@@ -46,6 +46,7 @@ class BasicDetails extends Component {
     };
   }
   switchChange = () => this.setState({ gstType: !this.state.gstType });
+  
   fileUpload = () => {
     try {
       const { imgnm, imgByte } = this.state;
@@ -87,10 +88,7 @@ class BasicDetails extends Component {
       setTimeout(() => {
         this.setState({ btnDisable: false });
       }, 4500);
-      let data = {
-        // name: value.firstName.trim(),
-        // email: value.email.trim(),
-      };
+      
       this.props.changeData("basicDetailsData", values);
       if (gstType && values.gst === "") {
         this.setState({ gstNoError: gstType && values.gst === "" });

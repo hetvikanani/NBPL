@@ -55,7 +55,7 @@ class AdminPartner extends Component {
     }
   };
   render() {
-    console.log("ccch", this.state);
+    console.log("dataaaa", this.state);
     return (
       <AdmProductStyle>
         <Menu />

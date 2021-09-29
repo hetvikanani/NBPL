@@ -91,7 +91,7 @@ class ContactDetails extends Component {
     const { initialState, disable } = this.state;
     return (
       <ContDetailsStyle>
-        <h3>{contactDetailConst.contactDetail}</h3>
+        <h2>{contactDetailConst.contactDetail}</h2>
         {initialState.map((data, index) => (
           <div className="formDiv" key={index}>
             <Formik

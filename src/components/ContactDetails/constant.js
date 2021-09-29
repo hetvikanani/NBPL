@@ -6,7 +6,7 @@ const contactDetailConst = {
     add:"Add Another",
     remove:"Remove",
     
-   
+    contactDetail:"Contact Details:"
     
   };
   export { contactDetailConst };
