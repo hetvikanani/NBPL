@@ -26,7 +26,6 @@ const UserValidation = Yup.object().shape({
     .max(12, FormValidation.aadharInvalid),
 });
 
-
 class BasicDetails extends Component {
   constructor(props) {
     super(props);
@@ -81,7 +80,6 @@ class BasicDetails extends Component {
   setByte = (byteCode, name) =>
     this.setState({ imgByte: byteCode, imgnm: name });
 
-
   handleSubmit = async (values, { setSubmitting }) => {
     try {
       const { gstType } = this.state;
@@ -92,9 +90,8 @@ class BasicDetails extends Component {
       let data = {
         // name: value.firstName.trim(),
         // email: value.email.trim(),
-        
-        
       };
+      this.props.changeData("basicDetailsData", values);
       if (gstType && values.gst === "") {
         this.setState({ gstNoError: gstType && values.gst === "" });
       } else this.props.countInc();

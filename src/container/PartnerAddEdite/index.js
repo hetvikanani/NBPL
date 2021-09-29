@@ -8,12 +8,15 @@ import {
   BasicDetails,
   FinancialDetails,
 } from "components/Form";
-import {PartnerAddEditConst} from "./constant"
+import { PartnerAddEditConst } from "./constant";
 class AdminPartner extends Component {
   constructor(props) {
     super(props);
     this.state = {
       count: 0,
+      basicDetailsData: {},
+      financialDetailsData: {},
+      contractDetailsData: {},
     };
   }
   countInc = () => {
@@ -24,19 +27,26 @@ class AdminPartner extends Component {
       console.log(error);
     }
   };
-  previous =()=>{
+  changeData = (key, data) => {
+    this.setState({ [key]: data });
+  };
+  previous = () => {
     const { count } = this.state;
     this.setState({ count: count - 1 });
-  }
+  };
   pageUI = () => {
     try {
       const { count } = this.state;
       return count === 0 ? (
-        <BasicDetails countInc={this.countInc} />
+        <BasicDetails changeData={this.changeData} countInc={this.countInc} />
       ) : count === 1 ? (
-        <FinancialDetails  countInc={this.countInc}  previous={this.previous}/>
+        <FinancialDetails
+          changeData={this.changeData}
+          countInc={this.countInc}
+          previous={this.previous}
+        />
       ) : count === 2 ? (
-        <ContactDetails />
+        <ContactDetails changeData={this.changeData} />
       ) : (
         ""
       );
@@ -45,6 +55,7 @@ class AdminPartner extends Component {
     }
   };
   render() {
+    console.log("ccch", this.state);
     return (
       <AdmProductStyle>
         <Menu />

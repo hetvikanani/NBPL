@@ -3,13 +3,15 @@ import { Row, Col } from "antd";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
-import {contactDetailConst} from "./constant";
-
+import { contactDetailConst } from "./constant";
 
 import { ContDetailsStyle } from "./style";
 import { Input, Label, Button } from "components/Form";
 const UserValidation = Yup.object().shape({
-  contactName: Yup.string().trim().required(" ").matches(/^[aA-zZ0-9\s]+$/, "Only alphabets are allowed for this field "),
+  contactName: Yup.string()
+    .trim()
+    .required(" ")
+    .matches(/^[aA-zZ0-9\s]+$/, "Only alphabets are allowed for this field "),
   mobile: Yup.string().trim().min(10).max(10).required(" "),
   email: Yup.string().trim().email().required(" "),
 });
@@ -64,14 +66,15 @@ class ContactDetails extends Component {
       setTimeout(() => {
         this.setState({ btnDisable: false });
       }, 4500);
-      let data = {
-        contactName: values.contactName,
-        mobile: values.mobile,
-        email: values.email,
-        designation: values.designation,
-      };
+      // let data = {
+      //   contactName: values.contactName,
+      //   mobile: values.mobile,
+      //   email: values.email,
+      //   designation: values.designation,
+      // };
+      this.props.changeData("contractDetailsData", values);
 
-      console.log("data", data);
+      // console.log("data", data);
       setSubmitting(false);
     } catch (error) {
       console.log(error, "handle error");
@@ -217,15 +220,14 @@ class ContactDetails extends Component {
                         </Button>
                       )}
                       {initialState.length !== 1 && (
-                        <Button type="button" 
-                        onClick={() => {
-                          this.remove(
-                            data.key,
-                            setFieldValue,
-                            handleReset
-                          );
-                        }}
-                        >{contactDetailConst.remove}</Button>
+                        <Button
+                          type="button"
+                          onClick={() => {
+                            this.remove(data.key, setFieldValue, handleReset);
+                          }}
+                        >
+                          {contactDetailConst.remove}
+                        </Button>
                       )}
                     </div>
                     <div className="rightBtnDiv">
