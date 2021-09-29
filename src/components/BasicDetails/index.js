@@ -8,8 +8,6 @@ import { BasicDetailsStyle } from "./style";
 import { basicConst } from "./constant";
 import { Input, Label, RoundSwitch, Button, FileUpload } from "components/Form";
 import { FormValidation, gstConst, panConst } from "App/AppConstant";
-import { connect } from "react-redux";
-import { savePartner } from "redux/partner/action";
 
 const UserValidation = Yup.object().shape({
   companyName: Yup.string()
@@ -46,7 +44,7 @@ class BasicDetails extends Component {
     };
   }
   switchChange = () => this.setState({ gstType: !this.state.gstType });
-  
+
   fileUpload = () => {
     try {
       const { imgnm, imgByte } = this.state;
@@ -88,7 +86,7 @@ class BasicDetails extends Component {
       setTimeout(() => {
         this.setState({ btnDisable: false });
       }, 4500);
-      
+
       this.props.changeData("basicDetailsData", values);
       if (gstType && values.gst === "") {
         this.setState({ gstNoError: gstType && values.gst === "" });
@@ -106,7 +104,7 @@ class BasicDetails extends Component {
         <div className="formDiv">
           <Formik
             initialValues={initialState}
-            validationSchema={UserValidation}
+            // validationSchema={UserValidation}
             onSubmit={this.handleSubmit}
             enableReinitialize
           >
@@ -286,14 +284,16 @@ class BasicDetails extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  loading: state.partner.loading,
-  error: state.partner.error,
-  message: state.partner.message,
-});
-const mapDispatchToProps = (dispatch) => ({
-  savePartner: (payload) => dispatch(savePartner(payload)),
-});
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(BasicDetails)
-);
+// const mapStateToProps = (state) => ({
+//   loading: state.partner.loading,
+//   error: state.partner.error,
+//   message: state.partner.message,
+// });
+// const mapDispatchToProps = (dispatch) => ({
+//   savePartner: (payload) => dispatch(savePartner(payload)),
+// });
+// export default withRouter(
+//   connect(mapStateToProps, mapDispatchToProps)(BasicDetails)
+// );
+
+export default withRouter(BasicDetails);

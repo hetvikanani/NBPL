@@ -63,9 +63,9 @@ class ContactDetails extends Component {
   handleSubmit = async (values, { setSubmitting }) => {
     try {
       this.setState({ btnDisable: true, check: true });
-      setTimeout(() => {
-        this.setState({ btnDisable: false });
-      }, 4500);
+      // setTimeout(() => {
+      //   this.setState({ btnDisable: false });
+      // }, 4500);
       // let data = {
       //   contactName: values.contactName,
       //   mobile: values.mobile,
@@ -73,7 +73,7 @@ class ContactDetails extends Component {
       //   designation: values.designation,
       // };
       this.props.changeData("contractDetailsData", values);
-
+      this.props.apiCall();
       // console.log("data", data);
       setSubmitting(false);
     } catch (error) {
@@ -97,7 +97,7 @@ class ContactDetails extends Component {
             <Formik
               enableReinitialize
               initialValues={data}
-              validationSchema={UserValidation}
+              // validationSchema={UserValidation}
               onSubmit={this.handleSubmit}
             >
               {({

@@ -9,6 +9,11 @@ import {
   FinancialDetails,
 } from "components/Form";
 import { PartnerAddEditConst } from "./constant";
+import { connect } from "react-redux";
+import { savePartner } from "redux/partner/action";
+import { withRouter } from "react-router-dom";
+import { contactDetailConst } from "components/ContactDetails/constant";
+
 class AdminPartner extends Component {
   constructor(props) {
     super(props);
@@ -34,6 +39,42 @@ class AdminPartner extends Component {
     const { count } = this.state;
     this.setState({ count: count - 1 });
   };
+  apiCall = () => {
+    const { basicDetailsData, contractDetailsData, financialDetailsData } =
+      this.state;
+    let data = {
+      // partnerId: 0,
+      partnerId: 1111114,
+      companyName: basicDetailsData.companyName,
+      emailId: basicDetailsData.email,
+      mobile: basicDetailsData.mobile?.toString(),
+      gstType: 0,
+      gstNumber: basicDetailsData.gst,
+      pan: basicDetailsData.pan,
+      aadharNumber: basicDetailsData.aadhar?.toString(),
+      companyLogo: "abc",
+      bankName: financialDetailsData.bankName,
+      branchName: financialDetailsData.branchName,
+      accountNumber: financialDetailsData.accountNo?.toString(),
+      ifsc: financialDetailsData.ifscCode,
+      address: financialDetailsData.address,
+      pincode: financialDetailsData.pincode?.toString(),
+      city: financialDetailsData.city,
+      state: financialDetailsData.state,
+      contactDetails: [
+        {
+          contactId: 34,
+          partnerId: 1111113,
+          contactName: contractDetailsData.contactName,
+          emailId: contractDetailsData.email,
+          mobile: contractDetailsData.mobile?.toString(),
+          designation: contractDetailsData.designation,
+        },
+      ],
+    };
+    this.props.savePartner(data);
+    // console.log(this.state, "state");
+  };
   pageUI = () => {
     try {
       const { count } = this.state;
@@ -46,7 +87,7 @@ class AdminPartner extends Component {
           previous={this.previous}
         />
       ) : count === 2 ? (
-        <ContactDetails changeData={this.changeData} />
+        <ContactDetails changeData={this.changeData} apiCall={this.apiCall} />
       ) : (
         ""
       );
@@ -70,4 +111,46 @@ class AdminPartner extends Component {
     );
   }
 }
-export default AdminPartner;
+
+const mapStateToProps = (state) => ({
+  loading: state.partner.loading,
+  error: state.partner.error,
+  message: state.partner.message,
+});
+const mapDispatchToProps = (dispatch) => ({
+  savePartner: (payload) => dispatch(savePartner(payload)),
+});
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(AdminPartner)
+);
+
+// {
+//   "partnerId":0,
+// "aadharNumber": "1212121212",
+// "accountNumber": "121212121212",
+// "address": "Near Sasuji Dining Hall, C G Road",
+// "bankName": "dsdsd",
+// "branchName": "sdsddddsd",
+// "city": "ahmedabad",
+// "companyLogo": "a",
+// "companyName": "cdsdcd",
+// "emailId": "hetvipatel321010@gmail.com",
+// "gstNumber": "DSDSDSDs",
+// "gstType": 0,
+// "ifsc": "121212121212",
+// "mobile": "8511829060",
+// "pan": "ABCDA1234A",
+// "pincode": "360005",
+// "state": "Gujarat",
+
+// "contactDetails": [
+//   {
+//     "contactId": 3,
+//     "partnerId": 1111112,
+//     "contactName": "hetvi@napbooks.com",
+//     "emailId": "hetvi@napbooks.com",
+//     "mobile": "123456789",
+//     "designation": "string"
+//   }
+// ]
+// }

@@ -13,12 +13,13 @@ export const savePartner = (payload) => async (dispatch) => {
       message.success(response.message);
       await dispatch({ type: actions.SAVE_PARTNER_SUCCESS, payload: response });
       dispatch(push("/partners"));
-
     } else dispatch({ type: actions.SAVE_PARTNER_ERROR, error: response });
   } catch (error) {
     console.log(error, "action catch");
     dispatch({ type: actions.SAVE_PARTNER_ERROR, error: "Network Error" });
   }
+
+  console.log("thase", payload);
 };
 export const getPartners = (payload) => async (dispatch) => {
   try {

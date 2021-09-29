@@ -3,8 +3,7 @@ import { Row, Col } from "antd";
 import { CloseOutlined, UploadOutlined } from "@ant-design/icons";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import {financialDetailConst} from "./constant";
-
+import { financialDetailConst } from "./constant";
 
 import { FinDetailsStyle } from "./style";
 import { Input, Label, Button } from "components/Form";
@@ -14,14 +13,12 @@ const UserValidation = Yup.object().shape({
   address: Yup.string().trim().required(" "),
   accountNo: Yup.string().trim().min(11).max(11).required(" "),
   ifscCode: Yup.string()
-  .trim()
-  .required(" ")
-  .matches(/^[A-Z]{4}0[A-Z0-9]{6}$/, "only"),
-pincode: Yup.string().trim().min(6).max(6).required(" "),
-city: Yup.string().trim().required(" "),
-state: Yup.string().trim().required(" "),
-
- 
+    .trim()
+    .required(" ")
+    .matches(/^[A-Z]{4}0[A-Z0-9]{6}$/, "only"),
+  pincode: Yup.string().trim().min(6).max(6).required(" "),
+  city: Yup.string().trim().required(" "),
+  state: Yup.string().trim().required(" "),
 });
 class FinancialDetails extends Component {
   constructor(props) {
@@ -62,7 +59,7 @@ class FinancialDetails extends Component {
         <div className="formDiv">
           <Formik
             initialValues={initialState}
-            validationSchema={UserValidation}
+            // validationSchema={UserValidation}
             onSubmit={this.handleSubmit}
             enableReinitialize
           >
@@ -119,10 +116,12 @@ class FinancialDetails extends Component {
                   </Col>
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <div className="field">
-                      <Label title={financialDetailConst.address}
-                      className={
-                        errors.address && touched.address ? "empty" : ""
-                      }/>
+                      <Label
+                        title={financialDetailConst.address}
+                        className={
+                          errors.address && touched.address ? "empty" : ""
+                        }
+                      />
                       <Input
                         row={5}
                         onBlur={handleBlur}
@@ -198,37 +197,33 @@ class FinancialDetails extends Component {
                   </Col>
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <div className="field">
-                      <Label title={financialDetailConst.city}
-                       className={
-                        errors.city && touched.city ? "empty" : ""
-                      } />
+                      <Label
+                        title={financialDetailConst.city}
+                        className={errors.city && touched.city ? "empty" : ""}
+                      />
                       <Input
                         onBlur={handleBlur}
                         name="city"
                         value={values.city}
                         handleChange={handleChange}
                         tabIndex="7"
-                        className={
-                          errors.city && touched.city ? "empty" : ""
-                        }
+                        className={errors.city && touched.city ? "empty" : ""}
                       />
                     </div>
                   </Col>
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <div className="field">
-                      <Label title={financialDetailConst.state}
-                       className={
-                        errors.state && touched.state ? "empty" : ""
-                      } />
+                      <Label
+                        title={financialDetailConst.state}
+                        className={errors.state && touched.state ? "empty" : ""}
+                      />
                       <Input
                         onBlur={handleBlur}
                         name="state"
                         value={values.state}
                         handleChange={handleChange}
                         tabIndex="8"
-                        className={
-                          errors.state && touched.state ? "empty" : ""
-                        }
+                        className={errors.state && touched.state ? "empty" : ""}
                       />
                     </div>
                   </Col>
@@ -236,9 +231,11 @@ class FinancialDetails extends Component {
 
                 <div className="bottomDiv">
                   <div className="btn">
-                    <Button type="button" onClick={this.props.previous}>{financialDetailConst.previous}</Button>
+                    <Button type="button" onClick={this.props.previous}>
+                      {financialDetailConst.previous}
+                    </Button>
                     <Button type="submit" disabled={disable}>
-                    {financialDetailConst.next}
+                      {financialDetailConst.next}
                     </Button>
                   </div>
                 </div>

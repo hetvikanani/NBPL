@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import { NewUserStyle } from "./style";
 import { Menu, Header, UserInfo, UserRole } from "components/Form";
 import {NewUserConst  } from "./constant";
+import { connect } from "react-redux";
+import { savePartner } from "redux/partner/action";
 
 class NewUser extends Component {
   constructor(props) {
