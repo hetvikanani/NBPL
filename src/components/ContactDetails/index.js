@@ -4,9 +4,9 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
 import { contactDetailConst } from "./constant";
-
 import { ContDetailsStyle } from "./style";
 import { Input, Label, Button } from "components/Form";
+
 const UserValidation = Yup.object().shape({
   contactName: Yup.string()
     .trim()
@@ -20,6 +20,7 @@ class ContactDetails extends Component {
     super(props);
     this.state = {
       disable: false,
+      prev: [],
       initialState: [
         {
           key: uuidv4(),
@@ -33,13 +34,17 @@ class ContactDetails extends Component {
       ],
     };
   }
-  increase = (key) => {
-    const newData = this.state.initialState.map((data) => {
+  increase = (key, val) => {
+    const { initialState, prev } = this.state;
+    const newData = initialState.map((data) => {
       if (data.key === key) {
         return { ...data, save: true };
       } else return data;
     });
+    let prevData = prev;
+    prevData.push(val);
     this.setState({
+      prev: prevData,
       initialState: [
         ...newData,
         {
@@ -62,18 +67,16 @@ class ContactDetails extends Component {
   };
   handleSubmit = async (values, { setSubmitting }) => {
     try {
+      const { prev } = this.state;
       this.setState({ btnDisable: true, check: true });
+      // debugger;
       // setTimeout(() => {
       //   this.setState({ btnDisable: false });
       // }, 4500);
-      // let data = {
-      //   contactName: values.contactName,
-      //   mobile: values.mobile,
-      //   email: values.email,
-      //   designation: values.designation,
-      // };
+      let prevData = prev;
+      prevData.push(values);
       this.props.changeData("contractDetailsData", values);
-      this.props.apiCall();
+      this.props.apiCall(prevData);
       // console.log("data", data);
       setSubmitting(false);
     } catch (error) {
@@ -97,7 +100,7 @@ class ContactDetails extends Component {
             <Formik
               enableReinitialize
               initialValues={data}
-              // validationSchema={UserValidation}
+              validationSchema={UserValidation}
               onSubmit={this.handleSubmit}
             >
               {({
@@ -107,13 +110,9 @@ class ContactDetails extends Component {
                 handleChange,
                 handleBlur,
                 handleSubmit,
-                isValid,
                 validateForm,
-                isValidating,
-                isInitialValid,
                 setFieldValue,
                 handleReset,
-                resetForm,
               }) => (
                 <Form onSubmit={handleSubmit}>
                   <Row gutter={20}>
@@ -211,7 +210,7 @@ class ContactDetails extends Component {
                           onClick={() => {
                             validateForm().then((d) => {
                               if (Object.keys(d).length === 0)
-                                this.increase(data.key);
+                                this.increase(data.key, values);
                               else handleSubmit();
                             });
                           }}

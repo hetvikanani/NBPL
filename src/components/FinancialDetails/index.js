@@ -59,7 +59,7 @@ class FinancialDetails extends Component {
         <div className="formDiv">
           <Formik
             initialValues={initialState}
-            // validationSchema={UserValidation}
+            validationSchema={UserValidation}
             onSubmit={this.handleSubmit}
             enableReinitialize
           >

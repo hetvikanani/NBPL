@@ -104,7 +104,7 @@ class BasicDetails extends Component {
         <div className="formDiv">
           <Formik
             initialValues={initialState}
-            // validationSchema={UserValidation}
+            validationSchema={UserValidation}
             onSubmit={this.handleSubmit}
             enableReinitialize
           >
@@ -284,16 +284,5 @@ class BasicDetails extends Component {
   }
 }
 
-// const mapStateToProps = (state) => ({
-//   loading: state.partner.loading,
-//   error: state.partner.error,
-//   message: state.partner.message,
-// });
-// const mapDispatchToProps = (dispatch) => ({
-//   savePartner: (payload) => dispatch(savePartner(payload)),
-// });
-// export default withRouter(
-//   connect(mapStateToProps, mapDispatchToProps)(BasicDetails)
-// );
 
 export default withRouter(BasicDetails);

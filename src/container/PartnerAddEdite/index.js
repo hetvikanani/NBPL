@@ -39,7 +39,7 @@ class AdminPartner extends Component {
     const { count } = this.state;
     this.setState({ count: count - 1 });
   };
-  apiCall = () => {
+  apiCall = (contacts) => {
     const { basicDetailsData, contractDetailsData, financialDetailsData } =
       this.state;
     let data = {
@@ -63,6 +63,7 @@ class AdminPartner extends Component {
       state: financialDetailsData.state,
       contactDetails: [
         {
+          ...contacts,
           contactId: 34,
           partnerId: 1111113,
           contactName: contractDetailsData.contactName,
@@ -72,8 +73,8 @@ class AdminPartner extends Component {
         },
       ],
     };
-    this.props.savePartner(data);
-    // console.log(this.state, "state");
+    // this.props.savePartner(data);
+    console.log("datass",data);
   };
   pageUI = () => {
     try {
