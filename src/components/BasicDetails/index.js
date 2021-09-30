@@ -33,6 +33,7 @@ class BasicDetails extends Component {
       gstNoError: false,
       imgnm: "",
       imgByte: "",
+      imgBase64: "",
       initialState: {
         pan: "",
         email: "",
@@ -74,10 +75,10 @@ class BasicDetails extends Component {
       console.log(error);
     }
   };
-  removefile = () => this.setState({ imgByte: "", imgnm: "" });
+  removefile = () => this.setState({ imgByte: "", imgnm: "",imgBase64:"" });
 
-  setByte = (byteCode, name) =>
-    this.setState({ imgByte: byteCode, imgnm: name });
+  setByte = (byteCode, name,base64) =>
+    this.setState({ imgByte: byteCode, imgnm: name,imgBase64:base64 });
 
   handleSubmit = async (values, { setSubmitting }) => {
     try {

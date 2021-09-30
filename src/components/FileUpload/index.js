@@ -15,7 +15,6 @@ class FileUpload extends Component {
           let reader = new FileReader();
           reader.readAsDataURL(file);
           reader.onloadend = () => {
-            this.props.sendByte(reader.result, file.name);
             let base64 = file.name + "," + reader.result.split("base64,")[1];
             this.props.sendByte(reader.result, file.name,base64);
           };
@@ -24,7 +23,8 @@ class FileUpload extends Component {
         let reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = () => {
-          this.props.sendByte(reader.result, file.name);
+          let base64 = file.name + "," + reader.result.split("base64,")[1];
+          this.props.sendByte(reader.result, file.name,base64);
         };
         // let formdata = new FormData();
         // let ext = file.name.split(".");
