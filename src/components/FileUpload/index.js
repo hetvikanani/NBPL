@@ -16,6 +16,8 @@ class FileUpload extends Component {
           reader.readAsDataURL(file);
           reader.onloadend = () => {
             this.props.sendByte(reader.result, file.name);
+            let base64 = file.name + "," + reader.result.split("base64,")[1];
+            this.props.sendByte(reader.result, file.name,base64);
           };
         }
       }else if(pdf) {

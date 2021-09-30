@@ -75,8 +75,8 @@ class ContactDetails extends Component {
       // }, 4500);
       let prevData = prev;
       prevData.push(values);
-      this.props.changeData("contractDetailsData", values);
-      this.props.apiCall(prevData);
+      this.props.changeData("contractDetailsData", this.state.initialState);
+      this.props.apiCall(this.state.initialState);
       // console.log("data", data);
       setSubmitting(false);
     } catch (error) {

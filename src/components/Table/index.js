@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import TableStyle from "./style";
 import { Table, Image } from "antd";
 import { DashOutlined } from "@ant-design/icons";
-
+import { withRouter } from "react-router-dom";
+import TableStyle from "./style";
 import {
   editPen,
   deleteImg,
@@ -16,9 +16,7 @@ import {
 } from "components/Images";
 import { TableConst } from "./constant";
 import { RenderDrop } from "components/Form";
-
 const { Column } = Table;
-
 class TableUI extends Component {
   constructor(props) {
     super(props);
@@ -76,12 +74,12 @@ class TableUI extends Component {
                 >
                   {this.adminActUI(prospect, TableConst.prospect)}
                 </div>
-                <div className="actionBtn" onClick={() => this.props.sales()}>
+                <div className="actionBtn" onClick={() => this.props.history.push("/admin-sales")}>
                   {this.adminActUI(sales, TableConst.sales)}
                 </div>
               </>
             )}
-            <div className="actionBtn" onClick={() => this.props.delete()}>
+            <div className="actionBtn" onClick={() => this.props.delete(record.partnerId)}>
               {this.adminActUI(deleteSvg, TableConst.delete)}
             </div>
           </RenderDrop>
@@ -91,7 +89,6 @@ class TableUI extends Component {
       console.log(error);
     }
   };
-
   action = (record, type) => {
     try {
       return (
@@ -167,7 +164,6 @@ class TableUI extends Component {
               )}
             </>
           )}
-
           {type === "wallet" && (
             <>
               <Column title={"Transaction ID"} dataIndex={"key"} />
@@ -190,7 +186,7 @@ class TableUI extends Component {
                 <>
                   <Column
                     title={"Partner"}
-                    dataIndex={"partnername"}
+                    dataIndex={"companyName"}
                     className="center"
                   />
                   <Column
@@ -235,9 +231,9 @@ class TableUI extends Component {
               />
             </>
           )}
-
           {type !== "wallet" &&
             type !== "partners" &&
+            type !== "packageList" &&
             type !== "userList" &&
             type !== "admin_sales" && (
               <Column
@@ -310,4 +306,4 @@ class TableUI extends Component {
     );
   }
 }
-export default TableUI;
+export default withRouter((TableUI));
