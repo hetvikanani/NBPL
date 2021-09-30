@@ -40,19 +40,18 @@ class AdminPartner extends Component {
     this.setState({ count: count - 1 });
   };
   apiCall = (contacts) => {
-    const { basicDetailsData, financialDetailsData } =
-      this.state;
+    const { basicDetailsData, financialDetailsData } = this.state;
     let data = {
       // partnerId: 0,
       partnerId: 1111114,
       companyName: basicDetailsData.companyName,
       emailId: basicDetailsData.email,
       mobile: basicDetailsData.mobile?.toString(),
-      gstType: 0,
+      gstType: basicDetailsData.gstType,
       gstNumber: basicDetailsData.gst,
       pan: basicDetailsData.pan,
       aadharNumber: basicDetailsData.aadhar?.toString(),
-      companyLogo: "",
+      companyLogo: basicDetailsData.img,
       bankName: financialDetailsData.bankName,
       branchName: financialDetailsData.branchName,
       accountNumber: financialDetailsData.accountNo?.toString(),
@@ -61,7 +60,7 @@ class AdminPartner extends Component {
       pincode: financialDetailsData.pincode?.toString(),
       city: financialDetailsData.city,
       state: financialDetailsData.state,
-      ContactDetails:contacts,
+      ContactDetails: contacts,
       // contactDetails: [
       //   {
       //     ...contacts,
@@ -75,7 +74,7 @@ class AdminPartner extends Component {
       // ],
     };
     // this.props.savePartner(data);
-    console.log("datass",data);
+    console.log("datass", data);
   };
   pageUI = () => {
     try {

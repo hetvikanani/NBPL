@@ -75,10 +75,10 @@ class BasicDetails extends Component {
       console.log(error);
     }
   };
-  removefile = () => this.setState({ imgByte: "", imgnm: "",imgBase64:"" });
+  removefile = () => this.setState({ imgByte: "", imgnm: "", imgBase64: "" });
 
-  setByte = (byteCode, name,base64) =>
-    this.setState({ imgByte: byteCode, imgnm: name,imgBase64:base64 });
+  setByte = (byteCode, name, base64) =>
+    this.setState({ imgByte: byteCode, imgnm: name, imgBase64: base64 });
 
   handleSubmit = async (values, { setSubmitting }) => {
     try {
@@ -88,7 +88,10 @@ class BasicDetails extends Component {
         this.setState({ btnDisable: false });
       }, 4500);
 
-      this.props.changeData("basicDetailsData", values);
+      this.props.changeData("basicDetailsData", {
+        ...values,
+        img: this.state.imgByte,
+      });
       if (gstType && values.gst === "") {
         this.setState({ gstNoError: gstType && values.gst === "" });
       } else this.props.countInc();
@@ -99,6 +102,7 @@ class BasicDetails extends Component {
   };
   render() {
     const { initialState, disable, gstType, gstNoError } = this.state;
+    console.log(this.state);
     return (
       <BasicDetailsStyle>
         <h2>{basicConst.basicDetail}</h2>
@@ -284,6 +288,5 @@ class BasicDetails extends Component {
     );
   }
 }
-
 
 export default withRouter(BasicDetails);
