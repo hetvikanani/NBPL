@@ -20,7 +20,7 @@ class AdminPartner extends Component {
     this.state = {
       count: 0,
       basicDetailsData: {},
-      financialDetailsData: {},
+      financialDetailsData: {}, 
       contractDetailsData: {},
     };
   }
@@ -42,12 +42,13 @@ class AdminPartner extends Component {
   apiCall = (contacts) => {
     const { basicDetailsData, financialDetailsData } = this.state;
     let data = {
-      // partnerId: 0,
-      partnerId: 1111114,
+      
+      partnerId: 0,
       companyName: basicDetailsData.companyName,
       emailId: basicDetailsData.email,
       mobile: basicDetailsData.mobile?.toString(),
-      gstType: basicDetailsData.gstType,
+      // gstType: basicDetailsData.gstType,
+      gstType:basicDetailsData.gstType ? 1 : 0,
       gstNumber: basicDetailsData.gst,
       pan: basicDetailsData.pan,
       aadharNumber: basicDetailsData.aadhar?.toString(),

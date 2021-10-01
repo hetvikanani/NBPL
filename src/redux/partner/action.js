@@ -32,7 +32,7 @@ export const getPartners = (payload) => async (dispatch) => {
     console.log(error, "action catch");
     dispatch({ type: actions.GET_PARTNERS_ERROR, error: "Network Error" });
   }
-};
+};  
 export const deletePartner = (id) => async (dispatch) => {
   try {
     dispatch({ type: actions.DELETE_PARTNER_INITIATED });

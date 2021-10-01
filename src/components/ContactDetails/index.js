@@ -55,6 +55,7 @@ class ContactDetails extends Component {
           designation: "",
           check: false,
           save: false,
+        
         },
       ],
     });

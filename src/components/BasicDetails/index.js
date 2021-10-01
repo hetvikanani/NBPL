@@ -90,7 +90,8 @@ class BasicDetails extends Component {
 
       this.props.changeData("basicDetailsData", {
         ...values,
-        img: this.state.imgByte,
+        img: this.state.imgBase64,
+        gstType:this.state.gstType,
       });
       if (gstType && values.gst === "") {
         this.setState({ gstNoError: gstType && values.gst === "" });

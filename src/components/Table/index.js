@@ -29,8 +29,8 @@ class TableUI extends Component {
     try {
       return (
         <div className="statusUI">
-          <span className={record.status ? "green" : "red"}>
-            {record.status ? "Active" : "Deactive"}
+          <span className={record.isActive===0 ? "green" : "red"}>
+            {record.isActive===0  ? "Active" : "Deactive"}
           </span>
         </div>
       );
