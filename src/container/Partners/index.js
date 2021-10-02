@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
-import { Empty } from 'antd';
+import { Empty } from "antd";
 
 import { PartnersStyle } from "./style";
 import { Menu, Header, Table, Input } from "components/Form";
 import { PartnersConst } from "./constant";
 import { ButtonConst } from "App/AppConstant";
-import { getPartners } from "redux/partner/action";
+import { getPartners, deletePartner } from "redux/partner/action";
 
 class Partners extends Component {
   async componentDidMount() {
@@ -27,6 +27,9 @@ class Partners extends Component {
       console.log(error);
     }
   };
+
+  deletePartnerApi = (id) => this.props.deletePartner(id);
+
   render() {
     return (
       <PartnersStyle>
@@ -58,11 +61,16 @@ class Partners extends Component {
                 />
               </div>
             </div>
-            {this.props.porters.length === 0?
-            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            :
-            <Table type="partners" data={this.props.porters} size={10} />
-            }
+            {this.props.porters.length === 0 ? (
+              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            ) : (
+              <Table
+                type="partners"
+                data={this.props.porters}
+                size={10}
+                deletePartner={this.deletePartnerApi}
+              />
+            )}
           </div>
         </div>
       </PartnersStyle>
@@ -77,6 +85,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
   getPartners: (payload) => dispatch(getPartners(payload)),
+  deletePartner: (id) => dispatch(deletePartner(id)),
 });
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(Partners)

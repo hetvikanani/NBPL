@@ -79,7 +79,7 @@ class TableUI extends Component {
                 </div>
               </>
             )}
-            <div className="actionBtn" onClick={() => this.props.delete(record.partnerId)}>
+            <div className="actionBtn" onClick={() => this.props.deletePartner(record.partnerId)}>
               {this.adminActUI(deleteSvg, TableConst.delete)}
             </div>
           </RenderDrop>
@@ -293,7 +293,6 @@ class TableUI extends Component {
       <TableStyle>
         <Table
           bordered
-          //   rowClassName={!print ? "anime" : ""}
           pagination={
             display.length > pageSize ? { pageSize: pageSize } : false
           }
@@ -307,3 +306,5 @@ class TableUI extends Component {
   }
 }
 export default withRouter((TableUI));
+
+

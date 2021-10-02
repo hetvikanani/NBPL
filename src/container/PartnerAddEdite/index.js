@@ -74,7 +74,7 @@ class AdminPartner extends Component {
       //   },
       // ],
     };
-    // this.props.savePartner(data);
+    this.props.savePartner(data);
     console.log("datass", data);
   };
   pageUI = () => {

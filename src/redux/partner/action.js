@@ -32,17 +32,34 @@ export const getPartners = (payload) => async (dispatch) => {
     console.log(error, "action catch");
     dispatch({ type: actions.GET_PARTNERS_ERROR, error: "Network Error" });
   }
-};  
+};
 export const deletePartner = (id) => async (dispatch) => {
+  console.log(id, "idd");
   try {
     dispatch({ type: actions.DELETE_PARTNER_INITIATED });
     let response = await axiosAuthGet(partnerConst.DELETE_PARTNER + id);
-    if (response.code === "200") {
+    if (response.responseCodes === "200") {
       message.success(response.message);
       await dispatch({
         type: actions.DELETE_PARTNER_SUCCESS,
         payload: response,
       });
+      var s = {
+        parameter: "",
+        pageSize: "10",
+        page: "1",
+        sortColumn: "partnerid desc",
+      };
+      try {
+        dispatch({ type: actions.GET_PARTNERS_INITIATED });
+        let response = await axiosAuthPost(partnerConst.GET_PARTNERS, s);
+        if (response.responseStatus === "1") {
+          await dispatch({ type: actions.GET_PARTNERS_SUCCESS, payload: response });
+        } else dispatch({ type: actions.GET_PARTNERS_ERROR, error: response });
+      } catch (error) {
+        console.log(error, "action catch");
+        dispatch({ type: actions.GET_PARTNERS_ERROR, error: "Network Error" });
+      }
     } else dispatch({ type: actions.DELETE_PARTNER_ERROR, error: response });
   } catch (error) {
     console.log(error, "action catch");

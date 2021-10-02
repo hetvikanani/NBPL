@@ -3,6 +3,9 @@ import store from "redux/store";
 import { configVar } from "modules/config";
 import { errorHandler, errorEmpty } from "redux/app/actions";
 
+// const token = localStorage.auth ? JSON.parse(localStorage.auth).token : "";
+// const config = { headers: { Authorization: `Bearer ${token}` } };
+
 export const axiosGet = async (url) => {
   try {
     debugger;
@@ -33,6 +36,7 @@ export const axiosPost = async (url, payload) => {
 };
 export const axiosAuthGet = async (url) => {
   try {
+    url = url.replace(/[^\x00-\x7F]/g, "");
     let { data: response } = await axios.get(configVar.BASE_URL + url);
     if (response.responseStatus!=="1")
       store.dispatch(errorHandler(response.message));
@@ -56,27 +60,4 @@ export const axiosAuthPost = async (url, payload) => {
     console.log(error);
   }
 };
-export const axiosAuthDelete = async (url) => {
-  try {
-    let { data: response } = await axios.delete(configVar.BASE_URL + url);
-    if (response.responseStatus!=="1") store.dispatch(errorHandler());
-    store.dispatch(errorEmpty());
-    return response;
-  } catch (error) {
-    console.log(error);
-  }
-};
-export const axiosAuthPatch = async (url, payload) => {
-  try {
-    let { data: response } = await axios.patch(
-      configVar.BASE_URL + url,
-      payload
-    );
-    if (response.responseStatus!=="1") 
-      store.dispatch(errorHandler(response.message));    
-    store.dispatch(errorEmpty());
-    return response;
-  } catch (error) {
-    console.log(error);
-  }
-};
+

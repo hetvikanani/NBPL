@@ -1,5 +1,5 @@
-// export const configVar = { BASE_URL: "https://partnerapi.naapbooks.com/" };
-export const configVar = { BASE_URL: "http://192.168.1.59/" };
+export const configVar = { BASE_URL: "https://partnerapi.naapbooks.com/" };
+// export const configVar = { BASE_URL: "http://192.168.1.59/" };
 
 
 export const apiConstant = {
