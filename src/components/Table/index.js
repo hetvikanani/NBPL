@@ -59,7 +59,7 @@ class TableUI extends Component {
                   {this.adminActUI(view, TableConst.view)}
                 </div>
               ),
-              <div className="actionBtn" onClick={() => this.props.getPartnerById()}>
+              <div className="actionBtn" onClick={() => this.props.getPartnerById}>
                 {this.adminActUI(edit, TableConst.edit)}
               </div>,
               type === "partners" && (
