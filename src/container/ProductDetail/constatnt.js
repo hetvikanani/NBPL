@@ -13,11 +13,11 @@ import {
 const FeaturesData = [
   { heading: "Receptionist Login", img: reception },
   { heading: "Security Login", img: security },
-  { heading: " Self Check In/Out", img: checkInOut },
+  { heading: "Self Check In/Out", img: checkInOut },
   { heading: "Capture Photo", img: capturePhoto },
   { heading: "Receptionist Login", img: capturePhoto },
   { heading: "Security Login", img: security },
-  { heading: " Self Check In/Out", img: checkInOut },
+  { heading: "Self Check In/Out", img: checkInOut },
   { heading: "Capture Photo", img: capturePhoto },
 ];
 const MonthlyData = [
@@ -58,4 +58,12 @@ const CarouselData = [
   videoCarousel4,
   videoCarousel5,
 ];
-export { FeaturesData, MonthlyData, CarouselData };
+const PdConst = {
+  pd: "Product Details",
+  feat: "Feature",
+  sugVid: "Suggestions Video",
+  SubDet: "Subscription Details",
+  partDet: "Partner related details",
+  userMan: "User Manual",
+};
+export { FeaturesData, MonthlyData, CarouselData, PdConst };

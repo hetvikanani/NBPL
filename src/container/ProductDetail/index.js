@@ -4,29 +4,16 @@ import { Row, Col, Image, Card } from "antd";
 import { FilePdfFilled } from "@ant-design/icons";
 import "react-multi-carousel/lib/styles.css";
 
-import { Menu, RoundSwitch,Header,PackageCard } from "components/Form";
-import { vizman, iPing, act, eAuction, eVoting, ezeo } from "components/Images";
 import { ProDetailstyle } from "./style";
-import { FeaturesData, MonthlyData, CarouselData } from "./constatnt";
+import { Menu, RoundSwitch, Header, PackageCard } from "components/Form";
+import { FeaturesData, MonthlyData, CarouselData, PdConst } from "./constatnt";
+import { vizman, iPing, act, eAuction, eVoting, ezeo } from "components/Images";
 
 const responsive = {
-  superLargeDesktop: {
-    // the naming can be any, depends on you.
-    breakpoint: { max: 4000, min: 3000 },
-    items: 5,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-  },
+  superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 5 },
+  desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
+  tablet: { breakpoint: { max: 1024, min: 464 }, items: 2 },
+  mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
 };
 export default class ProductDetails extends Component {
   constructor() {
@@ -36,7 +23,6 @@ export default class ProductDetails extends Component {
   componentDidMount() {
     try {
       const { match } = this.props;
-
       if (match.params.name) {
         this.setState({ item: match.params.name });
       }
@@ -51,7 +37,7 @@ export default class ProductDetails extends Component {
   featureUI = () => {
     try {
       return FeaturesData.map((a, i) => (
-        <Col xs={24} sm={12} md={12} lg={12} xl={6} key={i}>
+        <Col xs={24} sm={12} md={12} lg={12} xl={6} key={i} className="anime">
           <Card hoverable className="Feature-card">
             <div className="img-div">
               <Image src={a.img} preview={false} />
@@ -64,13 +50,12 @@ export default class ProductDetails extends Component {
       console.log(error);
     }
   };
-
   subscriptionUI = () => {
     try {
       const { checked } = this.state;
       return MonthlyData.map((a, i) => (
-        <Col xs={24} sm={24} md={24} lg={8} xl={8} key={i}>
-           <PackageCard data={a} period="Month"  checked={checked}/>
+        <Col xs={24} sm={24} md={24} lg={8} xl={8} key={i} className="anime">
+          <PackageCard data={a} period="Month" checked={checked} />
         </Col>
       ));
     } catch (error) {
@@ -80,7 +65,7 @@ export default class ProductDetails extends Component {
   carouselUI = () => {
     try {
       return CarouselData.map((a, i) => (
-        <div className="carousel-img" key ={i}>
+        <div className="carousel-img" key={i}>
           <Image src={a} preview={false} />
         </div>
       ));
@@ -116,24 +101,17 @@ export default class ProductDetails extends Component {
       console.log(error);
     }
   };
-  pdfImg = () => {
-    try {
-      return (
-        <>
-          <a
-            href="https://www.vizman.app/downloads/VizManUserManual.pdf"
-            target="_blank"
-          >
-            <div className="pdfIcon">
-              <FilePdfFilled />
-            </div>
-          </a>
-        </>
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  pdfImg = () => (
+    <a
+      href="https://www.vizman.app/downloads/VizManUserManual.pdf"
+      target="_blank"
+      rel="noreferrer"
+    >
+      <div className="pdfIcon">
+        <FilePdfFilled />
+      </div>
+    </a>
+  );
   render() {
     const { checked, item } = this.state;
     return (
@@ -141,9 +119,9 @@ export default class ProductDetails extends Component {
         <Menu />
         <div className="container">
           <Header />
-          <div className="allDiv">
-            <h2>Product Details</h2>
-            <div className="boxDiv">
+          <div className="allDiv anime">
+            <h2>{PdConst.pd}</h2>
+            <div className="boxDiv anime">
               {this.headerImg()}
               <h3 className="txtHead">{item} - Visitor Management System</h3>
               <p>
@@ -160,15 +138,12 @@ export default class ProductDetails extends Component {
               </p>
             </div>
             <div className="boxDiv">
-              <h3 className="txtHead">Features</h3>
-              <div>
-                <Row gutter ={20}>{this.featureUI()} </Row>
-              </div>
+              <h3 className="txtHead">{PdConst.feat}</h3>
+              <Row gutter={20}>{this.featureUI()} </Row>
             </div>
-
             <div className="box3">
               <div className="boxDiv">
-                <h3 className="txtHead">Subscription Details</h3>
+                <h3 className="txtHead">{PdConst.SubDet}</h3>
                 <div className="switch-div">
                   <RoundSwitch
                     left="MONTHLY"
@@ -184,7 +159,7 @@ export default class ProductDetails extends Component {
             </div>
             <div className="box4">
               <div className="boxDiv">
-                <h3 className="txtHead">Partner related details</h3>
+                <h3 className="txtHead">{PdConst.partDet}</h3>
                 <p>
                   We Provide a Variety of Visitor Management and Workspace
                   Reservation Solutions. We Also Provide You with Employee
@@ -195,13 +170,13 @@ export default class ProductDetails extends Component {
             </div>
             <div className="box5">
               <div className="boxDiv">
-                <h3 className="txtHead">User Manual</h3>
+                <h3 className="txtHead">{PdConst.userMan}</h3>
                 {this.pdfImg()}
               </div>
             </div>
             <div className="box6">
               <div className="boxDiv">
-                <h3 className="txtHead">Suggestions Video</h3>
+                <h3 className="txtHead">{PdConst.sugVid}</h3>
                 <Carousel
                   dotListClass="custom-dot-list-style"
                   swipeable={false}

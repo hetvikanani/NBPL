@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { size } from "App/device";
+
 const Wrapper = styled.div`
   .hero.parallax {
     background-attachment: fixed;

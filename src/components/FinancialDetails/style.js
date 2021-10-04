@@ -6,7 +6,6 @@ const FinDetailsStyle = styled.div`
   padding: 1em;
   background-color: #ffff;
   box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
-
   h2 {
     color: ${Theme.mainColor};
   }
@@ -16,7 +15,7 @@ const FinDetailsStyle = styled.div`
       margin-top: 1em;
       label {
         font-size: 16px;
-      }      
+      }
     }
     .bottomDiv {
       display: flex;
@@ -32,7 +31,6 @@ const FinDetailsStyle = styled.div`
         }
       }
     }
-    
   }
 `;
 export { FinDetailsStyle };

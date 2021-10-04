@@ -1,9 +1,9 @@
 const userInfoConst = {
   mobile: "Mobile Number:",
-    email: "Email ID:",
-firstName: "First Name:",
+  email: "Email ID:",
+  firstName: "First Name:",
   middleName: "Middle Name:",
   lastName: "Last Name:",
-  next:"Next",
+  next: "Next",
 };
 export { userInfoConst };

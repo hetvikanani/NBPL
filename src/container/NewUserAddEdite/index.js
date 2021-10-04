@@ -2,9 +2,7 @@ import React, { Component } from "react";
 
 import { NewUserStyle } from "./style";
 import { Menu, Header, UserInfo, UserRole } from "components/Form";
-import {NewUserConst  } from "./constant";
-import { connect } from "react-redux";
-import { savePartner } from "redux/partner/action";
+import { NewUserConst } from "./constant";
 
 class NewUser extends Component {
   constructor(props) {
@@ -41,7 +39,7 @@ class NewUser extends Component {
         <Menu />
         <div className="container">
           <Header />
-          <div className="allDiv">
+          <div className="allDiv anime">
             <h2>{NewUserConst.addNewUser}</h2>
             <div className="formDiv">{this.pageUI()}</div>
           </div>

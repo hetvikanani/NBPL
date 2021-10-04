@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import { AdmProductStyle } from "./style";
+import { PartnerAddEditConst } from "./constant";
 import {
   Menu,
   Header,
@@ -8,11 +9,9 @@ import {
   BasicDetails,
   FinancialDetails,
 } from "components/Form";
-import { PartnerAddEditConst } from "./constant";
 import { connect } from "react-redux";
 import { savePartner } from "redux/partner/action";
 import { withRouter } from "react-router-dom";
-import { contactDetailConst } from "components/ContactDetails/constant";
 
 class AdminPartner extends Component {
   constructor(props) {
@@ -74,7 +73,7 @@ class AdminPartner extends Component {
       //   },
       // ],
     };
-    // this.props.savePartner(data);
+    this.props.savePartner(data);
     console.log("datass", data);
   };
   pageUI = () => {
@@ -83,11 +82,7 @@ class AdminPartner extends Component {
       return count === 0 ? (
         <BasicDetails changeData={this.changeData} countInc={this.countInc} />
       ) : count === 1 ? (
-        <FinancialDetails
-          changeData={this.changeData}
-          countInc={this.countInc}
-          previous={this.previous}
-        />
+        <FinancialDetails    changeData={this.changeData} countInc={this.countInc} previous={this.previous} />
       ) : count === 2 ? (
         <ContactDetails changeData={this.changeData} apiCall={this.apiCall} />
       ) : (
@@ -99,13 +94,14 @@ class AdminPartner extends Component {
   };
   render() {
     console.log("dataaaa", this.state);
+
     return (
       <AdmProductStyle>
         <Menu />
         <div className="container">
           <Header />
-          <div className="allDiv">
-            <h2>{PartnerAddEditConst.addNewPart}</h2>
+          <div className="allDiv anime">
+            <h2>{PartnerAddEditConst.addPart}</h2>
             {this.pageUI()}
           </div>
         </div>
@@ -126,33 +122,3 @@ export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(AdminPartner)
 );
 
-// {
-//   "partnerId":0,
-// "aadharNumber": "1212121212",
-// "accountNumber": "121212121212",
-// "address": "Near Sasuji Dining Hall, C G Road",
-// "bankName": "dsdsd",
-// "branchName": "sdsddddsd",
-// "city": "ahmedabad",
-// "companyLogo": "a",
-// "companyName": "cdsdcd",
-// "emailId": "hetvipatel321010@gmail.com",
-// "gstNumber": "DSDSDSDs",
-// "gstType": 0,
-// "ifsc": "121212121212",
-// "mobile": "8511829060",
-// "pan": "ABCDA1234A",
-// "pincode": "360005",
-// "state": "Gujarat",
-
-// "contactDetails": [
-//   {
-//     "contactId": 3,
-//     "partnerId": 1111112,
-//     "contactName": "hetvi@napbooks.com",
-//     "emailId": "hetvi@napbooks.com",
-//     "mobile": "123456789",
-//     "designation": "string"
-//   }
-// ]
-// }

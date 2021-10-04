@@ -67,9 +67,7 @@ h1, h2, h3, h4, h5, h6 {
     margin-left: auto;
     display: block;
     border-radius: 10px;
-    // @media ${size["tablet-md-max"]} {       
-    //   margin: auto;    
-    // }
+    // @media ${size["tablet-md-max"]} { margin: auto;}
     span {
       margin-right: 5px;
     }
@@ -116,86 +114,66 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 .anime:first-child{
-  z-index: 20;
   animation-delay: .1s;
 }
 .anime:nth-child(2){
-  z-index: 19;
   animation-delay: .2s;
 }
 .anime:nth-child(3){
-  z-index: 18;
   animation-delay: .3s;
 }
 .anime:nth-child(4){
-  z-index: 17;
   animation-delay: .4s;
 }
 .anime:nth-child(5){
-  z-index: 16;
   animation-delay: .5s;
 }
 .anime:nth-child(6){
-  z-index: 15;
   animation-delay: .6s;
 }
 .anime:nth-child(7){
-  z-index: 14;
   animation-delay: .7s;
 }
 .anime:nth-child(8){
-  z-index: 13;
   animation-delay: .8s;
 }
 .anime:nth-child(9){
-  z-index: 12;
   animation-delay: .9s;
 }
 .anime:nth-child(10){
-  z-index: 11;
   animation-delay: .91s;
 }
 .anime:nth-child(11){
-  z-index: 10;
   animation-delay: .92s;
 }
 .anime:nth-child(12){
-  z-index: 9;
   animation-delay: .93s;
 }
 .anime:nth-child(13){
-  z-index: 8;
   animation-delay: .94s;
 }
 .anime:nth-child(14){
-  z-index: 8;
   animation-delay: .95s;
 }
 .anime:nth-child(15){
-  z-index: 7;
   animation-delay: .96s;
 }
 .anime:nth-child(16){
-  z-index: 6;
   animation-delay: .97s;
 }
 .anime:nth-child(17){
-  z-index: 5;
   animation-delay: .98s;
 }
 .anime:nth-child(18){
-  z-index: 4;
   animation-delay: .99s;
 }
 .anime:nth-child(19){
-  z-index: 3;
   animation-delay: .991s;
 }
-.anime:nth-child(20){
-  z-index: 2;
+.anime:nth-child(20){ 
   animation-delay: .992s;
 }
-.highZ{z-index: 22!important;}
-.highZ2{z-index: 20!important;}
+.highZ{z-index: 22;}
+.highZ2{z-index: 20;}
 `;
 export default GlobalStyle;

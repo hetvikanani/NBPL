@@ -2,7 +2,7 @@ import Button from "components/Button";
 import Checkbox from "components/Checkbox";
 import DatePicker from "components/DatePicker";
 import Dropdown from "components/Dropdown";
-import Header from "components/Header2";
+import Header from "components/Header";
 import Input from "components/Input";
 import Label from "components/Label";
 import PageLoader from "components/PageLoader";

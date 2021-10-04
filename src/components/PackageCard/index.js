@@ -17,21 +17,21 @@ class PackageCard extends Component {
     }
   };
   render() {
-    const { data, period, checked} = this.props;
+    const { data, period, checked } = this.props;
     return (
       <PackageStyle>
-        <div className="cardDiv">
+        <div className="cardDiv anime">
           <div className="headingDiv">
             <h2>{data.heading}</h2>
           </div>
           <div className="priceDiv">
             <i className="fas fa-rupee-sign"></i>
             <h1>
-              { checked?data.amount2 + "/":data.amount + "/"}
+              {checked ? data.amount2 + "/" : data.amount + "/"}
               <sub className="month-txt">{period}</sub>
             </h1>
           </div>
-          <div className="listDiv">
+          <div className="listDiv anime">
             {this.listUI(data.li_1)}
             {this.listUI(data.li_2)}
             {this.listUI(data.li_3)}
@@ -43,7 +43,7 @@ class PackageCard extends Component {
             )}
           </div>
           <div className="btnDiv">
-            <Button >{ButtonConst.select}</Button>
+            <Button>{ButtonConst.select}</Button>
           </div>
         </div>
       </PackageStyle>

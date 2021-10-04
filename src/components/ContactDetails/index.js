@@ -3,17 +3,18 @@ import { Row, Col } from "antd";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
-import { contactDetailConst } from "./constant";
+import { contactConst } from "./constant";
+
 import { ContDetailsStyle } from "./style";
 import { Input, Label, Button } from "components/Form";
-
+import { FormValidation } from "App/AppConstant";
 const UserValidation = Yup.object().shape({
   contactName: Yup.string()
     .trim()
     .required(" ")
-    .matches(/^[aA-zZ0-9\s]+$/, "Only alphabets are allowed for this field "),
-  mobile: Yup.string().trim().min(10).max(10).required(" "),
+    .matches(/^[aA-zZ0-9\s]+$/, FormValidation.alphaValid),
   email: Yup.string().trim().email().required(" "),
+  mobile: Yup.string().trim().min(10).max(10).required(" "),
 });
 class ContactDetails extends Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class ContactDetails extends Component {
       ],
     };
   }
-  increase = (key, val) => {
+  increase = (key,val) => {
     const { initialState, prev } = this.state;
     const newData = initialState.map((data) => {
       if (data.key === key) {
@@ -55,7 +56,6 @@ class ContactDetails extends Component {
           designation: "",
           check: false,
           save: false,
-        
         },
       ],
     });
@@ -70,18 +70,17 @@ class ContactDetails extends Component {
     try {
       const { prev } = this.state;
       this.setState({ btnDisable: true, check: true });
-      // debugger;
-      // setTimeout(() => {
-      //   this.setState({ btnDisable: false });
-      // }, 4500);
+      setTimeout(() => {
+        this.setState({ btnDisable: false });
+      }, 4500);
       let prevData = prev;
       prevData.push(values);
       this.props.changeData("contractDetailsData", this.state.initialState);
       this.props.apiCall(this.state.initialState);
-      // console.log("data", data);
+     
       setSubmitting(false);
     } catch (error) {
-      console.log(error, "handle error");
+      console.log(error);
     }
   };
   proex = (e, index, setFieldValue, fildName) => {
@@ -95,9 +94,9 @@ class ContactDetails extends Component {
     const { initialState, disable } = this.state;
     return (
       <ContDetailsStyle>
-        <h2>{contactDetailConst.contactDetail}</h2>
+        <h3 className="anime">{contactConst.cd}</h3>
         {initialState.map((data, index) => (
-          <div className="formDiv" key={index}>
+          <div className="formDiv anime" key={index}>
             <Formik
               enableReinitialize
               initialValues={data}
@@ -117,10 +116,17 @@ class ContactDetails extends Component {
               }) => (
                 <Form onSubmit={handleSubmit}>
                   <Row gutter={20}>
-                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={24}
+                      lg={12}
+                      xl={12}
+                      className="anime"
+                    >
                       <div className="field">
                         <Label
-                          title={contactDetailConst.contactName}
+                          title={contactConst.contactName}
                           className={
                             errors.contactName && touched.contactName
                               ? "empty"
@@ -143,10 +149,17 @@ class ContactDetails extends Component {
                         />
                       </div>
                     </Col>
-                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={24}
+                      lg={12}
+                      xl={12}
+                      className="anime"
+                    >
                       <div className="field">
                         <Label
-                          title={contactDetailConst.mobile}
+                          title={contactConst.mobile}
                           className={
                             errors.mobile && touched.mobile ? "empty" : ""
                           }
@@ -166,10 +179,17 @@ class ContactDetails extends Component {
                         />
                       </div>
                     </Col>
-                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={24}
+                      lg={12}
+                      xl={12}
+                      className="anime"
+                    >
                       <div className="field">
                         <Label
-                          title={contactDetailConst.email}
+                          title={contactConst.email}
                           className={
                             errors.email && touched.email ? "empty" : ""
                           }
@@ -188,9 +208,16 @@ class ContactDetails extends Component {
                         />
                       </div>
                     </Col>
-                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={24}
+                      lg={12}
+                      xl={12}
+                      className="anime"
+                    >
                       <div className="field">
-                        <Label title={contactDetailConst.designation} />
+                        <Label title={contactConst.designation} />
                         <Input
                           onBlur={handleBlur}
                           name="designation"
@@ -204,19 +231,19 @@ class ContactDetails extends Component {
                     </Col>
                   </Row>
                   <div className="bottomDiv">
-                    <div className="leftBtnDiv">
+                    <div className="leftBtnDiv anime">
                       {initialState.length - 1 === index && (
                         <Button
                           type="button"
                           onClick={() => {
                             validateForm().then((d) => {
                               if (Object.keys(d).length === 0)
-                                this.increase(data.key, values);
+                                this.increase(data.key);
                               else handleSubmit();
                             });
                           }}
                         >
-                          {contactDetailConst.add}
+                          {contactConst.add}
                         </Button>
                       )}
                       {initialState.length !== 1 && (
@@ -226,7 +253,7 @@ class ContactDetails extends Component {
                             this.remove(data.key, setFieldValue, handleReset);
                           }}
                         >
-                          {contactDetailConst.remove}
+                          {contactConst.remove}
                         </Button>
                       )}
                     </div>

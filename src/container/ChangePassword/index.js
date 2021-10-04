@@ -6,8 +6,8 @@ import { ChangePWDStyle } from "./style";
 import { Menu, Header } from "components/Form";
 import { Button, Input, Label } from "components/Form";
 import { FormValidation, pwdMatch, ButtonConst } from "App/AppConstant";
-import {ChangePasswordConst} from "./constant";
- 
+import { ChangePasswordConst } from "./constant";
+
 const validationSchema = Yup.object().shape({
   curPwd: Yup.string()
     .min(4, FormValidation.passwordMin)
@@ -26,7 +26,6 @@ const validationSchema = Yup.object().shape({
     })
     .matches(pwdMatch, FormValidation.passwordInvalid),
 });
-
 
 class ChangePWD extends Component {
   constructor() {
@@ -57,7 +56,7 @@ class ChangePWD extends Component {
         <Menu />
         <div className="container">
           <Header />
-          <div className="allDiv">
+          <div className="allDiv anime">
             <Formik
               initialValues={initialState}
               validationSchema={validationSchema}
@@ -75,56 +74,62 @@ class ChangePWD extends Component {
               }) => (
                 <Form onSubmit={handleSubmit}>
                   <div className="form_div">
-                    <div className="field">
+                    <div className="field anime">
                       <Label
                         title={ChangePasswordConst.curPwd}
                         className={
                           errors.curPwd && touched.curPwd ? "empty" : ""
                         }
                       />
-                       <Input
+                      <Input
                         placeholder={ChangePasswordConst.entCurPwd}
-                        className={errors.curPwd && touched.curPwd ? "empty" : ""}
+                        className={
+                          errors.curPwd && touched.curPwd ? "empty" : ""
+                        }
                         onBlur={handleBlur}
                         name="curPwd"
                         value={values.curPwd}
                         handleChange={handleChange}
                         tabIndex="1"
-                      /> 
+                      />
                     </div>
-                    <div className="field">
+                    <div className="field anime">
                       <Label
                         title={ChangePasswordConst.newPwd}
                         className={
                           errors.newPwd && touched.newPwd ? "empty" : ""
                         }
                       />
-                       <Input
+                      <Input
                         placeholder={ChangePasswordConst.entNewPwd}
-                        className={errors.newPwd && touched.newPwd ? "empty" : ""}
+                        className={
+                          errors.newPwd && touched.newPwd ? "empty" : ""
+                        }
                         onBlur={handleBlur}
                         name="newPwd"
                         value={values.newPwd}
                         handleChange={handleChange}
                         tabIndex="2"
-                      /> 
+                      />
                     </div>
-                    <div className="field">
+                    <div className="field anime">
                       <Label
                         title={ChangePasswordConst.cunfNewPwd}
                         className={
                           errors.conPwd && touched.conPwd ? "empty" : ""
                         }
                       />
-                       <Input
+                      <Input
                         placeholder={ChangePasswordConst.cunfNewPwd}
-                        className={errors.conPwd && touched.conPwd ? "empty" : ""}
+                        className={
+                          errors.conPwd && touched.conPwd ? "empty" : ""
+                        }
                         onBlur={handleBlur}
                         name="conPwd"
                         value={values.conPwd}
                         handleChange={handleChange}
                         tabIndex="3"
-                      /> 
+                      />
                     </div>
                     <div className="btnDiv">
                       <Button type="submit" disabled={disable}>

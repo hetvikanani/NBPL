@@ -3,7 +3,6 @@ import { Theme } from "App/theme";
 // import { size } from "App/device";
 
 const StyledComponent = styled.div`
-  background-color: ${Theme.mainColor};
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   height: 100vh;
   padding-top: 1.8em;
@@ -28,7 +27,7 @@ const StyledComponent = styled.div`
     }
     .ant-menu-item,
     .ant-menu-submenu-title {
-      padding: 0 12px !important;
+      padding-left: 12px !important;
       .ant-menu-title-content {
         width: 9.5em;
       }

@@ -1,5 +1,4 @@
 import activeCust from "assets/images/activeCustomer.png";
-import license from "assets/images/activeLicense.png";
 import act from "assets/images/act.png";
 import actWhite from "assets/images/actwhite.png";
 import arrowdown from "assets/images/arrow-down.svg";
@@ -32,6 +31,7 @@ import iPing from "assets/images/iPing.png";
 import ipingWhite from "assets/images/ipingWhite.png";
 import leads from "assets/images/leads.png";
 import logo from "assets/images/logo.png";
+import license from "assets/images/activeLicense.png";
 import logoWhite from "assets/images/logoWhite.png";
 import lock from "assets/images/lock.svg";
 import logout from "assets/images/logout.svg";
@@ -39,6 +39,7 @@ import monthlySale from "assets/images/monthlySale.png";
 import meeting from "assets/images/meeting.svg";
 import nbpl from "assets/images/nbpl.png";
 import prospect from "assets/images/prospect.svg";
+import profile from "assets/images/profile.svg";
 import packag from "assets/images/packag.svg";
 import reception from "assets/images/reception.svg";
 import security from "assets/images/security.svg";
@@ -57,7 +58,6 @@ import adminPartner from "assets/images/adminPartners.svg";
 import adminProduct from "assets/images/adminProduct.svg";
 import adminSubscribe from "assets/images/adminSubscribe.svg";
 import adminUsers from "assets/images/adminUsers.svg";
-
 
 export {
   meeting,
@@ -99,6 +99,7 @@ export {
   monthlySale,
   nbpl,
   prospect,
+  profile,
   packag,
   reception,
   security,

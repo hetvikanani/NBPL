@@ -50,7 +50,6 @@ const TableConst = {
   gstType: "GST Type",
   timePer: "Time Period",
   gstno: "GST No.",
-  liceId: "License ID",
   firstName: "First Name",
   middleName: "Middle Name",
   lastName: "Last Name",

@@ -5,7 +5,7 @@ const AdminProStyle = styled.div`
   display: flex;
   .allDiv {
     padding: 1em;
-    h2{
+    h2 {
       color: ${Theme.mainColor};
     }
     .formDiv {

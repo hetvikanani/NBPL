@@ -11,7 +11,7 @@ export default class Colla extends Component {
       <StyleContainer>
         <Collapse expandIconPosition="right" accordion>
           {panelData &&
-            panelData.map((data,i) => (
+            panelData.map((data, i) => (
               <Panel header={data.header} key={i}>
                 {data.body}
               </Panel>

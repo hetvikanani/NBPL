@@ -54,10 +54,6 @@ const PartnersStyle = styled.div`
         max-width: 20em;    
       }
     }
-    .ant-empty{
-      border: 1px solid;
-      height: 10em;
-    }
     
   }
 `;

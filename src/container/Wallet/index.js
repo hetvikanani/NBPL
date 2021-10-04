@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { Row, Col, Card ,InputNumber} from "antd";
+import { Row, Col, Card, InputNumber } from "antd";
 
 import { WalletStyle } from "./style";
 import { Menu, Button, Header, Input, Table } from "components/Form";
-import { topRowData, tableData,WalletConst } from "./constatnt";
+import { topRowData, tableData, WalletConst } from "./constatnt";
 
 // const onSearch = (value) => console.log(value);
 class Salse extends Component {
@@ -65,34 +65,35 @@ class Salse extends Component {
           <Card className="box">
             <h3 className="name">{a.name}</h3>
             <div className="input-div">
-            {i === 0 && <h1 className="mark">{a.value}</h1>}
-              {i !== 0 && (<>
-                <Input                  
-                  className={`inputBox ${
-                    a.name === "Add Money" && addMoneyError
-                      ? "empty-field"
-                      : "" || (a.name === "Withdraw" && withDrawError)
-                      ? "empty-field"
-                      : ""
-                  }  `}
-                  value={a.name === "Add Money" ? addMoney : withDraw}
-                  type="number"
-                  handleChange={(e) => {
-                    this.handleInput(
-                      a.name === "Add Money" ? "addMoney" : "withDraw",
-                      e.target.value
-                    );
-                  }}
-                />
-                <Button
-                  className="btn-head"
-                  onClick={() => this.handleSubmit(a.name)}
-                >
-                  {a.name}
-                </Button>
+              {i === 0 && <h1 className="mark">{a.value}</h1>}
+              {i !== 0 && (
+                <>
+                  <Input
+                    className={`inputBox ${
+                      a.name === "Add Money" && addMoneyError
+                        ? "empty-field"
+                        : "" || (a.name === "Withdraw" && withDrawError)
+                        ? "empty-field"
+                        : ""
+                    }  `}
+                    value={a.name === "Add Money" ? addMoney : withDraw}
+                    type="number"
+                    handleChange={(e) => {
+                      this.handleInput(
+                        a.name === "Add Money" ? "addMoney" : "withDraw",
+                        e.target.value
+                      );
+                    }}
+                  />
+                  <Button
+                    className="btn-head"
+                    onClick={() => this.handleSubmit(a.name)}
+                  >
+                    {a.name}
+                  </Button>
                 </>
-                )} 
-              </div>
+              )}
+            </div>
           </Card>
         </Col>
       ));
@@ -120,27 +121,24 @@ class Salse extends Component {
   };
   SearchUI = () => {
     try {
-      return (
-          <Input placeholder={WalletConst.search}/>
-      );
+      return <Input placeholder={WalletConst.search} />;
     } catch (error) {
       console.log(error);
     }
   };
-
   render() {
     return (
       <WalletStyle>
         <Menu />
         <div className="container">
           <Header />
-          <div className="allDiv">            
-              <Row gutter={20}>{this.topRowUi()}</Row>
-              <div className="boxDiv">
+          <div className="allDiv">
+            <Row gutter={20}>{this.topRowUi()}</Row>
+            <div className="boxDiv">
               <h2>{WalletConst.tranHistory}</h2>
               <div className="inputNum-div">
-                <div className = "inputDiv"> {this.inputNumberUi()} </div>               
-                <div className = "searchDiv">{this.SearchUI()}</div>
+                <div className="inputDiv"> {this.inputNumberUi()} </div>
+                <div className="searchDiv">{this.SearchUI()}</div>
               </div>
               <div className="table-div">
                 <Table data={tableData} type="wallet" size={10} />

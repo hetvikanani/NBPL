@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { UserRoleStyle } from "./style";
 import { Label, Button, Select, Checkbox } from "components/Form";
 // import { PageConst, ButtonConst } from "App/AppConstant";
-import {userRoleConst} from "./constant";
+import { userRoleConst } from "./constant";
 
 class UserRole extends Component {
   constructor(props) {
@@ -42,14 +42,13 @@ class UserRole extends Component {
         },
       ],
     };
-  }  
-  handleSelect=(e)=>{
-    
+  }
+  handleSelect = (e) => {
     this.setState({
       userRole: e,
       userRoleError: false,
     });
-  }
+  };
   handleSubmit = () => {
     try {
       this.setState({ btnDisable: true });
@@ -68,19 +67,17 @@ class UserRole extends Component {
       console.log(error);
     }
   };
-
-
   tableBodyUI = () => {
     try {
       const { tableArray } = this.state;
       return tableArray.map((a, i) => (
-        <tr key={i}>
+        <tr key={i} className="anime">
           <td className="text">{a.value}</td>
-          {this.tdUI(a.all,i, a, 0)}
-          {this.tdUI(a.add,i, a, 1)}
-          {this.tdUI(a.edit,i, a, 2)}
-          {this.tdUI(a.view,i, a, 3)}
-          {this.tdUI(a.delete,i, a, 4)}
+          {this.tdUI(a.all, i, a, 0)}
+          {this.tdUI(a.add, i, a, 1)}
+          {this.tdUI(a.edit, i, a, 2)}
+          {this.tdUI(a.view, i, a, 3)}
+          {this.tdUI(a.delete, i, a, 4)}
         </tr>
       ));
     } catch (error) {
@@ -107,17 +104,16 @@ class UserRole extends Component {
       console.log(error);
     }
   };
-  tdUI=(type,i, a, inx)=>  <td>
-  <Checkbox
-    checked={type}
-    onChange={() => this.onChange(i, a, inx)}
-  />
-</td>
+  tdUI = (type, i, a, inx) => (
+    <td>
+      <Checkbox checked={type} onChange={() => this.onChange(i, a, inx)} />
+    </td>
+  );
   render() {
     const { btnDisable, userRole, userRoleError } = this.state;
     return (
       <UserRoleStyle>
-        <div className="field">
+        <div className="field anime">
           <Label
             title={userRoleConst.userRole}
             className={userRoleError ? "empty" : ""}
@@ -132,7 +128,7 @@ class UserRole extends Component {
         <div className="tableDiv">
           <table>
             <thead>
-              <tr>
+              <tr className="anime">
                 <th> </th>
                 <th>{userRoleConst.all}</th>
                 <th>{userRoleConst.add}</th>

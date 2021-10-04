@@ -1,22 +1,29 @@
 import React, { Component } from "react";
 import { Menu, Dropdown } from "antd";
 import { StyleComponent } from "./style";
+// import { debounce } from "lodash-es";
 
 class RenderDrop extends Component {
   menu = () => {
+    const { data, children } = this.props;
     return (
       <Menu>
-        <Menu.Item key="0">{this.props.children}</Menu.Item>
+        {!data ? (
+          <Menu.Item key="1">{children}</Menu.Item>
+        ) : (
+          data.map((a, i) => <Menu.Item key={i + 1}>{a}</Menu.Item>)
+        )}
       </Menu>
     );
   };
   render() {
-    const { item, id } = this.props;
+    const { item, id,} = this.props;
     let cls = id ? "render-form" + id : "render-form";
     return (
       <StyleComponent>
-        <div id={cls}>
+        <div id={cls} >
           <Dropdown
+            destroyPopupOnHide
             placement="bottomRight"
             overlay={this.menu()}
             trigger={["click"]}

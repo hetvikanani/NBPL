@@ -5,19 +5,17 @@ import * as Yup from "yup";
 
 import { UserInfoStyle } from "./style";
 import { Input, Label, Button } from "components/Form";
-import {  FormValidation } from "App/AppConstant";
-import {userInfoConst} from "./constant";
-
-
+import { FormValidation } from "App/AppConstant";
+import { userInfoConst } from "./constant";
 
 const ValidationSchema = Yup.object().shape({
   firstName: Yup.string().trim().required(" "),
   emailId: Yup.string().trim().email(FormValidation.emailInvalid),
   mobileNo: Yup.string()
-    .trim().required(" ")
+    .trim()
+    .required(" ")
     .min(10, FormValidation.mobileInvalid)
-    .max(10, FormValidation.mobileInvalid)
-    ,
+    .max(10, FormValidation.mobileInvalid),
 });
 
 class userInfo extends Component {
@@ -40,15 +38,15 @@ class userInfo extends Component {
       setTimeout(() => {
         this.setState({ btnDisable: false });
       }, 4500);
-       this.props.countInc();
-      
+      this.props.countInc();
+
       setSubmitting(false);
     } catch (error) {
       console.log(error);
     }
   };
   render() {
-    const { initState,btnDisable } = this.state;
+    const { initState, btnDisable } = this.state;
     return (
       <UserInfoStyle>
         <Formik
@@ -69,7 +67,7 @@ class userInfo extends Component {
           }) => (
             <Form onSubmit={handleSubmit}>
               <Row gutter={20}>
-                <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                <Col xs={24} sm={24} md={12} lg={12} xl={12} className="anime">
                   <div className="field">
                     <Label
                       title={userInfoConst.firstName}
@@ -88,19 +86,19 @@ class userInfo extends Component {
                     />
                   </div>
                 </Col>
-                <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                <Col xs={24} sm={24} md={12} lg={12} xl={12} className="anime">
                   <div className="field">
                     <Label title={userInfoConst.middleName} />
                     <Input />
                   </div>
                 </Col>
-                <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                <Col xs={24} sm={24} md={12} lg={12} xl={12} className="anime">
                   <div className="field">
                     <Label title={userInfoConst.lastName} />
                     <Input />
                   </div>
                 </Col>
-                <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                <Col xs={24} sm={24} md={12} lg={12} xl={12} className="anime">
                   <div className="field">
                     <Label
                       title={userInfoConst.email}
@@ -122,7 +120,7 @@ class userInfo extends Component {
                     )}
                   </div>
                 </Col>
-                <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                <Col xs={24} sm={24} md={12} lg={12} xl={12} className="anime">
                   <div className="field">
                     <Label
                       title={userInfoConst.mobile}
@@ -147,7 +145,9 @@ class userInfo extends Component {
                 </Col>
               </Row>
               <div className="btnDiv">
-                <Button type="submit" disabled={btnDisable}>{userInfoConst.next}</Button>
+                <Button type="submit" disabled={btnDisable}>
+                  {userInfoConst.next}
+                </Button>
               </div>
             </Form>
           )}

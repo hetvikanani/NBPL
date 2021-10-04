@@ -4,9 +4,9 @@ import { withRouter } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Editor } from "react-draft-wysiwyg";
-import { EditorState , convertToRaw} from "draft-js";
+import { EditorState, convertToRaw } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import draftToHtml from 'draftjs-to-html';
+import draftToHtml from "draftjs-to-html";
 // import htmlToDraft from 'html-to-draftjs';
 
 import { PackAddEditStyle } from "./style";
@@ -30,20 +30,19 @@ class PackageAddEdit extends Component {
     super();
     this.state = {
       editor: EditorState.createEmpty(),
-      packageDetails:"",
+      packageDetails: "",
       btnDisable: false,
       subType: false,
       initialState: {
-        packageType:"",
-        packagePrice:"",
+        packageType: "",
+        packagePrice: "",
       },
     };
   }
   hendalEditor = (editorState) => {
     try {
       let val = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-      
-      this.setState({ editor: editorState,packageDetails: val});
+      this.setState({ editor: editorState, packageDetails: val });
     } catch (error) {
       console.log(error);
     }
@@ -56,9 +55,9 @@ class PackageAddEdit extends Component {
       console.log(error);
     }
   };
-  selectUI =(val,setFieldValue,error)=>{
+  selectUI = (val, setFieldValue, error) => {
     try {
-      return(
+      return (
         <Select
           data={select}
           value={val}
@@ -68,20 +67,19 @@ class PackageAddEdit extends Component {
             setFieldValue("packageType", value);
           }}
         />
-
       );
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   render() {
-    const { initialState, subType, editor ,packageDetails} = this.state;
+    const { initialState, subType, editor } = this.state;
     return (
       <PackAddEditStyle>
         <Menu />
         <div className="container">
           <Header />
-          <div className="allDiv">
+          <div className="allDiv anime">
             <h2>{packAddEditConst.addNewPack}</h2>
             <div className="formDiv">
               <Formik
@@ -103,19 +101,24 @@ class PackageAddEdit extends Component {
                     <Row gutter={20}>
                       <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                         <div className="field">
-                          <Label title={packAddEditConst.packType + packAddEditConst.colon} 
-                          className={
-                            errors.packageType && touched.packageType
-                              ? "empty"
-                              : ""
-                          }
+                          <Label
+                            title={
+                              packAddEditConst.packType + packAddEditConst.colon
+                            }
+                            className={
+                              errors.packageType && touched.packageType
+                                ? "empty"
+                                : ""
+                            }
                           />
-                          { values.packageType==="" && this.selectUI(
+                          {values.packageType === "" &&
+                            this.selectUI(
                               "",
                               setFieldValue,
                               errors.packageType && touched.packageType
                             )}
-                            { values.packageType!==""&& this.selectUI(
+                          {values.packageType !== "" &&
+                            this.selectUI(
                               values.packageType,
                               setFieldValue,
                               errors.packageType && touched.packageType
@@ -124,7 +127,11 @@ class PackageAddEdit extends Component {
                       </Col>
                       <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                         <div className="field">
-                          <Label title={packAddEditConst.subsType + packAddEditConst.colon} />
+                          <Label
+                            title={
+                              packAddEditConst.subsType + packAddEditConst.colon
+                            }
+                          />
                           <div className="switchDiv">
                             <RoundSwitch
                               left="MONTHLY"
@@ -137,8 +144,13 @@ class PackageAddEdit extends Component {
                       </Col>
                       <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                         <div className="field">
-                          <Label title={packAddEditConst.packPrice + packAddEditConst.colon} />
-                          <Input 
+                          <Label
+                            title={
+                              packAddEditConst.packPrice +
+                              packAddEditConst.colon
+                            }
+                          />
+                          <Input
                             className={
                               errors.packagePrice && touched.packagePrice
                                 ? "empty"
@@ -153,17 +165,24 @@ class PackageAddEdit extends Component {
                       </Col>
                       <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                         <div className="field">
-                          <Label title={packAddEditConst.packDetails + packAddEditConst.colon} />
+                          <Label
+                            title={
+                              packAddEditConst.packDetails +
+                              packAddEditConst.colon
+                            }
+                          />
                           <Editor
                             editorState={editor}
                             onEditorStateChange={this.hendalEditor}
                           />
                         </div>
                       </Col>
-                    </Row>     
+                    </Row>
                     {/* <div dangerouslySetInnerHTML={{__html: packageDetails}}/> */}
                     <div className="bottomDiv">
-                      <Button type="button">{packAddEditConst.saveAddOther}</Button>
+                      <Button type="button">
+                        {packAddEditConst.saveAddOther}
+                      </Button>
                       <Button type="submit">{packAddEditConst.save}</Button>
                     </div>
                   </Form>

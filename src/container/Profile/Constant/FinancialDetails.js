@@ -5,6 +5,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { ProfileStyle } from "../style";
 import { FinancialConst } from "../constant";
+import { ButtonConst } from "App/AppConstant";
 
 const ValidationSchema = Yup.object().shape({
   bank_name: Yup.string().trim().required(" "),
@@ -48,7 +49,7 @@ export default class FinancialDetails extends Component {
       }, 4500);
       setSubmitting(false);
     } catch (error) {
-      console.log(error, "handle error");
+      console.log(error);
     }
   };
 
@@ -65,189 +66,191 @@ export default class FinancialDetails extends Component {
     const { initState } = this.state;
 
     return (
-      
-        <div>
-          <Formik
-            initialValues={initState}
-            validationSchema={ValidationSchema}
-            onSubmit={this.handleSubmit}
-          >
-            {({
-              values,
-              errors,
-              touched,
-              onBlur,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              setFieldValue,
-            }) => (
-              <Form onSubmit={handleSubmit}>
-                <Row gutter={24}>
-                  <Col xs={24} sm={24} md={12} lg={8} xl={8}>
-                    <Label
-                      title={FinancialConst.bank_name}
-                      className={
-                        errors.bank_name && touched.bank_name ? "empty" : ""
-                      }
-                    ></Label>
-                    <Select
-                      placeholder={FinancialConst.bank_nameplace}
-                      data={bank}
-                      selectClass={
-                        errors.bank_name && touched.bank_name ? "empty" : ""
-                      }
-                      name="bank_name"
-                      tabIndex="1"
-                      value={values.bank_name}
-                      onChange={(value) => {
-                        setFieldValue("bank_name", value);
-                      }}
-                    ></Select>
-                  </Col>
-                  <Col xs={24} sm={24} md={12} lg={8} xl={8}>
-                    <Label
-                      title={FinancialConst.branch_name}
-                      className={
-                        errors.branch_name && touched.branch_name ? "empty" : ""
-                      }
-                    ></Label>
-                    <Input
-                      placeholder={FinancialConst.branch_nameplace}
-                      className={
-                        errors.branch_name && touched.branch_name ? "empty" : ""
-                      }
-                      onBlur={handleBlur}
-                      name="branch_name"
-                      value={values.branch_name}
-                      handleChange={handleChange}
-                      tabIndex="2"
-                    ></Input>
-                  </Col>
-                  <Col xs={24} sm={24} md={12} lg={8} xl={8}>
-                    <Label
-                      title={FinancialConst.account_no}
-                      className={
-                        errors.account_no && touched.account_no ? "empty" : ""
-                      }
-                    ></Label>
-                    <Input
-                      placeholder={FinancialConst.account_noplace}
-                      type="number"
-                      className={
-                        errors.account_no && touched.account_no ? "empty" : ""
-                      }
-                      onBlur={handleBlur}
-                      name="account_no"
-                      value={values.account_no}
-                      handleChange={handleChange}
-                      tabIndex="3"
-                    ></Input>
-                  </Col>
-
-                  <Col xs={24} sm={24} md={12} lg={8} xl={8}>
-                    <Label
-                      title={FinancialConst.ifsc}
-                      className={
-                        errors.ifsc_code && touched.ifsc_code ? "empty" : ""
-                      }
-                    ></Label>
-                    <Input
-                      placeholder={FinancialConst.ifscplace}
-                      className={
-                        errors.ifsc_code && touched.ifsc_code ? "empty" : ""
-                      }
-                      onBlur={handleBlur}
-                      name="ifsc_code"
-                      value={values.ifsc_code}
-                      handleChange={handleChange}
-                      tabIndex="4"
-                    ></Input>
-                  </Col>
-                  <Col xs={24} sm={24} md={12} lg={8} xl={8}>
-                    <Label
-                      title={FinancialConst.address}
-                      className={
-                        errors.address && touched.address ? "empty" : ""
-                      }
-                    ></Label>
-                    <Input
-                      rows={2}
-                      placeholder={FinancialConst.addressplace}
-                      className={
-                        errors.address && touched.address ? "empty" : ""
-                      }
-                      onBlur={handleBlur}
-                      name="address"
-                      value={values.address}
-                      handleChange={handleChange}
-                      tabIndex="5"
-                    ></Input>
-                  </Col>
-                  <Col xs={24} sm={24} md={12} lg={8} xl={8}>
-                    <Label
-                      title={FinancialConst.pincode}
-                      className={
-                        errors.pincode && touched.pincode ? "empty" : ""
-                      }
-                    ></Label>
-                    <Input
-                      placeholder={FinancialConst.pincodeplace}
-                      className={
-                        errors.pincode && touched.pincode ? "empty" : ""
-                      }
-                      onBlur={handleBlur}
-                      name="pincode"
-                      type="number"
-                      value={values.pincode}
-                      handleChange={handleChange}
-                      tabIndex="6"
-                    ></Input>
-                  </Col>
-
-                  <Col xs={24} sm={24} md={12} lg={8} xl={8}>
-                    <Label
-                      title={FinancialConst.city}
-                      className={errors.city && touched.city ? "empty" : ""}
-                    ></Label>
-                    <Select
-                      placeholder={FinancialConst.cityplace}
-                      data={city}
-                      selectClass={errors.city && touched.city ? "empty" : ""}
-                      name="city"
-                      tabIndex="7"
-                      value={values.city}
-                      onChange={(value) => {
-                        setFieldValue("city", value);
-                      }}
-                    ></Select>
-                  </Col>
-                  <Col xs={24} sm={24} md={12} lg={8} xl={8}>
-                    <Label
-                      title={FinancialConst.state}
-                      className={errors.state && touched.state ? "empty" : ""}
-                    ></Label>
-                    <Select
-                      placeholder={FinancialConst.stateplace}
-                      data={state}
-                      selectClass={errors.state && touched.state ? "empty" : ""}
-                      name="state"
-                      tabIndex="8"
-                      value={values.state}
-                      onChange={(value) => {
-                        setFieldValue("state", value);
-                      }}
-                    ></Select>
-                  </Col>
-                </Row>
-                <div className="btnDiv">
-                  <Button type="submit">Update</Button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </div>
-     
+      <div>
+        <Formik
+          initialValues={initState}
+          validationSchema={ValidationSchema}
+          onSubmit={this.handleSubmit}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            onBlur,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            setFieldValue,
+          }) => (
+            <Form onSubmit={handleSubmit}>
+              <Row gutter={24}>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
+                  <Label
+                    title={FinancialConst.bank_name}
+                    className={
+                      errors.bank_name && touched.bank_name ? "empty" : ""
+                    }
+                  />
+                  <Select
+                    placeholder={FinancialConst.bank_nameplace}
+                    data={bank}
+                    selectClass={
+                      errors.bank_name && touched.bank_name ? "empty" : ""
+                    }
+                    name="bank_name"
+                    tabIndex="1"
+                    value={values.bank_name}
+                    onChange={(value) => {
+                      setFieldValue("bank_name", value);
+                    }}
+                  />
+                </Col>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
+                  <Label
+                    title={FinancialConst.branch_name}
+                    className={
+                      errors.branch_name && touched.branch_name ? "empty" : ""
+                    }
+                  />
+                  <Input
+                    placeholder={FinancialConst.branch_nameplace}
+                    className={
+                      errors.branch_name && touched.branch_name ? "empty" : ""
+                    }
+                    onBlur={handleBlur}
+                    name="branch_name"
+                    value={values.branch_name}
+                    handleChange={handleChange}
+                    tabIndex="2"
+                  />
+                </Col>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
+                  <Label
+                    title={FinancialConst.account_no}
+                    className={
+                      errors.account_no && touched.account_no ? "empty" : ""
+                    }
+                  />
+                  <Input
+                    placeholder={FinancialConst.account_noplace}
+                    type="number"
+                    className={
+                      errors.account_no && touched.account_no ? "empty" : ""
+                    }
+                    onBlur={handleBlur}
+                    name="account_no"
+                    value={values.account_no}
+                    handleChange={handleChange}
+                    tabIndex="3"
+                  />
+                </Col>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
+                  <Label
+                    title={FinancialConst.ifsc}
+                    className={
+                      errors.ifsc_code && touched.ifsc_code ? "empty" : ""
+                    }
+                  />
+                  <Input
+                    placeholder={FinancialConst.ifscplace}
+                    className={
+                      errors.ifsc_code && touched.ifsc_code ? "empty" : ""
+                    }
+                    onBlur={handleBlur}
+                    name="ifsc_code"
+                    value={values.ifsc_code}
+                    handleChange={handleChange}
+                    tabIndex="4"
+                  />
+                </Col>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
+                  <Label
+                    title={FinancialConst.address}
+                    className={errors.address && touched.address ? "empty" : ""}
+                  />
+                  <Input
+                    rows={2}
+                    placeholder={FinancialConst.addressplace}
+                    className={errors.address && touched.address ? "empty" : ""}
+                    onBlur={handleBlur}
+                    name="address"
+                    value={values.address}
+                    handleChange={handleChange}
+                    tabIndex="5"
+                  />
+                </Col>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
+                  <Label
+                    title={FinancialConst.pincode}
+                    className={errors.pincode && touched.pincode ? "empty" : ""}
+                  />
+                  <Input
+                    placeholder={FinancialConst.pincodeplace}
+                    className={errors.pincode && touched.pincode ? "empty" : ""}
+                    onBlur={handleBlur}
+                    name="pincode"
+                    type="number"
+                    value={values.pincode}
+                    handleChange={handleChange}
+                    tabIndex="6"
+                  />
+                </Col>
+                <Col
+                  xs={24}
+                  sm={24}
+                  md={12}
+                  lg={8}
+                  xl={8}
+                  className="anime highZ"
+                >
+                  <Label
+                    title={FinancialConst.city}
+                    className={errors.city && touched.city ? "empty" : ""}
+                  />
+                  <Select
+                    placeholder={FinancialConst.cityplace}
+                    data={city}
+                    selectClass={errors.city && touched.city ? "empty" : ""}
+                    name="city"
+                    tabIndex="7"
+                    value={values.city}
+                    onChange={(value) => {
+                      setFieldValue("city", value);
+                    }}
+                  />
+                </Col>
+                <Col
+                  xs={24}
+                  sm={24}
+                  md={12}
+                  lg={8}
+                  xl={8}
+                  className="anime highZ2"
+                >
+                  <Label
+                    title={FinancialConst.state}
+                    className={errors.state && touched.state ? "empty" : ""}
+                  />
+                  <Select
+                    placeholder={FinancialConst.stateplace}
+                    data={state}
+                    selectClass={errors.state && touched.state ? "empty" : ""}
+                    name="state"
+                    tabIndex="8"
+                    value={values.state}
+                    onChange={(value) => {
+                      setFieldValue("state", value);
+                    }}
+                  />
+                </Col>
+              </Row>
+              <div className="btnDiv anime">
+                <Button type="submit">{ButtonConst.update}</Button>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
     );
   }
 }

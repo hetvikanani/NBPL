@@ -1,6 +1,5 @@
 import styled from "styled-components";
 // import { size } from "App/device";
-import { Theme } from "App/theme";
 
 const TableStyle = styled.div`
   .ant-table-content table {
@@ -20,46 +19,17 @@ const TableStyle = styled.div`
     .ant-pagination-item-link {
       color: #616161;
     }
-
     .actionUI {
       display: flex;
       justify-content: center;
       color: black;
+      z-index: 1000;
       .edite_box {
         margin: 0 7px;
       }
       .dash {
         transform: rotate(90deg);
         font-size: 20px;
-      }
-      .ant-dropdown {
-        .ant-dropdown-menu {
-          box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
-          border-radius: 7px;
-          .ant-dropdown-menu-item {
-            padding: 5px 15px;
-            :hover {
-              background-color: #ffff;
-            }
-            .actionBtn {
-              color: ${Theme.mainColor};
-              display: flex;
-              border-bottom: 1px solid;
-              align-items: center;
-              margin-bottom: 7px;
-              padding: 5px;
-              font-weight: 700;
-              .text {
-                margin-left: 10px;
-              }
-              :hover {
-                background-color: #e4e4e4;
-                border-bottom: none;
-                border-radius: 5px;
-              }
-            }
-          }
-        }
       }
     }
     .statusUI {

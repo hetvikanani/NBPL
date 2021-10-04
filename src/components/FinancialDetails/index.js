@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { Row, Col } from "antd";
-import { CloseOutlined, UploadOutlined } from "@ant-design/icons";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { financialDetailConst } from "./constant";
+import { finConst } from "./constant";
 
 import { FinDetailsStyle } from "./style";
 import { Input, Label, Button } from "components/Form";
@@ -15,7 +14,7 @@ const UserValidation = Yup.object().shape({
   ifscCode: Yup.string()
     .trim()
     .required(" ")
-    .matches(/^[A-Z]{4}0[A-Z0-9]{6}$/, "only"),
+    .matches(/^[A-Z]{4}0[A-Z0-9]{6}$/, "only ifsc code allow"),
   pincode: Yup.string().trim().min(6).max(6).required(" "),
   city: Yup.string().trim().required(" "),
   state: Yup.string().trim().required(" "),
@@ -45,17 +44,16 @@ class FinancialDetails extends Component {
       }, 4500);
       this.props.countInc();
       this.props.changeData("financialDetailsData", values);
-
       setSubmitting(false);
     } catch (error) {
-      console.log(error, "handle error");
+      console.log(error);
     }
   };
   render() {
     const { initialState, disable } = this.state;
     return (
       <FinDetailsStyle>
-        <h2>{financialDetailConst.finDetail}</h2>
+        <h2 className="anime">{finConst.finDetail}</h2>
         <div className="formDiv">
           <Formik
             initialValues={initialState}
@@ -70,14 +68,20 @@ class FinancialDetails extends Component {
               handleChange,
               handleBlur,
               handleSubmit,
-              validateForm,
             }) => (
               <Form onSubmit={handleSubmit}>
                 <Row gutter={24}>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
-                        title={financialDetailConst.bankName}
+                        title={finConst.bankName}
                         className={
                           errors.bankName && touched.bankName ? "empty" : ""
                         }
@@ -94,10 +98,17 @@ class FinancialDetails extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
-                        title={financialDetailConst.branchName}
+                        title={finConst.branchName}
                         className={
                           errors.branchName && touched.branchName ? "empty" : ""
                         }
@@ -114,10 +125,17 @@ class FinancialDetails extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
-                        title={financialDetailConst.address}
+                        title={finConst.address}
                         className={
                           errors.address && touched.address ? "empty" : ""
                         }
@@ -135,10 +153,17 @@ class FinancialDetails extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
-                        title={financialDetailConst.accNo}
+                        title={finConst.accNo}
                         className={
                           errors.accountNo && touched.accountNo ? "empty" : ""
                         }
@@ -157,7 +182,7 @@ class FinancialDetails extends Component {
                     </div>
                     <div className="field">
                       <Label
-                        title={financialDetailConst.ifsc}
+                        title={finConst.ifsc}
                         className={
                           errors.ifscCode && touched.ifscCode ? "empty" : ""
                         }
@@ -174,10 +199,17 @@ class FinancialDetails extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
-                        title={financialDetailConst.pincode}
+                        title={finConst.pincode}
                         className={
                           errors.pincode && touched.pincode ? "empty" : ""
                         }
@@ -195,10 +227,17 @@ class FinancialDetails extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
-                        title={financialDetailConst.city}
+                        title={finConst.city}
                         className={errors.city && touched.city ? "empty" : ""}
                       />
                       <Input
@@ -211,10 +250,17 @@ class FinancialDetails extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
-                        title={financialDetailConst.state}
+                        title={finConst.state}
                         className={errors.state && touched.state ? "empty" : ""}
                       />
                       <Input
@@ -230,12 +276,12 @@ class FinancialDetails extends Component {
                 </Row>
 
                 <div className="bottomDiv">
-                  <div className="btn">
+                  <div className="btn anime">
                     <Button type="button" onClick={this.props.previous}>
-                      {financialDetailConst.previous}
+                      {finConst.previous}
                     </Button>
                     <Button type="submit" disabled={disable}>
-                      {financialDetailConst.next}
+                      {finConst.next}
                     </Button>
                   </div>
                 </div>

@@ -8,7 +8,7 @@ const UserListStyle = styled.div`
     padding: 1em;
     .headDiv {
       display: flex;
-      margin-bottom: 2em;     
+      margin-bottom: 2em;
       h2 {
         margin-bottom: 0;
       }
@@ -33,7 +33,6 @@ const UserListStyle = styled.div`
       max-width: 20em;
       margin-bottom: 2em;
     }
-    
   }
 `;
 export { UserListStyle };

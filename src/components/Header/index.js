@@ -1,20 +1,21 @@
 import React, { Component } from "react";
 import { withRouter, NavLink } from "react-router-dom";
+import { Image, Modal, Popover } from "antd";
 import { connect } from "react-redux";
-import { Image, Modal } from "antd";
-import { QuestionCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined, UserOutlined } from "@ant-design/icons";
 
-import { RenderDrop } from "components/Form";
+import { headConst } from "./constant";
 import { StyleComponent } from "./style";
+import { RemoveConst } from "App/AppConstant";
 import { setCollapsMenu } from "redux/app/actions";
-import {  RemoveConst } from "App/AppConstant";
-import { logo, logoWhite } from "components/Images";
 import { getAuthRole, getAuthUserID } from "modules/helper";
-import { headerConst } from "./constant";
+import { logo, logoWhite, logout, lock, profile } from "components/Images";
+import { Theme } from "App/theme";
 
 var userRole = getAuthRole();
 var userId = getAuthUserID();
 const { confirm } = Modal;
+
 class Header extends Component {
   constructor() {
     super();
@@ -56,6 +57,13 @@ class Header extends Component {
   //   }
   // };
   handleVisible = (visible) => this.setState({ visible });
+  iconUI = (cls, url) => (
+    <i
+      className={"fas " + cls}
+      onClick={() => this.props.history.push(url)}
+    ></i>
+  );
+  handleVisible = (visible) => this.setState({ visible });
   openMenu = async () => {
     try {
       this.handleVisible(false);
@@ -75,71 +83,98 @@ class Header extends Component {
         okType: "danger",
         cancelText: RemoveConst.no,
         getContainer: () => document.getElementById("App"),
-        onOk: () => {
-          this.props.logout();
-        },
+        onOk: () => this.props.logout(),
       });
     } catch (error) {
       console.log(error);
     }
   };
-  readNotify = async (id) => {
-    try {
-      // await this.props.getReadNotification(userId + "/" + id);
-      // await this.props.getNotification(userId);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  allNotif = () => {
-    try {
-      const { notification } = this.props;
-      return notification.map((a, i) => (
-        <div className={`notify-border ${!a.isread ? "read" : ""}`} key={i}>
-          <span className="not-mrg">
-            <div className="not-txt">{a.title}</div>
-            <div className="not-txt"> {a.notification}</div>
-          </span>
-          {!a.isread && (
-            <CloseCircleOutlined
-              className="croIcon"
-              onClick={() => this.readNotify(a.id)}
-            />
-          )}
-        </div>
-      ));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  iconUI = (cls, url) => (
-    <i
-      className={"fas " + cls}
-      onClick={() => this.props.history.push(url)}
-    ></i>
-  );  
-  
   render() {
     const { show, collapsed } = this.props;
     let allwidth = window.innerWidth;
+    let title = { lineHeight: "1.3em", marginLeft: "10px" };
+    let admin =
+      localStorage.auth && JSON.parse(localStorage.auth).role === "admin";
     return (
       <StyleComponent className={!show ? "" : "show"}>
-        <div className="maindiv" id="menu-form">
+        <div
+          className="maindiv"
+          id="menu-form"
+          style={{ backgroundColor: admin ? Theme.adColor : Theme.mainColor }}
+        >
           <div className="head-container">
             <div>
               <i
                 className="fa fa-bars text-white"
                 onClick={() => this.props.setCollapsMenu(!collapsed)}
               ></i>
-              <h4 className="text-white">{headerConst.nbl}</h4>
+              <h4 className="text-white">
+                {admin ? headConst.admin : headConst.nbl}
+              </h4>
             </div>
             <div>
-              {this.iconUI("fa-shopping-cart", "/shop")}
-              {this.iconUI("fa-wallet", "/wallet")}
-              {this.iconUI("fa-bell", "/shop")}
-              {this.iconUI("fa-user", "/profile")}
-             
-              
+              {!admin && (
+                <>
+                  {this.iconUI("fa-shopping-cart", "/shop")}
+                  {this.iconUI("fa-wallet", "/wallet")}
+                  {this.iconUI("fa-bell", "/shop")}
+                </>
+              )}
+              <Popover
+                visible={this.state.visible}
+                onVisibleChange={this.handleVisible}
+                style={{ top: "26" }}
+                content={
+                  <div>
+                    <div
+                      style={{
+                        display: "flex",
+                        cursor: "pointer",
+                        marginBottom: "8px",
+                      }}
+                      onClick={() => this.props.history.push("/profile")}
+                    >
+                      <UserOutlined
+                        style={{
+                          color: "#b5b5b5",
+                          fontSize: "1.2em",
+                          marginRight: "4px",
+                        }}
+                      />
+                      <div style={title}>{headConst.profile}</div>
+                    </div>
+                    <div
+                      style={{ display: "flex", cursor: "pointer" }}
+                      // onClick={this.openMenu}
+                      onClick={() =>
+                        this.props.history.push("/change-password")
+                      }
+                    >
+                      <Image src={lock} preview={false} width={20} />
+                      <div style={title}>{headConst.changePwd}</div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        cursor: "pointer",
+                        marginTop: "12px",
+                      }}
+                      onClick={this.logoutWarn}
+                    >
+                      <Image src={logout} preview={false} width={20} />
+                      <div style={title}>{RemoveConst.logout}</div>
+                    </div>
+                  </div>
+                }
+                trigger="click"
+                placement="bottomRight"
+              >
+                {admin ? (
+                  <Image src={profile} width={30} preview={false}></Image>
+                ) : (
+                  <i className={"fas fa-user"}></i>
+                )}
+              </Popover>
             </div>
           </div>
           <NavLink to="/" className="flex mr-auto">

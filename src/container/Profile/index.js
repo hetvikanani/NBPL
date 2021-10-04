@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Collapse,Menu, Header  } from "components/Form";
+import { Collapse, Menu, Header } from "components/Form";
 import BasicDetails from "./Constant/BasicDetails";
 import FinanicialDetails from "./Constant/FinancialDetails";
 import ContactDetails from "./Constant/ContactDetails";
@@ -32,12 +32,12 @@ class Profile extends Component {
   render() {
     return (
       <ProfileStyle>
-         <Menu />
-         <div className="container">
-         <Header />
-         <div className="allDiv">
-        <Collapse panelData={this.panelUI()}></Collapse>
-        </div>
+        <Menu />
+        <div className="container">
+          <Header />
+          <div className="allDiv anime">
+            <Collapse panelData={this.panelUI()}></Collapse>
+          </div>
         </div>
       </ProfileStyle>
     );

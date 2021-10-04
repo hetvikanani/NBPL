@@ -1,24 +1,24 @@
 import React, { Component } from "react";
 import { Row, Col, Card, Image, Carousel, message } from "antd";
 
-import { Menu, Header } from "components/Form";
 import { DashbordStyle } from "./style";
-import { TopRowData, Products,DashConst } from "./constant";
+import { Months } from "App/AppConstant";
+import { Menu, Header } from "components/Form";
+import { TopRowData, Products, DashConst } from "./constant";
 import { banner1, banner2, copy, share } from "components/Images";
-import { Months} from "App/AppConstant";
 
 class DashBoard extends Component {
   constructor(props) {
     super(props);
     this.state = {
       ReferCode: "51415614566",
-      copyDisable:false,
+      copyDisable: false,
     };
   }
   copyCode = () => {
     try {
-      const { ReferCode,copyDisable } = this.state;
-      if(copyDisable === false){
+      const { ReferCode, copyDisable } = this.state;
+      if (copyDisable === false) {
         navigator.clipboard.writeText(ReferCode);
         message.success("Code Copied");
         this.setState({ copyDisable: true });
@@ -33,7 +33,7 @@ class DashBoard extends Component {
   topRowUi = () => {
     try {
       return TopRowData.map((a, i) => (
-        <Col xs={24} sm={12} md={12} lg={12} xl={5} key={i} className="">
+        <Col xs={24} sm={12} md={12} lg={12} xl={5} key={i} className="anime">
           <Card className="box">
             <div className="content">
               <h3 className="name">{a.name}</h3>
@@ -59,7 +59,7 @@ class DashBoard extends Component {
       let currDate = today.getDate();
       let monthName = " " + Months[today.getMonth()];
       return (
-        <Col xs={24} sm={12} md={12} lg={12} xl={4} className="dateUI">
+        <Col xs={24} sm={12} md={12} lg={12} xl={4} className="dateUI anime">
           <h2 className="mainTxt">
             {currDate + this.suffix_of(currDate)}
             {monthName + "," + today.getFullYear()}
@@ -85,7 +85,7 @@ class DashBoard extends Component {
   hotSellProd = () => {
     try {
       return Products.map((a, i) => (
-        <Col xs={24} sm={8} md={8} lg={8} xl={4} key={i}>
+        <Col xs={24} sm={8} md={8} lg={8} xl={4} key={i} className="anime">
           <div className={"img_div " + a.class}>
             <Image height={25} src={a.img} preview={false} alt={a.class} />
           </div>
@@ -108,10 +108,10 @@ class DashBoard extends Component {
               {this.currDateUI()}
             </Row>
             <Row className="middle-row" gutter={25}>
-              <Col xs={24} sm={24} md={24} lg={24} xl={17}>
+              <Col xs={24} sm={24} md={24} lg={24} xl={17} className="anime">
                 <Card className="box"></Card>
               </Col>
-              <Col xs={24} sm={24} md={24} lg={24} xl={7}>
+              <Col xs={24} sm={24} md={24} lg={24} xl={7} className="anime">
                 <div className="slider_div">
                   <Carousel autoplay>
                     <div className="accountDiv">
@@ -163,7 +163,7 @@ class DashBoard extends Component {
               </Col>
             </Row>
             <div className="bottom_div">
-              <h2 className="mainTxt">{DashConst.hotSellPro}</h2>
+              <h2 className="mainTxt anime">{DashConst.hotSellPro}</h2>
               <Row gutter={10}>{this.hotSellProd()}</Row>
             </div>
           </div>

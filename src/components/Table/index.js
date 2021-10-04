@@ -1,8 +1,8 @@
 import React, { Component } from "react";
+import TableStyle from "./style";
 import { Table, Image } from "antd";
 import { DashOutlined } from "@ant-design/icons";
-import { withRouter } from "react-router-dom";
-import TableStyle from "./style";
+
 import {
   editPen,
   deleteImg,
@@ -16,7 +16,9 @@ import {
 } from "components/Images";
 import { TableConst } from "./constant";
 import { RenderDrop } from "components/Form";
+
 const { Column } = Table;
+
 class TableUI extends Component {
   constructor(props) {
     super(props);
@@ -29,8 +31,8 @@ class TableUI extends Component {
     try {
       return (
         <div className="statusUI">
-          <span className={record.isActive===0 ? "green" : "red"}>
-            {record.isActive===0  ? "Active" : "Deactive"}
+          <span className={record.isActive === 0 ? "green" : "red"}>
+            {record.isActive === 0 ? "Active" : "Deactive"}
           </span>
         </div>
       );
@@ -38,51 +40,51 @@ class TableUI extends Component {
       console.log(error);
     }
   };
-  adminActUI = (img, text) => {
-    try {
-      return (
-        <>
-          <Image src={img} preview={false} width={15} />
-          <span className="text">{text}</span>
-        </>
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  adminActUI = (img, text) => (
+    <>
+      <Image src={img} preview={false} width={15} />
+      <span className="text">{text}</span>
+    </>
+  );
+
   adminActionUI = (record, type) => {
     try {
       return (
         <div className="actionUI">
-          <RenderDrop item={<DashOutlined className="dash" />}>
-            {type === "partners" && (
-              <div className="actionBtn" onClick={() => this.props.view()}>
-                {this.adminActUI(view, TableConst.view)}
-              </div>
-            )}
-            <div className="actionBtn" onClick={() => this.props.edite()}>
-              {this.adminActUI(edit, TableConst.edit)}
-            </div>
-            {type === "partners" && (
-              <>
+          <RenderDrop overlayClassName="actionUI" 
+            item={<DashOutlined className="dash" />}
+            data={[
+              type === "partners" && (
+                <div className="actionBtn" onClick={() => this.props.view()}>
+                  {this.adminActUI(view, TableConst.view)}
+                </div>
+              ),
+              <div className="actionBtn" onClick={() => this.props.getPartnerById()}>
+                {this.adminActUI(edit, TableConst.edit)}
+              </div>,
+              type === "partners" && (
                 <div className="actionBtn" onClick={() => this.props.wallet()}>
                   {this.adminActUI(wallet, TableConst.wallet)}
                 </div>
+              ),
+              type === "partners" && (
                 <div
                   className="actionBtn"
                   onClick={() => this.props.prospect()}
                 >
                   {this.adminActUI(prospect, TableConst.prospect)}
                 </div>
-                <div className="actionBtn" onClick={() => this.props.history.push("/admin-sales")}>
+              ),
+              type === "partners" && (
+                <div className="actionBtn" onClick={() => this.props.sales()}>
                   {this.adminActUI(sales, TableConst.sales)}
                 </div>
-              </>
-            )}
-            <div className="actionBtn" onClick={() => this.props.delete(record.partnerId)}>
-              {this.adminActUI(deleteSvg, TableConst.delete)}
-            </div>
-          </RenderDrop>
+              ),
+              <div className="actionBtn" onClick={() => this.props.deletePartner(record.partnerId)}>
+                {this.adminActUI(deleteSvg, TableConst.delete)}
+              </div>,
+            ]}
+          />
         </div>
       );
     } catch (error) {
@@ -125,7 +127,7 @@ class TableUI extends Component {
   };
   columns = () => {
     try {
-      const { type, print, tab } = this.props;
+      const { type } = this.props;
       return (
         <>
           {type === "MyProspect" && (
@@ -164,6 +166,7 @@ class TableUI extends Component {
               )}
             </>
           )}
+
           {type === "wallet" && (
             <>
               <Column title={"Transaction ID"} dataIndex={"key"} />
@@ -231,9 +234,9 @@ class TableUI extends Component {
               />
             </>
           )}
+
           {type !== "wallet" &&
             type !== "partners" &&
-            type !== "packageList" &&
             type !== "userList" &&
             type !== "admin_sales" && (
               <Column
@@ -281,8 +284,8 @@ class TableUI extends Component {
   //     }
   //   };
   render() {
-    const { pagination } = this.state;
-    const { data, search, size } = this.props;
+    // const { pagination } = this.state;
+    const { data, search, size, print } = this.props;
     let display = !search || search.trim() === "" ? data : this.searchData();
     display &&
       display.forEach((a, i) => {
@@ -293,10 +296,8 @@ class TableUI extends Component {
       <TableStyle>
         <Table
           bordered
-          //   rowClassName={!print ? "anime" : ""}
-          pagination={
-            display.length > pageSize ? { pageSize: pageSize } : false
-          }
+          rowClassName={!print ? "anime" : ""}
+          pagination={false}
           onChange={this.handleTable}
           dataSource={display}
         >
@@ -306,4 +307,4 @@ class TableUI extends Component {
     );
   }
 }
-export default withRouter((TableUI));
+export default TableUI;

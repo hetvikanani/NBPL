@@ -1,7 +1,6 @@
 // export const configVar = { BASE_URL: "https://partnerapi.naapbooks.com/" };
 export const configVar = { BASE_URL: "http://192.168.1.59/" };
 
-
 export const apiConstant = {
   AUTH_LOGIN: "api/Admin​/Login/",
   AUTH_LOGOUT: "api/Account/Logout/",
@@ -11,7 +10,6 @@ export const apiConstant = {
   // AUTH_REGISTER: "/api/Chat/Registration",
   // GET_ALL_USER: "/api/User/GetAllUsers",}
 };
-
 export const crmConst = {
   SAVE_PROSPECT: "api​/Partner​/SaveProspect​/",
   GET_PROSPECT: "api​/Partner​/GetProspectList",
@@ -45,7 +43,7 @@ export const partnerUsersConst = {
   SAVE_SUPPORT: "api​/Partner​/SaveSupport/",
 };
 export const productConst = {
-  SAVE_PRODUCT: "api​/Admin​/SaveProduct/",
+  SAVE_PRODUCT: "api​/Admin​/SaveProduct",
   GET_PRODUCT: "api​/Admin​/GetProductList/",
   DELETE_PRODUCT: "api​/Admin​/DeleteProduct​/",
 };

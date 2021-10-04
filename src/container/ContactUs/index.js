@@ -6,7 +6,7 @@ import { SearchOutlined } from "@ant-design/icons";
 
 import { ContactStyle } from "./style";
 import { Menu, Header, Input, Button } from "components/Form";
-import { FormValidation} from "App/AppConstant";
+import { FormValidation } from "App/AppConstant";
 import { ContactPageconst } from "./constant";
 
 const ValidationSchema = Yup.object().shape({
@@ -30,7 +30,14 @@ class Contact extends Component {
     try {
       let a = ["Surat", "Vadodara", "Mumbai", "U.S.A"];
       return a.map((b) => (
-        <Col xs={24} sm={12} md={12} lg={6} xl={6} className="address_col">
+        <Col
+          xs={24}
+          sm={12}
+          md={12}
+          lg={6}
+          xl={6}
+          className="address_col anime"
+        >
           <h3>{b}</h3>
           <ul>
             <li>{ContactPageconst.address1}</li>
@@ -53,7 +60,7 @@ class Contact extends Component {
         <div className="container">
           <Header />
           <div className="allDiv">
-            <Row gutter={20}>
+            <Row gutter={20} className="anime">
               <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                 <Card>
                   <h3>{ContactPageconst.contactUs}</h3>
@@ -72,7 +79,7 @@ class Contact extends Component {
                       handleSubmit,
                     }) => (
                       <Form onSubmit={handleSubmit}>
-                        <Row gutter={20}>
+                        <Row gutter={20} className="anime">
                           <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                             <Input
                               name="name"
@@ -114,7 +121,9 @@ class Contact extends Component {
                           </Col>
                         </Row>
                         <div className="btnDiv">
-                          <Button type="submit">{ContactPageconst.sendMessage}</Button>
+                          <Button type="submit">
+                            {ContactPageconst.sendMessage}
+                          </Button>
                         </div>
                       </Form>
                     )}
@@ -140,7 +149,9 @@ class Contact extends Component {
                       <i className="fas fa-phone-alt icon"></i>
                     </div>
                     <div>
-                      <p>{ContactPageconst.pluse + ContactPageconst.nuberDigit}</p>
+                      <p>
+                        {ContactPageconst.pluse + ContactPageconst.nuberDigit}
+                      </p>
                     </div>
                   </div>
                   <div className="cardHead">

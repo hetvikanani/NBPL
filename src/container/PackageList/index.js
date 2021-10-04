@@ -5,7 +5,7 @@ import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import { PackageListStyle } from "./style";
 import { Menu, Header, Input, Table } from "components/Form";
 import { ButtonConst } from "App/AppConstant";
-import { tableData,PackListConst } from "./constant";
+import { tableData, PackListConst } from "./constant";
 
 class PackageList extends Component {
   constructor() {
@@ -24,7 +24,7 @@ class PackageList extends Component {
     }
   }
   render() {
-      const {item}=this.state;
+    const { item } = this.state;
     return (
       <PackageListStyle>
         <Menu />
@@ -33,8 +33,9 @@ class PackageList extends Component {
           <div className="allDiv">
             <div className="headDiv">
               <h2>{item + PackListConst.packList}</h2>
-              <div className="addButton pointer"
-              onClick={() => this.props.history.push("/add-new-package")}
+              <div
+                className="addButton pointer"
+                onClick={() => this.props.history.push("/package/new")}
               >
                 <PlusOutlined />
               </div>

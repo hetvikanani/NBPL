@@ -1,13 +1,10 @@
-const contactDetailConst = {
-    contactName:"Contact Name:",
-    email:"Email ID:",
-    mobile:"Mobile No:",
-    designation:"Designation:",
-    add:"Add Another",
-    remove:"Remove",
-    
-    contactDetail:"Contact Details:"
-    
-  };
-  export { contactDetailConst };
-  
+const contactConst = {
+  cd: "ContactDetail",
+  contactName: "Contact Name:",
+  email: "Email ID:",
+  mobile: "Mobile No:",
+  designation: "Designation:",
+  add: "Add Another",
+  remove: "Remove",
+};
+export { contactConst };

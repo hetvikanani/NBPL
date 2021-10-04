@@ -52,7 +52,7 @@ class Login extends Component {
       await this.props.login(data);
       setSubmitting(false);
     } catch (error) {
-      console.log(error, "handle error");
+      console.log(error);
     }
   };
   render() {
@@ -99,17 +99,21 @@ class Login extends Component {
                     <div className="">
                       <Label
                         title={LoginConst.userName}
-                        className={errors.userName && touched.userName ? "empty" : ""}
+                        className={
+                          errors.userName && touched.userName ? "empty" : ""
+                        }
                       />
                       <Input
                         onBlur={handleBlur}
                         name="userName"
                         value={values.userName.trim()}
                         handleChange={handleChange}
-                        className={errors.userName && touched.userName ? "empty" : ""}
+                        className={
+                          errors.userName && touched.userName ? "empty" : ""
+                        }
                       />
                       {errors.userName && touched.userName ? (
-                        <div className="form-error">{errors.userName}</div>  
+                        <div className="form-error">{errors.userName}</div>
                       ) : null}
                     </div>
                     <div className="">

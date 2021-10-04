@@ -1,21 +1,10 @@
 const proAddConst = {
   product: "Product Name:",
+  productTitle: "Product TiTle:",
   company: "Company Logo:",
   productDes: "Product Description:",
   features: "Features:",
   icon: "Icon:",
-  title:"Title:",
-
-  //     colon:":",
-  //  products:"Products",
-  //  addNewPro:"Add New Product",
-  //  prodName:
-  //  comLogo:"",
-  //
-  // 
-  //
-  //  docTitle:"Document Title",
-  //  proDocS:"Product Document’s",
-  //  proVideo:"Product Video",
+  title: "Title:",
 };
 export { proAddConst };

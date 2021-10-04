@@ -5,7 +5,7 @@ const ProductStyle = styled.div`
   display: flex;
   .allDiv {
     padding: 3em 1em 1em;
-    .headDiv{
+    .headDiv {
       display: flex;
       .addButton {
         margin-right: 2rem;
@@ -83,7 +83,7 @@ const ProductStyle = styled.div`
                 justify-content: center;
                 align-items: center;
                 margin: 0 0.3em;
-                :hover{
+                :hover {
                   background-color: #e4e4e4;
                 }
               }

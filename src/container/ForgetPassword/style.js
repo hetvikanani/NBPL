@@ -26,7 +26,7 @@ const StyleContainer = styled.div`
     width: 90%;
     max-width: 450px;
     position: relative;
-    box-shadow: 0 30px 60px 0 rgb(0, 0, 0,.3);
+    box-shadow: 0 30px 60px 0 rgb(0, 0, 0, 0.3);
     @media ${size["tablet-max"]} {
       margin-top: 15%;
     }

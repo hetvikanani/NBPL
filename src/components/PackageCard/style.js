@@ -5,7 +5,7 @@ const PackageStyle = styled.div`
     box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
     padding: 1em;
     border-radius: 8px;
-    :hover{
+    :hover {
       box-shadow: 0 0 10px rgb(0, 0, 0, 0.4);
     }
     .headingDiv {
@@ -57,7 +57,7 @@ const PackageStyle = styled.div`
       }
     }
     button {
-      margin: auto;      
+      margin: auto;
       padding: 0 25px;
       height: 30px;
       line-height: 30px;

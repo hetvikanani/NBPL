@@ -3,7 +3,6 @@ import { size } from "App/device";
 import { Theme } from "App/theme";
 
 const UserRoleStyle = styled.div`
-  
   .field {
     padding-top: 2em;
     display: flex;
@@ -42,7 +41,7 @@ const UserRoleStyle = styled.div`
       }
       .text {
         padding: 8px 8px 8px 20px;
-        font-weight: 700;         
+        font-weight: 700;
         width: 3em;
       }
     }

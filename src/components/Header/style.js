@@ -9,7 +9,6 @@ const StyleComponent = styled.div`
   position: relative;
   .maindiv {
     height: 4em;
-    background: ${Theme.mainColor};
     .head-container {
       display: flex;
       color: #fff;

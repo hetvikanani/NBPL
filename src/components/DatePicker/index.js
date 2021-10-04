@@ -12,7 +12,7 @@ class Datepicker extends Component {
   disabledDate(current) {
     try {
       let prev_date = new Date();
-      prev_date.setDate(prev_date.getDate() - 1);
+      prev_date.setDate(prev_date.getDate());
       return current && current.valueOf() > prev_date.getTime();
     } catch (error) {
       console.log(error);

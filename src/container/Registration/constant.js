@@ -5,12 +5,11 @@ const RegistrationConstant = {
   register: "Register here",
   userph: "Username",
   pwdph: "Password",
-
   name: "Name",
   email: "Email",
   mobile: "Mobile Number",
   RefC: "Referral code",
-  submit:"Submit",
+  submit: "Submit",
 };
 
 export { RegistrationConstant };

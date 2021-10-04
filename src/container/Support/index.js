@@ -5,17 +5,12 @@ import * as Yup from "yup";
 import { SupportStyle } from "./style";
 import { Menu, Header } from "components/Form";
 import { Button, Input, Label } from "components/Form";
-import {  ButtonConst, FormValidation } from "App/AppConstant";
+import { FormValidation } from "App/AppConstant";
 import { supportConstant } from "./constant";
-
-
 
 const ValidationSchema = Yup.object().shape({
   name: Yup.string().trim().required(" "),
-  email: Yup.string()
-    .trim() 
-    .required(" ")
-    .email(FormValidation.emailInvalid),
+  email: Yup.string().trim().required(" ").email(FormValidation.emailInvalid),
   message: Yup.string().trim().required(" "),
   number: Yup.string()
     .trim()
@@ -69,14 +64,11 @@ class Support extends Component {
                 handleSubmit,
               }) => (
                 <Form onSubmit={handleSubmit}>
-                  <div className="form_div">
-                    <div className="field">
-                      <Label title={supportConstant.name} 
-                      className={
-                        errors.name && touched.name
-                          ? "empty"
-                          : ""
-                      }
+                  <div className="form_div anime">
+                    <div className="field anime">
+                      <Label
+                        title={supportConstant.name}
+                        className={errors.name && touched.name ? "empty" : ""}
                       />
                       <Input
                         placeholder={supportConstant.placeName}
@@ -85,16 +77,12 @@ class Support extends Component {
                         name="name"
                         value={values.name}
                         handleChange={handleChange}
-                        tabIndex="1"
-                      />                      
+                      />
                     </div>
-                    <div className="field">
-                      <Label title={supportConstant.email}
-                         className={
-                          errors.email && touched.email
-                            ? "empty"
-                            : ""
-                        }
+                    <div className="field anime">
+                      <Label
+                        title={supportConstant.email}
+                        className={errors.email && touched.email ? "empty" : ""}
                       />
                       <Input
                         placeholder={supportConstant.placeEmail}
@@ -103,19 +91,17 @@ class Support extends Component {
                         name="email"
                         value={values.email}
                         handleChange={handleChange}
-                        tabIndex="2"
                       />
                       {errors.email && touched.email && (
                         <div className="form-error">{errors.email}</div>
                       )}
                     </div>
-                    <div className="field">
-                      <Label title={supportConstant.msg} 
-                      className={
-                        errors.message && touched.message
-                          ? "empty"
-                          : ""
-                      }
+                    <div className="field anime">
+                      <Label
+                        title={supportConstant.msg}
+                        className={
+                          errors.message && touched.message ? "empty" : ""
+                        }
                       />
                       <Input
                         className={
@@ -125,13 +111,12 @@ class Support extends Component {
                         name="message"
                         value={values.message}
                         handleChange={handleChange}
-                        tabIndex="3"
                       />
                       {errors.message && touched.message && (
                         <div className="form-error">{errors.message}</div>
                       )}
                     </div>
-                    <div className="field">
+                    <div className="field anime">
                       <Label title={supportConstant.phone} />
                       <Input
                         placeholder={supportConstant.placePhone}
@@ -142,7 +127,6 @@ class Support extends Component {
                         name="number"
                         value={values.number}
                         handleChange={handleChange}
-                        tabIndex="4"
                       />
                       {errors.number && touched.number && (
                         <div className="form-error">{errors.number}</div>

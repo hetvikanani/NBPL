@@ -75,10 +75,11 @@ class BasicDetails extends Component {
       console.log(error);
     }
   };
-  removefile = () => this.setState({ imgByte: "", imgnm: "", imgBase64: "" });
+  removefile = () => this.setState({ imgByte: "", imgnm: "",imgBase64: "" });
 
-  setByte = (byteCode, name, base64) =>
-    this.setState({ imgByte: byteCode, imgnm: name, imgBase64: base64 });
+  setByte = (byteCode, name,base64) =>
+    this.setState({ imgByte: byteCode, imgnm: name,
+      imgBase64: base64 });
 
   handleSubmit = async (values, { setSubmitting }) => {
     try {
@@ -87,7 +88,6 @@ class BasicDetails extends Component {
       setTimeout(() => {
         this.setState({ btnDisable: false });
       }, 4500);
-
       this.props.changeData("basicDetailsData", {
         ...values,
         img: this.state.imgBase64,
@@ -98,15 +98,14 @@ class BasicDetails extends Component {
       } else this.props.countInc();
       setSubmitting(false);
     } catch (error) {
-      console.log(error, "handle error");
+      console.log(error,"handle error");
     }
   };
   render() {
     const { initialState, disable, gstType, gstNoError } = this.state;
-    console.log(this.state);
     return (
       <BasicDetailsStyle>
-        <h2>{basicConst.basicDetail}</h2>
+        <h2 className="anime">{basicConst.basicDetail}</h2>
         <div className="formDiv">
           <Formik
             initialValues={initialState}
@@ -124,7 +123,14 @@ class BasicDetails extends Component {
             }) => (
               <Form onSubmit={handleSubmit}>
                 <Row gutter={24}>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
                         title={basicConst.comName}
@@ -147,7 +153,14 @@ class BasicDetails extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
                         title={basicConst.email}
@@ -162,7 +175,14 @@ class BasicDetails extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
                         title={basicConst.mobile}
@@ -182,18 +202,32 @@ class BasicDetails extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label title={basicConst.gst} />
                       <RoundSwitch
-                        left={basicConst.nr}
+                        left={basicConst.no + basicConst.reg}
                         right={basicConst.reg}
                         checked={gstType}
                         handleChange={this.switchChange}
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
                         title={basicConst.pan}
@@ -212,7 +246,14 @@ class BasicDetails extends Component {
                     )}
                   </Col>
                   {gstType ? (
-                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={24}
+                      lg={12}
+                      xl={12}
+                      className="anime"
+                    >
                       <div className="field">
                         <Label
                           title={basicConst.gstNum}
@@ -241,9 +282,23 @@ class BasicDetails extends Component {
                       </div>
                     </Col>
                   ) : (
-                    <Col xs={24} sm={24} md={24} lg={12} xl={12}></Col>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={24}
+                      lg={12}
+                      xl={12}
+                      className="anime"
+                    ></Col>
                   )}
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label title={basicConst.aadhar} />
                       <Input
@@ -261,7 +316,14 @@ class BasicDetails extends Component {
                       )}
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label title={basicConst.comLogo} />
                       <div className="pointer">{this.fileUpload()}</div>
@@ -269,7 +331,7 @@ class BasicDetails extends Component {
                   </Col>
                 </Row>
                 <div className="bottomDiv">
-                  <div className="btn">
+                  <div className="btn anime">
                     <Button
                       type="button"
                       onClick={() => this.props.history.push("/partners")}
@@ -289,5 +351,4 @@ class BasicDetails extends Component {
     );
   }
 }
-
 export default withRouter(BasicDetails);

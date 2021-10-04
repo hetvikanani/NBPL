@@ -9,14 +9,13 @@ import {
   DeleteOutlined,
 } from "@ant-design/icons";
 import { Editor } from "react-draft-wysiwyg";
+import draftToHtml from "draftjs-to-html";
 import { EditorState, convertToRaw } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import draftToHtml from "draftjs-to-html";
 
 import { ProAddEditStyle } from "./style";
 import { Input, Label, Button, FileUpload } from "components/Form";
 import { ButtonConst } from "App/AppConstant";
-// import {adminProConst} from "container/AdminProduct/constant";
 import { proAddConst } from "./constant";
 const ProductValidation = Yup.object().shape({
   productName: Yup.string().trim().required(" "),
@@ -173,8 +172,8 @@ class ProAddEditDetail extends Component {
             setFieldValue,
           }) => (
             <Form onSubmit={handleSubmit}>
-              <Row gutter={20}>
-                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+              <Row gutter={20} className="anime">
+                <Col xs={24} sm={24} md={24} lg={12} xl={12} className="anime">
                   <div className="field">
                     <Label
                       title={proAddConst.product}
@@ -193,12 +192,18 @@ class ProAddEditDetail extends Component {
                     />
                   </div>
                 </Col>
-                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                <Col xs={24} sm={24} md={24} lg={12} xl={12} className="anime">
                   <div className="compLogoDiv">
                     <Label title={proAddConst.company} />
                     {this.fileUpload(comLogoName, comLogoByte, "companyLogo")}
                   </div>
                 </Col>
+                <Col xs={24} sm={24} md={24} lg={12} xl={12} className="anime">
+                  <div className="field">
+                    <Label title={proAddConst.productTitle} />
+                  </div>
+                </Col>
+
                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                   <div className="field">
                     <Label title={proAddConst.productDes} />
@@ -211,7 +216,7 @@ class ProAddEditDetail extends Component {
               </Row>
               <h2>{proAddConst.features}</h2>
               <Row gutter={20}>
-                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                <Col xs={24} sm={24} md={24} lg={12} xl={12} className="anime">
                   <div className="field">
                     <Label title={proAddConst.title} />
                     <Input value={title} handleChange={this.handalTitle} />

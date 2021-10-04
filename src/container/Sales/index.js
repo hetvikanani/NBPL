@@ -9,12 +9,11 @@ import { license, exhaustedLicense, expires } from "components/Images";
 // import { PageConst } from "App/AppConstant";
 import { salesConstant } from "./constant";
 
-
 class Sales extends Component {
   topRowUi = () => {
     try {
       return topRowData.map((a, i) => (
-        <Col xs={24} sm={24} md={24} lg={8} xl={8} key={i}>
+        <Col xs={24} sm={24} md={24} lg={8} xl={8} key={i} className="anime">
           <Card className="box">
             <div className="content">
               <h3 className="name">{a.name}</h3>
@@ -51,10 +50,13 @@ class Sales extends Component {
           <div className="allDiv">
             <Row gutter={40}>{this.topRowUi()}</Row>
             <div className="salesListDiv">
-              <div className="headerDiv">
+              <div className="headerDiv anime">
                 <h2>{salesConstant.saleslist}</h2>
                 <div className="adsDiv">
-                  <div className="btn" onClick={() => this.props.history.push("/add-new-sales")}>
+                  <div
+                    className="btn"
+                    onClick={() => this.props.history.push("/sales/new")}
+                  >
                     <PlusOutlined />
                     {salesConstant.addSale}
                   </div>

@@ -25,7 +25,7 @@ const Products = [
   { img: eAuction, class: "eAuShadow" },
   { img: iPing, class: "iPShadow" },
 ];
-const DashConst ={
+const DashConst = {
   colon: ":",
   name: "Name",
   accManDetail: "Account manager details",
@@ -33,5 +33,5 @@ const DashConst ={
   emid: "Email ID",
   refCode: "Referral Code",
   hotSellPro: "Hot Selling Product",
-}
-export { TopRowData, Products,DashConst };
+};
+export { TopRowData, Products, DashConst };

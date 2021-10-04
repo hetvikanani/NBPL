@@ -56,5 +56,9 @@ const CRdata = [
       "EZEO is an end to end supply chain management solution. EZEO lets the small and medium business reorganise their supply chain and provide greater control and visibility of product  movement and quality. EZEO helps our clients to run their procurement to delivery management through one system and can be used for B2B and B2C channels.",
   },
 ];
+const ProductConst = {
+  viewMore: "View More",
+  nblPro: "NBL Products",
+};
 
-export { CRdata };
+export { CRdata, ProductConst };

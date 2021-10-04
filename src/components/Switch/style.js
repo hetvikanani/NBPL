@@ -3,7 +3,7 @@ import { Theme } from "App/theme";
 const FormWrapper = styled.div`
   .switch {
     width: 50px;
-    background: #B2B2B2;
+    background: #b2b2b2;
     border-radius: 5px;
     height: 25px;
     .ant-switch-handle::before {
