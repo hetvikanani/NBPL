@@ -23,8 +23,8 @@ import UserRole from "components/UserRole";
 import ContactDetails from "components/ContactDetails";
 import BasicDetails from "components/BasicDetails";
 import FinancialDetails from "components/FinancialDetails";
-import ProAddEditDetail from "components/ProAddEditDetail";
-import ProductDocument from "components/ProductDocument";
+import ProAddEditDetail from "components/ProductAddEdit";
+import ProductDocument from "components/ProductDoc";
 
 export {
   Button,

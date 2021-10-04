@@ -68,8 +68,11 @@ export const deletePartner = (id) => async (dispatch) => {
 export const getPartnerById = (id) => async (dispatch) => {
   try {
     dispatch({ type: actions.GET_PARTNER_BY_ID_INITIATED });
-    let response = await axiosAuthPost(partnerConst.GET_PARTNER_BY_ID + id);
-    if (response.code === "200") {
+    let response = await axiosAuthGet(partnerConst.GET_PARTNER_BY_ID + id);
+    console.log(response,'rzz')
+    if (response.responseStatus === "1") {
+    console.log(response,'rzz')
+
       message.success(response.message);
       await dispatch({
         type: actions.GET_PARTNER_BY_ID_SUCCESS,

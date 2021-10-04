@@ -10,7 +10,7 @@ import {
   FinancialDetails,
 } from "components/Form";
 import { connect } from "react-redux";
-import { savePartner } from "redux/partner/action";
+import { savePartner,getPartnerById  } from "redux/partner/action";
 import { withRouter } from "react-router-dom";
 
 class AdminPartner extends Component {
@@ -21,6 +21,7 @@ class AdminPartner extends Component {
       basicDetailsData: {},
       financialDetailsData: {}, 
       contractDetailsData: {},
+     
     };
   }
   countInc = () => {
@@ -38,10 +39,10 @@ class AdminPartner extends Component {
     const { count } = this.state;
     this.setState({ count: count - 1 });
   };
+  
   apiCall = (contacts) => {
     const { basicDetailsData, financialDetailsData } = this.state;
     let data = {
-      
       partnerId: 0,
       companyName: basicDetailsData.companyName,
       emailId: basicDetailsData.email,
@@ -61,20 +62,10 @@ class AdminPartner extends Component {
       city: financialDetailsData.city,
       state: financialDetailsData.state,
       ContactDetails: contacts,
-      // contactDetails: [
-      //   {
-      //     ...contacts,
-      //     contactId: 34,
-      //     partnerId: 1111113,
-      //     contactName: contractDetailsData.contactName,
-      //     emailId: contractDetailsData.email,
-      //     mobile: contractDetailsData.mobile?.toString(),
-      //     designation: contractDetailsData.designation,
-      //   },
-      // ],
+     
     };
     this.props.savePartner(data);
-    console.log("datass", data);
+
   };
   pageUI = () => {
     try {
@@ -92,9 +83,15 @@ class AdminPartner extends Component {
       console.log(error);
     }
   };
+  componentDidMount(){
+   
+    
+    const id=this?.props?.match?.params?.id;
+   
+    if(id)
+    this.props.getPartnerById(id)
+  }
   render() {
-    console.log("dataaaa", this.state);
-
     return (
       <AdmProductStyle>
         <Menu />
@@ -117,6 +114,8 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
   savePartner: (payload) => dispatch(savePartner(payload)),
+  getPartnerById:(id)=>dispatch(getPartnerById(id)),
+
 });
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(AdminPartner)

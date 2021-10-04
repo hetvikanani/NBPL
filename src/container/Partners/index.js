@@ -8,7 +8,7 @@ import { PartnersStyle } from "./style";
 import { Menu, Header, Table, Input } from "components/Form";
 import { PartnersConst } from "./constant";
 import { ButtonConst } from "App/AppConstant";
-import { getPartners, deletePartner,getPartnerById } from "redux/partner/action";
+import { getPartners, deletePartner} from "redux/partner/action";
 
 class Partners extends Component {
   async componentDidMount() {
@@ -30,7 +30,7 @@ class Partners extends Component {
 
   deletePartnerApi = (id) => this.props.deletePartner(id);
 
-  editPartnerById=(id)=>this.props.getPartnerById(id);
+  
 
   render() {
     return (
@@ -86,7 +86,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getPartners: (payload) => dispatch(getPartners(payload)),
   deletePartner: (id) => dispatch(deletePartner(id)),
-  getPartnerById:(id)=>dispatch(getPartnerById(id)),
 
 });
 export default withRouter(

@@ -3,9 +3,10 @@ import { Row, Col } from "antd";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { finConst } from "./constant";
-
+import {connect} from 'react-redux'
 import { FinDetailsStyle } from "./style";
 import { Input, Label, Button } from "components/Form";
+
 const UserValidation = Yup.object().shape({
   bankName: Yup.string().trim().required(" "),
   branchName: Yup.string().trim().required(" "),
@@ -38,6 +39,7 @@ class FinancialDetails extends Component {
   }
   handleSubmit = async (values, { setSubmitting }) => {
     try {
+      debugger;
       this.setState({ btnDisable: true });
       setTimeout(() => {
         this.setState({ btnDisable: false });
@@ -49,7 +51,32 @@ class FinancialDetails extends Component {
       console.log(error);
     }
   };
+  initialStateChange = () => {
+    const { partner } = this.props;
+
+    let data = {
+      bankName: partner.bankName,
+      branchName: partner.branchName,
+      address: partner.address,
+      accountNo: partner.accountNumber,
+      ifscCode: partner.ifsc,
+      pincode: partner.pincode,
+      city: partner.city,
+      state: partner.state,
+    };
+    this.setState({ initialState: data });
+  };
+  componentDidMount() {
+   try {
+    if (this.props.partner  && this?.props?.match?.params?.id) this.initialStateChange();
+   } catch (error) {
+     console.log(error);
+   }
+   
+  }
+  
   render() {
+
     const { initialState, disable } = this.state;
     return (
       <FinDetailsStyle>
@@ -293,4 +320,11 @@ class FinancialDetails extends Component {
     );
   }
 }
-export default FinancialDetails;
+const mapStateToProps = (state) => ({
+  loading: state.partner.loading,
+  error: state.partner.error,
+  message: state.partner.message,
+  partners: state.partner.partners,
+  partner:state.partner.partner,
+});
+export default connect(mapStateToProps)( FinancialDetails);

@@ -83,6 +83,17 @@ class ContactDetails extends Component {
       console.log(error);
     }
   };
+  initialStateChange = () => {
+    const { partner } = this.props;
+
+    let data = {
+      contactName: partner.contactName,
+      mobile: partner.mobile,
+      email: partner.emailId,
+      designation: partner.designation,
+    };
+    this.setState({ initialState: data });
+  };
   proex = (e, index, setFieldValue, fildName) => {
     const { initialState } = this.state;
     let data = [...initialState];

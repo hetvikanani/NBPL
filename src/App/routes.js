@@ -158,6 +158,12 @@ const routes = [
     component: PartnerAddEdite,
   },
   {
+    path: "/partner/edit/:id",
+    exact: true,
+    AuthRoute: true,
+    component: PartnerAddEdite,
+  },
+  {
     path: "/users",
     exact: true,
     AuthRoute: true,

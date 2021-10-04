@@ -8,6 +8,7 @@ import { BasicDetailsStyle } from "./style";
 import { basicConst } from "./constant";
 import { Input, Label, RoundSwitch, Button, FileUpload } from "components/Form";
 import { FormValidation, gstConst, panConst } from "App/AppConstant";
+import { connect } from "react-redux";
 
 const UserValidation = Yup.object().shape({
   companyName: Yup.string()
@@ -44,6 +45,12 @@ class BasicDetails extends Component {
       },
     };
   }
+
+
+  componentDidMount() {
+    if (this.props.partner  && this?.props?.match?.params?.id) this.initialStateChange();
+  }
+
   switchChange = () => this.setState({ gstType: !this.state.gstType });
 
   fileUpload = () => {
@@ -62,7 +69,7 @@ class BasicDetails extends Component {
             <Image src={imgByte} width={50} height={30} />
           </>
         );
-      }
+      } 
       return (
         <FileUpload
           accept=".jpg, .jpeg, .png"
@@ -75,32 +82,49 @@ class BasicDetails extends Component {
       console.log(error);
     }
   };
-  removefile = () => this.setState({ imgByte: "", imgnm: "",imgBase64: "" });
+  removefile = () => this.setState({ imgByte: "", imgnm: "", imgBase64: "" });
 
-  setByte = (byteCode, name,base64) =>
-    this.setState({ imgByte: byteCode, imgnm: name,
-      imgBase64: base64 });
+  setByte = (byteCode, name, base64) =>
+    this.setState({ imgByte: byteCode, imgnm: name, imgBase64: base64 });
 
   handleSubmit = async (values, { setSubmitting }) => {
     try {
       const { gstType } = this.state;
-      this.setState({ btnDisable: true });
-      setTimeout(() => {
-        this.setState({ btnDisable: false });
-      }, 4500);
+      console.log(gstType,values,'lll')
+      // this.setState({ btnDisable: true });
+      // setTimeout(() => {
+      //   this.setState({ btnDisable: false });
+      // }, 4500);
       this.props.changeData("basicDetailsData", {
         ...values,
         img: this.state.imgBase64,
-        gstType:this.state.gstType,
+        gstType: this.state.gstType,
       });
       if (gstType && values.gst === "") {
         this.setState({ gstNoError: gstType && values.gst === "" });
       } else this.props.countInc();
       setSubmitting(false);
     } catch (error) {
-      console.log(error,"handle error");
+      console.log(error, "handle error");
     }
   };
+  initialStateChange = () => {
+    const { partner } = this.props;
+    console.log('jova mate',partner)
+    let data = {
+      pan: partner.pan,
+      email: partner.emailId,
+      mobile: partner.mobile,
+      aadhar: partner.aadharNumber,
+      gst: partner.gstNumber,
+      // gstType:partner.gstType,
+      companyName: partner.companyName,
+      img: partner.companyLogo,
+    };
+    this.setState({ initialState: data });
+  };
+
+
   render() {
     const { initialState, disable, gstType, gstNoError } = this.state;
     return (
@@ -351,4 +375,11 @@ class BasicDetails extends Component {
     );
   }
 }
-export default withRouter(BasicDetails);
+const mapStateToProps = (state) => ({
+  loading: state.partner.loading,
+  error: state.partner.error,
+  message: state.partner.message,
+  partners: state.partner.partners,
+  partner: state.partner.partner,
+});
+export default withRouter(connect(mapStateToProps)(BasicDetails));

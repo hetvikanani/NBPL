@@ -16,6 +16,7 @@ import {
 } from "components/Images";
 import { TableConst } from "./constant";
 import { RenderDrop } from "components/Form";
+import { withRouter } from "react-router";
 
 const { Column } = Table;
 
@@ -59,7 +60,7 @@ class TableUI extends Component {
                   {this.adminActUI(view, TableConst.view)}
                 </div>
               ),
-              <div className="actionBtn" onClick={() => this.props.getPartnerById}>
+              <div className="actionBtn" onClick={() => this.props.history.push(`partner/edit/${record.partnerId}`)}>
                 {this.adminActUI(edit, TableConst.edit)}
               </div>,
               type === "partners" && (
@@ -307,4 +308,4 @@ class TableUI extends Component {
     );
   }
 }
-export default TableUI;
+export default withRouter(TableUI);
