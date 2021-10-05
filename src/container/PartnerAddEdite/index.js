@@ -10,20 +10,30 @@ import {
   FinancialDetails,
 } from "components/Form";
 import { connect } from "react-redux";
-import { savePartner,getPartnerById  } from "redux/partner/action";
+import { savePartner, getPartnerById } from "redux/partner/action";
 import { withRouter } from "react-router-dom";
+import { changePartnerData } from "redux/partner/action";
 
 class AdminPartner extends Component {
   constructor(props) {
     super(props);
     this.state = {
       count: 0,
-      basicDetailsData: {},
-      financialDetailsData: {}, 
-      contractDetailsData: {},
-     
+      partnerData: [],
     };
   }
+  async componentDidMount() {
+    try {
+      const { match } = this.props;
+      if (match !== "/partner/new") {
+        if (match?.params?.id) await this.props.getPartnerById(match.params.id);
+        else this.props.changePartnerData(null, null);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   countInc = () => {
     try {
       const { count } = this.state;
@@ -39,33 +49,32 @@ class AdminPartner extends Component {
     const { count } = this.state;
     this.setState({ count: count - 1 });
   };
-  
+
   apiCall = (contacts) => {
-    const { basicDetailsData, financialDetailsData } = this.state;
+    const { partner } = this.props;
+
     let data = {
       partnerId: 0,
-      companyName: basicDetailsData.companyName,
-      emailId: basicDetailsData.email,
-      mobile: basicDetailsData.mobile?.toString(),
-      // gstType: basicDetailsData.gstType,
-      gstType:basicDetailsData.gstType ? 1 : 0,
-      gstNumber: basicDetailsData.gst,
-      pan: basicDetailsData.pan,
-      aadharNumber: basicDetailsData.aadhar?.toString(),
-      companyLogo: basicDetailsData.img,
-      bankName: financialDetailsData.bankName,
-      branchName: financialDetailsData.branchName,
-      accountNumber: financialDetailsData.accountNo?.toString(),
-      ifsc: financialDetailsData.ifscCode,
-      address: financialDetailsData.address,
-      pincode: financialDetailsData.pincode?.toString(),
-      city: financialDetailsData.city,
-      state: financialDetailsData.state,
-      ContactDetails: contacts,
-     
+      companyName: partner.companyName,
+      emailId: partner.email,
+      mobile: partner.mobile?.toString(),
+      // gstType: partner.gstType,
+      gstType: partner.gstType ? 1 : 0,
+      gstNumber: partner.gst,
+      pan: partner.pan,
+      aadharNumber: partner.aadhar?.toString(),
+      companyLogo: partner.img,
+      bankName: partner.bankName,
+      branchName: partner.branchName,
+      accountNumber: partner.accountNo?.toString(),
+      ifsc: partner.ifscCode,
+      address: partner.address,
+      pincode: partner.pincode?.toString(),
+      city: partner.city,
+      state: partner.state,
+      contactDetails: partner?.contactDetails,
     };
     this.props.savePartner(data);
-
   };
   pageUI = () => {
     try {
@@ -73,7 +82,11 @@ class AdminPartner extends Component {
       return count === 0 ? (
         <BasicDetails changeData={this.changeData} countInc={this.countInc} />
       ) : count === 1 ? (
-        <FinancialDetails    changeData={this.changeData} countInc={this.countInc} previous={this.previous} />
+        <FinancialDetails
+          changeData={this.changeData}
+          countInc={this.countInc}
+          previous={this.previous}
+        />
       ) : count === 2 ? (
         <ContactDetails changeData={this.changeData} apiCall={this.apiCall} />
       ) : (
@@ -83,14 +96,6 @@ class AdminPartner extends Component {
       console.log(error);
     }
   };
-  componentDidMount(){
-   
-    
-    const id=this?.props?.match?.params?.id;
-   
-    if(id)
-    this.props.getPartnerById(id)
-  }
   render() {
     return (
       <AdmProductStyle>
@@ -111,13 +116,14 @@ const mapStateToProps = (state) => ({
   loading: state.partner.loading,
   error: state.partner.error,
   message: state.partner.message,
+  partner: state.partner.partner,
 });
 const mapDispatchToProps = (dispatch) => ({
   savePartner: (payload) => dispatch(savePartner(payload)),
-  getPartnerById:(id)=>dispatch(getPartnerById(id)),
-
+  getPartnerById: (id) => dispatch(getPartnerById(id)),
+  changePartnerData: (key, value) =>
+    dispatch(changePartnerData(key, value, true)),
 });
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(AdminPartner)
 );
-

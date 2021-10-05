@@ -8,7 +8,7 @@ import { PartnersStyle } from "./style";
 import { Menu, Header, Table, Input } from "components/Form";
 import { PartnersConst } from "./constant";
 import { ButtonConst } from "App/AppConstant";
-import { getPartners, deletePartner} from "redux/partner/action";
+import { getPartners, deletePartner } from "redux/partner/action";
 
 class Partners extends Component {
   async componentDidMount() {
@@ -29,9 +29,7 @@ class Partners extends Component {
   };
 
   deletePartnerApi = (id) => this.props.deletePartner(id);
-
-  
-
+  editPartnerApi = (id) => this.props.history.push(`partner/edit/${id}`);
   render() {
     return (
       <PartnersStyle>
@@ -63,13 +61,13 @@ class Partners extends Component {
                 />
               </div>
             </div>
-            
-              <Table
-                type="partners"
-                data={this.props.partners}
-                deletePartner={this.deletePartnerApi}
-              />
-           
+
+            <Table
+              type="partners"
+              data={this.props.partners}
+              deletePartner={this.deletePartnerApi}
+              edit={this.editPartnerApi}
+            />
           </div>
         </div>
       </PartnersStyle>
@@ -81,12 +79,11 @@ const mapStateToProps = (state) => ({
   error: state.partner.error,
   message: state.partner.message,
   partners: state.partner.partners,
-  partner:state.partner.partner,
+  partner: state.partner.partner,
 });
 const mapDispatchToProps = (dispatch) => ({
   getPartners: (payload) => dispatch(getPartners(payload)),
   deletePartner: (id) => dispatch(deletePartner(id)),
-
 });
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(Partners)

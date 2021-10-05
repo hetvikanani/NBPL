@@ -7,13 +7,12 @@ import { axiosAuthPost, axiosAuthGet } from "modules/Axios";
 
 export const savePartner = (payload) => async (dispatch) => {
   try {
-    debugger;
     dispatch({ type: actions.SAVE_PARTNER_INITIATED });
     let response = await axiosAuthPost(partnerConst.SAVE_PARTNER, payload);
     if (response.responseStatus === "1") {
       message.success(response.message);
       await dispatch({ type: actions.SAVE_PARTNER_SUCCESS, payload: response });
-      dispatch(push("/partners")); 
+      dispatch(push("/partners"));
     } else dispatch({ type: actions.SAVE_PARTNER_ERROR, error: response });
   } catch (error) {
     console.log(error, "action catch");
@@ -53,7 +52,10 @@ export const deletePartner = (id) => async (dispatch) => {
         dispatch({ type: actions.GET_PARTNERS_INITIATED });
         let response = await axiosAuthPost(partnerConst.GET_PARTNERS, s);
         if (response.responseStatus === "1") {
-          await dispatch({ type: actions.GET_PARTNERS_SUCCESS, payload: response });
+          await dispatch({
+            type: actions.GET_PARTNERS_SUCCESS,
+            payload: response,
+          });
         } else dispatch({ type: actions.GET_PARTNERS_ERROR, error: response });
       } catch (error) {
         console.log(error, "action catch");
@@ -69,9 +71,9 @@ export const getPartnerById = (id) => async (dispatch) => {
   try {
     dispatch({ type: actions.GET_PARTNER_BY_ID_INITIATED });
     let response = await axiosAuthGet(partnerConst.GET_PARTNER_BY_ID + id);
-    console.log(response,'rzz')
+    console.log(response, "rzz");
     if (response.responseStatus === "1") {
-    console.log(response,'rzz')
+      console.log(response, "rzz");
 
       message.success(response.message);
       await dispatch({
@@ -83,4 +85,11 @@ export const getPartnerById = (id) => async (dispatch) => {
     console.log(error, "action catch");
     dispatch({ type: actions.GET_PARTNER_BY_ID_ERROR, error: "Network Error" });
   }
+};
+
+export const changePartnerData = (key, value, reset) => async (dispatch) => {
+  dispatch({
+    type: actions.CHANGE_PARTNER_DATA,
+    payload: { key, value, reset },
+  });
 };

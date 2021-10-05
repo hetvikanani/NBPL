@@ -4,10 +4,13 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
 import { contactConst } from "./constant";
+import { connect } from "react-redux";
+import { changePartnerData } from "redux/partner/action";
 
 import { ContDetailsStyle } from "./style";
 import { Input, Label, Button } from "components/Form";
 import { FormValidation } from "App/AppConstant";
+import { withRouter } from "react-router";
 const UserValidation = Yup.object().shape({
   contactName: Yup.string()
     .trim()
@@ -22,52 +25,47 @@ class ContactDetails extends Component {
     this.state = {
       disable: false,
       prev: [],
-      initialState: [
-        {
-          key: uuidv4(),
-          contactName: "",
-          mobile: "",
-          email: "",
-          designation: "",
-          check: false,
-          save: false,
-        },
-      ],
     };
   }
-  increase = (key,val) => {
-    const { initialState, prev } = this.state;
-    const newData = initialState.map((data) => {
+  changeDataForm = (fieldName, value) =>
+    this.props.changePartnerData(fieldName, value);
+
+  increase = (key, val) => {
+    const { prev } = this.state;
+    const { partner } = this.props;
+    const newData = partner?.contactDetails?.map((data) => {
       if (data.key === key) {
         return { ...data, save: true };
       } else return data;
     });
     let prevData = prev;
     prevData.push(val);
+    this.changeDataForm("contactDetails", [
+      ...newData,
+      {
+        key: uuidv4(),
+        contactName: "",
+        mobile: "",
+        email: "",
+        designation: "",
+        check: false,
+        save: false,
+      },
+    ]);
     this.setState({
       prev: prevData,
-      initialState: [
-        ...newData,
-        {
-          key: uuidv4(),
-          contactName: "",
-          mobile: "",
-          email: "",
-          designation: "",
-          check: false,
-          save: false,
-        },
-      ],
     });
   };
+
   remove = (key, setFieldValue, handleReset) => {
-    const newData = this.state.initialState.filter((data) => data.key !== key);
-    this.setState({ initialState: newData }, () => {
-      handleReset();
-    });
+    const { partner } = this.props;
+    const newData = partner?.contactDetails?.filter((data) => data.key !== key);
+    this.changeDataForm("contactDetails", newData);
+    handleReset();
   };
   handleSubmit = async (values, { setSubmitting }) => {
     try {
+      const { partner } = this.props;
       const { prev } = this.state;
       this.setState({ btnDisable: true, check: true });
       setTimeout(() => {
@@ -75,38 +73,29 @@ class ContactDetails extends Component {
       }, 4500);
       let prevData = prev;
       prevData.push(values);
-      this.props.changeData("contractDetailsData", this.state.initialState);
-      this.props.apiCall(this.state.initialState);
-     
+      this.props.apiCall();
       setSubmitting(false);
     } catch (error) {
       console.log(error);
     }
   };
-  initialStateChange = () => {
-    const { partner } = this.props;
 
-    let data = {
-      contactName: partner.contactName,
-      mobile: partner.mobile,
-      email: partner.emailId,
-      designation: partner.designation,
-    };
-    this.setState({ initialState: data });
-  };
-  proex = (e, index, setFieldValue, fildName) => {
-    const { initialState } = this.state;
-    let data = [...initialState];
-    data[index][fildName] = e.target.value;
-    this.setState({ initialState: data });
-    setFieldValue(fildName, e.target.value);
+  proex = (e, index, setFieldValue, fieldName) => {
+    const { partner } = this.props;
+    let data = [...partner?.contactDetails];
+    data[index][fieldName] = e.target.value;
+    this.changeDataForm("contactDetails", data);
+    setFieldValue(fieldName, e.target.value);
   };
   render() {
-    const { initialState, disable } = this.state;
+    const { disable } = this.state;
+    const { partner } = this.props;
+
+    console.log(partner, this.props, "kaa");
     return (
       <ContDetailsStyle>
         <h3 className="anime">{contactConst.cd}</h3>
-        {initialState.map((data, index) => (
+        {partner?.contactDetails?.map((data, index) => (
           <div className="formDiv anime" key={index}>
             <Formik
               enableReinitialize
@@ -243,7 +232,7 @@ class ContactDetails extends Component {
                   </Row>
                   <div className="bottomDiv">
                     <div className="leftBtnDiv anime">
-                      {initialState.length - 1 === index && (
+                      {partner?.contactDetails?.length - 1 === index && (
                         <Button
                           type="button"
                           onClick={() => {
@@ -257,7 +246,7 @@ class ContactDetails extends Component {
                           {contactConst.add}
                         </Button>
                       )}
-                      {initialState.length !== 1 && (
+                      {partner?.contactDetails?.length !== 1 && (
                         <Button
                           type="button"
                           onClick={() => {
@@ -270,7 +259,9 @@ class ContactDetails extends Component {
                     </div>
                     <div className="rightBtnDiv">
                       <Button type="submit" disabled={disable}>
-                        {initialState.filter((d) => d.key === data.key)[0]?.save
+                        {partner?.contactDetails?.filter(
+                          (d) => d.key === data.key
+                        )[0]?.save
                           ? "Save"
                           : "Submit"}
                       </Button>
@@ -285,4 +276,17 @@ class ContactDetails extends Component {
     );
   }
 }
-export default ContactDetails;
+
+const mapStateToProps = (state) => ({
+  loading: state.partner.loading,
+  error: state.partner.error,
+  message: state.partner.message,
+  partners: state.partner.partners,
+  partner: state.partner.partner,
+});
+const mapDispatchToProps = (dispatch) => ({
+  changePartnerData: (key, value) => dispatch(changePartnerData(key, value)),
+});
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(ContactDetails)
+);

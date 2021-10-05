@@ -9,6 +9,9 @@ import { basicConst } from "./constant";
 import { Input, Label, RoundSwitch, Button, FileUpload } from "components/Form";
 import { FormValidation, gstConst, panConst } from "App/AppConstant";
 import { connect } from "react-redux";
+import { changePartnerData } from "redux/partner/action";
+
+import { values } from "lodash";
 
 const UserValidation = Yup.object().shape({
   companyName: Yup.string()
@@ -17,7 +20,10 @@ const UserValidation = Yup.object().shape({
     .matches(/^[aA-zZ\s]+$/, FormValidation.alphaValid),
   email: Yup.string().trim().email().required(" "),
   mobile: Yup.string().trim().min(10).max(10).required(" "),
-  gst: Yup.string().trim().matches(gstConst, FormValidation.gstvalid),
+  gst: Yup.string()
+    .trim()
+    .nullable()
+    .matches(gstConst, FormValidation.gstvalid),
   pan: Yup.string().trim().matches(panConst, FormValidation.panValid),
   aadhar: Yup.string()
     .trim()
@@ -35,21 +41,11 @@ class BasicDetails extends Component {
       imgnm: "",
       imgByte: "",
       imgBase64: "",
-      initialState: {
-        pan: "",
-        email: "",
-        mobile: "",
-        aadhar: "",
-        gst: "",
-        companyName: "",
-      },
+      isDataSet: false,
     };
   }
-
-
-  componentDidMount() {
-    if (this.props.partner  && this?.props?.match?.params?.id) this.initialStateChange();
-  }
+  changeDataForm = (fieldName, value) =>
+    this.props.changePartnerData(fieldName, value);
 
   switchChange = () => this.setState({ gstType: !this.state.gstType });
 
@@ -69,7 +65,7 @@ class BasicDetails extends Component {
             <Image src={imgByte} width={50} height={30} />
           </>
         );
-      } 
+      }
       return (
         <FileUpload
           accept=".jpg, .jpeg, .png"
@@ -90,49 +86,37 @@ class BasicDetails extends Component {
   handleSubmit = async (values, { setSubmitting }) => {
     try {
       const { gstType } = this.state;
-      console.log(gstType,values,'lll')
+      console.log(gstType, values, "lll");
       // this.setState({ btnDisable: true });
       // setTimeout(() => {
       //   this.setState({ btnDisable: false });
       // }, 4500);
-      this.props.changeData("basicDetailsData", {
-        ...values,
-        img: this.state.imgBase64,
-        gstType: this.state.gstType,
-      });
-      if (gstType && values.gst === "") {
-        this.setState({ gstNoError: gstType && values.gst === "" });
-      } else this.props.countInc();
+      this.props.changePartnerData("img", this.state.imgBase64);
+      // this.props.changeData("basicDetailsData", {
+      //   ...values,
+      //   img: this.state.imgBase64,
+      //   // gstType: this.state.gstType,
+      // });
+      // if (gstType && values.gst === "") {
+      //   this.setState({ gstNoError: gstType && values.gst === "" });
+      // } else this.props.countInc();
+      this.props.countInc();
       setSubmitting(false);
     } catch (error) {
       console.log(error, "handle error");
     }
   };
-  initialStateChange = () => {
-    const { partner } = this.props;
-    console.log('jova mate',partner)
-    let data = {
-      pan: partner.pan,
-      email: partner.emailId,
-      mobile: partner.mobile,
-      aadhar: partner.aadharNumber,
-      gst: partner.gstNumber,
-      // gstType:partner.gstType,
-      companyName: partner.companyName,
-      img: partner.companyLogo,
-    };
-    this.setState({ initialState: data });
-  };
-
 
   render() {
-    const { initialState, disable, gstType, gstNoError } = this.state;
+    const { disable, gstType, gstNoError } = this.state;
+    const { partner } = this.props;
+
     return (
       <BasicDetailsStyle>
         <h2 className="anime">{basicConst.basicDetail}</h2>
         <div className="formDiv">
           <Formik
-            initialValues={initialState}
+            initialValues={partner}
             validationSchema={UserValidation}
             onSubmit={this.handleSubmit}
             enableReinitialize
@@ -168,7 +152,10 @@ class BasicDetails extends Component {
                         name="companyName"
                         onBlur={handleBlur}
                         value={values.companyName}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("companyName", e.target.value);
+                        }}
                         className={
                           errors.companyName && touched.companyName
                             ? "empty"
@@ -194,7 +181,10 @@ class BasicDetails extends Component {
                         name="email"
                         value={values.email}
                         onBlur={handleBlur}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("email", e.target.value);
+                        }}
                         className={errors.email && touched.email ? "empty" : ""}
                       />
                     </div>
@@ -219,7 +209,10 @@ class BasicDetails extends Component {
                         type="number"
                         value={values.mobile}
                         onBlur={handleBlur}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("mobile", e.target.value);
+                        }}
                         className={
                           errors.mobile && touched.mobile ? "empty" : ""
                         }
@@ -261,7 +254,10 @@ class BasicDetails extends Component {
                         name="pan"
                         value={values.pan}
                         onBlur={handleBlur}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("pan", e.target.value);
+                        }}
                         className={errors.pan && touched.pan ? "empty" : ""}
                       />
                     </div>
@@ -292,7 +288,10 @@ class BasicDetails extends Component {
                           name="gst"
                           onBlur={handleBlur}
                           value={values.gst.toUpperCase()}
-                          handleChange={handleChange}
+                          handleChange={(e) => {
+                            handleChange(e);
+                            this.changeDataForm("gst", e.target.value);
+                          }}
                           className={
                             (errors.gst && touched.gst) ||
                             (gstNoError && values.gst === "")
@@ -330,7 +329,10 @@ class BasicDetails extends Component {
                         type="number"
                         value={values.aadhar}
                         onBlur={handleBlur}
-                        handleChange={handleChange}
+                        handleChange={(e, z) => {
+                          handleChange(e);
+                          this.changeDataForm("aadhar", e.target.value);
+                        }}
                         className={
                           errors.aadhar && touched.aadhar ? "empty" : ""
                         }
@@ -379,7 +381,11 @@ const mapStateToProps = (state) => ({
   loading: state.partner.loading,
   error: state.partner.error,
   message: state.partner.message,
-  partners: state.partner.partners,
   partner: state.partner.partner,
 });
-export default withRouter(connect(mapStateToProps)(BasicDetails));
+const mapDispatchToProps = (dispatch) => ({
+  changePartnerData: (key, value) => dispatch(changePartnerData(key, value)),
+});
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(BasicDetails)
+);

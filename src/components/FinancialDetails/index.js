@@ -3,10 +3,11 @@ import { Row, Col } from "antd";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { finConst } from "./constant";
-import {connect} from 'react-redux'
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 import { FinDetailsStyle } from "./style";
 import { Input, Label, Button } from "components/Form";
-
+import { changePartnerData } from "redux/partner/action";
 const UserValidation = Yup.object().shape({
   bankName: Yup.string().trim().required(" "),
   branchName: Yup.string().trim().required(" "),
@@ -25,65 +26,35 @@ class FinancialDetails extends Component {
     super(props);
     this.state = {
       disable: false,
-      initialState: {
-        bankName: "",
-        branchName: "",
-        address: "",
-        accountNo: "",
-        ifscCode: "",
-        pincode: "",
-        city: "",
-        state: "",
-      },
     };
   }
+
   handleSubmit = async (values, { setSubmitting }) => {
     try {
-      debugger;
       this.setState({ btnDisable: true });
       setTimeout(() => {
         this.setState({ btnDisable: false });
       }, 4500);
       this.props.countInc();
-      this.props.changeData("financialDetailsData", values);
+      // this.props.changeData("financialDetailsData", values);
       setSubmitting(false);
     } catch (error) {
       console.log(error);
     }
   };
-  initialStateChange = () => {
+  changeDataForm = (fieldName, value) =>
+    this.props.changePartnerData(fieldName, value);
+
+  render() {
+    const { disable } = this.state;
     const { partner } = this.props;
 
-    let data = {
-      bankName: partner.bankName,
-      branchName: partner.branchName,
-      address: partner.address,
-      accountNo: partner.accountNumber,
-      ifscCode: partner.ifsc,
-      pincode: partner.pincode,
-      city: partner.city,
-      state: partner.state,
-    };
-    this.setState({ initialState: data });
-  };
-  componentDidMount() {
-   try {
-    if (this.props.partner  && this?.props?.match?.params?.id) this.initialStateChange();
-   } catch (error) {
-     console.log(error);
-   }
-   
-  }
-  
-  render() {
-
-    const { initialState, disable } = this.state;
     return (
       <FinDetailsStyle>
         <h2 className="anime">{finConst.finDetail}</h2>
         <div className="formDiv">
           <Formik
-            initialValues={initialState}
+            initialValues={partner}
             validationSchema={UserValidation}
             onSubmit={this.handleSubmit}
             enableReinitialize
@@ -117,7 +88,10 @@ class FinancialDetails extends Component {
                         onBlur={handleBlur}
                         name="bankName"
                         value={values.bankName}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("bankName", e.target.value);
+                        }}
                         tabIndex="1"
                         className={
                           errors.bankName && touched.bankName ? "empty" : ""
@@ -144,7 +118,10 @@ class FinancialDetails extends Component {
                         onBlur={handleBlur}
                         name="branchName"
                         value={values.branchName}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("branchName", e.target.value);
+                        }}
                         tabIndex="2"
                         className={
                           errors.branchName && touched.branchName ? "empty" : ""
@@ -172,7 +149,10 @@ class FinancialDetails extends Component {
                         onBlur={handleBlur}
                         name="address"
                         value={values.address}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("address", e.target.value);
+                        }}
                         tabIndex="3"
                         className={
                           errors.address && touched.address ? "empty" : ""
@@ -200,7 +180,10 @@ class FinancialDetails extends Component {
                         onBlur={handleBlur}
                         name="accountNo"
                         value={values.accountNo}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("accountNo", e.target.value);
+                        }}
                         tabIndex="4"
                         className={
                           errors.accountNo && touched.accountNo ? "empty" : ""
@@ -218,7 +201,10 @@ class FinancialDetails extends Component {
                         onBlur={handleBlur}
                         name="ifscCode"
                         value={values.ifscCode}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("ifscCode", e.target.value);
+                        }}
                         tabIndex="5"
                         className={
                           errors.ifscCode && touched.ifscCode ? "empty" : ""
@@ -246,7 +232,10 @@ class FinancialDetails extends Component {
                         onBlur={handleBlur}
                         name="pincode"
                         value={values.pincode}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("pincode", e.target.value);
+                        }}
                         tabIndex="6"
                         className={
                           errors.pincode && touched.pincode ? "empty" : ""
@@ -271,7 +260,10 @@ class FinancialDetails extends Component {
                         onBlur={handleBlur}
                         name="city"
                         value={values.city}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("city", e.target.value);
+                        }}
                         tabIndex="7"
                         className={errors.city && touched.city ? "empty" : ""}
                       />
@@ -294,7 +286,10 @@ class FinancialDetails extends Component {
                         onBlur={handleBlur}
                         name="state"
                         value={values.state}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("state", e.target.value);
+                        }}
                         tabIndex="8"
                         className={errors.state && touched.state ? "empty" : ""}
                       />
@@ -325,6 +320,11 @@ const mapStateToProps = (state) => ({
   error: state.partner.error,
   message: state.partner.message,
   partners: state.partner.partners,
-  partner:state.partner.partner,
+  partner: state.partner.partner,
 });
-export default connect(mapStateToProps)( FinancialDetails);
+const mapDispatchToProps = (dispatch) => ({
+  changePartnerData: (key, value) => dispatch(changePartnerData(key, value)),
+});
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(FinancialDetails)
+);
