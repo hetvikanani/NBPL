@@ -116,10 +116,10 @@ class BasicDetails extends Component {
         <h2 className="anime">{basicConst.basicDetail}</h2>
         <div className="formDiv">
           <Formik
+            enableReinitialize
             initialValues={partner}
             validationSchema={UserValidation}
             onSubmit={this.handleSubmit}
-            enableReinitialize
           >
             {({
               values,
@@ -128,6 +128,7 @@ class BasicDetails extends Component {
               handleChange,
               handleBlur,
               handleSubmit,
+              setFieldValue,
             }) => (
               <Form onSubmit={handleSubmit}>
                 <Row gutter={24}>
@@ -153,8 +154,9 @@ class BasicDetails extends Component {
                         onBlur={handleBlur}
                         value={values.companyName}
                         handleChange={(e) => {
-                          handleChange(e);
+                          // handleChange(e);
                           this.changeDataForm("companyName", e.target.value);
+                          setFieldValue("companyName", e.target.value);
                         }}
                         className={
                           errors.companyName && touched.companyName
@@ -182,8 +184,9 @@ class BasicDetails extends Component {
                         value={values.email}
                         onBlur={handleBlur}
                         handleChange={(e) => {
-                          handleChange(e);
+                          // handleChange(e);
                           this.changeDataForm("email", e.target.value);
+                          setFieldValue("email", e.target.value);
                         }}
                         className={errors.email && touched.email ? "empty" : ""}
                       />
@@ -210,8 +213,9 @@ class BasicDetails extends Component {
                         value={values.mobile}
                         onBlur={handleBlur}
                         handleChange={(e) => {
-                          handleChange(e);
+                          // handleChange(e);
                           this.changeDataForm("mobile", e.target.value);
+                          setFieldValue("mobile", e.target.value);
                         }}
                         className={
                           errors.mobile && touched.mobile ? "empty" : ""
@@ -255,7 +259,7 @@ class BasicDetails extends Component {
                         value={values.pan}
                         onBlur={handleBlur}
                         handleChange={(e) => {
-                          handleChange(e);
+                          // handleChange(e);
                           this.changeDataForm("pan", e.target.value);
                         }}
                         className={errors.pan && touched.pan ? "empty" : ""}
@@ -289,8 +293,9 @@ class BasicDetails extends Component {
                           onBlur={handleBlur}
                           value={values.gst.toUpperCase()}
                           handleChange={(e) => {
-                            handleChange(e);
+                            // handleChange(e);
                             this.changeDataForm("gst", e.target.value);
+                            setFieldValue("gst", e.target.value);
                           }}
                           className={
                             (errors.gst && touched.gst) ||
@@ -330,7 +335,7 @@ class BasicDetails extends Component {
                         value={values.aadhar}
                         onBlur={handleBlur}
                         handleChange={(e, z) => {
-                          handleChange(e);
+                          // handleChange(e);
                           this.changeDataForm("aadhar", e.target.value);
                         }}
                         className={

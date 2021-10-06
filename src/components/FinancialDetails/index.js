@@ -12,7 +12,7 @@ const UserValidation = Yup.object().shape({
   bankName: Yup.string().trim().required(" "),
   branchName: Yup.string().trim().required(" "),
   address: Yup.string().trim().required(" "),
-  accountNo: Yup.string().trim().min(11).max(11).required(" "),
+  accountNumber: Yup.string().trim().min(11).max(11).required(" "),
   ifscCode: Yup.string()
     .trim()
     .required(" ")
@@ -172,21 +172,25 @@ class FinancialDetails extends Component {
                       <Label
                         title={finConst.accNo}
                         className={
-                          errors.accountNo && touched.accountNo ? "empty" : ""
+                          errors.accountNumber && touched.accountNumber
+                            ? "empty"
+                            : ""
                         }
                       />
                       <Input
                         type="number"
                         onBlur={handleBlur}
-                        name="accountNo"
-                        value={values.accountNo}
+                        name="accountNumber"
+                        value={values.accountNumber}
                         handleChange={(e) => {
                           handleChange(e);
-                          this.changeDataForm("accountNo", e.target.value);
+                          this.changeDataForm("accountNumber", e.target.value);
                         }}
                         tabIndex="4"
                         className={
-                          errors.accountNo && touched.accountNo ? "empty" : ""
+                          errors.accountNumber && touched.accountNumber
+                            ? "empty"
+                            : ""
                         }
                       />
                     </div>

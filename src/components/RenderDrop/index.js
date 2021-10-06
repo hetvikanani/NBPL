@@ -17,11 +17,11 @@ class RenderDrop extends Component {
     );
   };
   render() {
-    const { item, id,} = this.props;
+    const { item, id } = this.props;
     let cls = id ? "render-form" + id : "render-form";
     return (
       <StyleComponent>
-        <div id={cls} >
+        <div id={cls}>
           <Dropdown
             destroyPopupOnHide
             placement="bottomRight"

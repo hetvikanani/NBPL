@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { Theme } from "App/theme";
-
 const StyleComponent = styled.div`
   .ant-dropdown {
     max-width: 300px;
@@ -19,7 +18,7 @@ const StyleComponent = styled.div`
         margin-left: 10px;
       }
       :hover {
-        border-bottom: 1px solid;
+        border-bottom: 1px solid ${Theme.mainColor};
       }
   }
 `;

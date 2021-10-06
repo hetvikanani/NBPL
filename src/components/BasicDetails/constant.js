@@ -1,7 +1,7 @@
 const basicConst = {
-  comName: "Company Name:",
-  email: "Email ID:",
-  mobile: "Mobile No:",
+  comName: "Company Name:*",
+  email: "Email ID:*",
+  mobile: "Mobile No:*",
   gst: "GST Type:",
   pan: "Pan:",
   gstNum: "GST Number:",

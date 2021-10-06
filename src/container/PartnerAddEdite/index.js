@@ -52,9 +52,11 @@ class AdminPartner extends Component {
 
   apiCall = (contacts) => {
     const { partner } = this.props;
-
+    let id = 0;
+    if (this?.props?.match?.params?.id)
+      id = parseInt(this?.props?.match?.params?.id);
     let data = {
-      partnerId: 0,
+      partnerId: id,
       companyName: partner.companyName,
       emailId: partner.email,
       mobile: partner.mobile?.toString(),
@@ -66,9 +68,9 @@ class AdminPartner extends Component {
       companyLogo: partner.img,
       bankName: partner.bankName,
       branchName: partner.branchName,
-      accountNumber: partner.accountNo?.toString(),
+      accountNumber: partner.accountNumber?.toString(),
       ifsc: partner.ifscCode,
-      address: partner.address,
+      address: partner.address?.toString(),
       pincode: partner.pincode?.toString(),
       city: partner.city,
       state: partner.state,

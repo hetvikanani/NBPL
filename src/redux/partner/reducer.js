@@ -10,6 +10,8 @@ const initialState = {
   partner: {
     contactDetails: [
       {
+        contactId: 0,
+        partnerId: 0,
         key: uuidv4(),
         contactName: "",
         mobile: "",
@@ -17,6 +19,7 @@ const initialState = {
         designation: "",
         check: false,
         save: false,
+        isDelete: 0,
       },
     ],
   },
@@ -126,17 +129,17 @@ export default (state = initialState, action) => {
           key: a.contactId,
           contactName: a.contactName,
           mobile: a.mobile,
-          emailId: a.emailId,
+          email: a.email,
           designation: a.designation,
           save: data.contactDetails.length - 2 === i,
+          contactId: a.contactId,
+          partnerId: a.partnerId,
+          ...a,
         };
         contactDetails.push(detail);
       });
       newData.contactDetails = contactDetails;
-      // contactName: partner.contactName,
-      //         mobile: partner.mobile,
-      //         email: partner.emailId,
-      //         designation: partner.designation,
+
       return {
         ...state,
         error: false,
@@ -159,6 +162,8 @@ export default (state = initialState, action) => {
           partner: {
             contactDetails: [
               {
+                contactId: 0,
+                partnerId: 0,
                 key: uuidv4(),
                 contactName: "",
                 mobile: "",
