@@ -25,6 +25,7 @@ import BasicDetails from "components/BasicDetails";
 import FinancialDetails from "components/FinancialDetails";
 import ProAddEditDetail from "components/ProductAddEdit";
 import ProductDocument from "components/ProductDoc";
+import Pagination from "components/Pagination";
 
 export {
   Button,
@@ -54,4 +55,5 @@ export {
   FinancialDetails,
   ProAddEditDetail,
   ProductDocument,
+  Pagination,
 };

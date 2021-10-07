@@ -16,7 +16,7 @@ const UserValidation = Yup.object().shape({
     .trim()
     .required(" ")
     .matches(/^[aA-zZ0-9\s]+$/, FormValidation.alphaValid),
-  email: Yup.string().trim().email().required(" "),
+  emailId: Yup.string().trim().email().required(" "),
   mobile: Yup.string().trim().min(10).max(10).required(" "),
 });
 class ContactDetails extends Component {
@@ -48,7 +48,7 @@ class ContactDetails extends Component {
         key: uuidv4(),
         contactName: "",
         mobile: "",
-        email: "",
+        emailId: "",
         designation: "",
         check: false,
         save: false,
@@ -72,6 +72,7 @@ class ContactDetails extends Component {
   };
   handleSubmit = async (values, { setSubmitting }) => {
     try {
+      // debugger;
       const { partner } = this.props;
       const { prev } = this.state;
       this.setState({ btnDisable: true, check: true });
@@ -100,7 +101,6 @@ class ContactDetails extends Component {
     const { disable } = this.state;
     const { partner } = this.props;
 
-    console.log(partner, this.props, "kaa");
     return (
       <ContDetailsStyle>
         <h3 className="anime">{contactConst.cd}</h3>
@@ -207,18 +207,18 @@ class ContactDetails extends Component {
                           <Label
                             title={contactConst.email}
                             className={
-                              errors.email && touched.email ? "empty" : ""
+                              errors.emailId && touched.emailId ? "empty" : ""
                             }
                           />
                           <Input
                             className={
-                              errors.email && touched.email ? "empty" : ""
+                              errors.emailId && touched.emailId ? "empty" : ""
                             }
                             onBlur={handleBlur}
-                            name="email"
-                            value={values.email}
+                            name="emailId"
+                            value={values.emailId}
                             onChange={(e) => {
-                              this.proex(e, index, setFieldValue, "email");
+                              this.proex(e, index, setFieldValue, "emailId");
                             }}
                             tabIndex="3"
                           />

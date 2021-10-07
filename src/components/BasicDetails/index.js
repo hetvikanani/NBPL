@@ -10,7 +10,6 @@ import { Input, Label, RoundSwitch, Button, FileUpload } from "components/Form";
 import { FormValidation, gstConst, panConst } from "App/AppConstant";
 import { connect } from "react-redux";
 import { changePartnerData } from "redux/partner/action";
-
 import { values } from "lodash";
 
 const UserValidation = Yup.object().shape({
@@ -47,30 +46,37 @@ class BasicDetails extends Component {
   changeDataForm = (fieldName, value) =>
     this.props.changePartnerData(fieldName, value);
 
-  switchChange = () => this.setState({ gstType: !this.state.gstType });
+  switchChange = (setFieldValue) => {
+    this.changeDataForm("gstType", !this.state.gstType);
+    setFieldValue("gstType", !this.state.gstType);
+    this.setState({ gstType: !this.state.gstType });
+  };
 
-  fileUpload = () => {
+  fileUpload = (setFieldValue) => {
     try {
       const { imgnm, imgByte } = this.state;
-      let name = imgnm;
-      if (imgnm && imgByte) {
+      const { partner } = this.props;
+
+      let name = partner?.imgnm;
+      if (partner?.imgnm && partner?.companyLogo) {
         let a = name.split(".");
         name = a[0].substr(0, 5) + "." + a[1];
+
         return (
           <>
             <span className="optionui">
               <span className="txtWrap">{name}</span>
-              <CloseOutlined onClick={() => this.removefile()} />
+              <CloseOutlined onClick={() => this.removefile(setFieldValue)} />
             </span>
-            <Image src={imgByte} width={50} height={30} />
+            <Image src={partner?.companyLogo} width={50} height={30} />
           </>
         );
       }
       return (
         <FileUpload
-          accept=".jpg, .jpeg, .png"
+          accept=".jpg, .jpeg, .png , .svg"
           image={true}
-          sendByte={this.setByte}
+          sendByte={(a, b, c) => this.setByte(a, b, c, setFieldValue)}
           elements={<UploadOutlined />}
         />
       );
@@ -78,20 +84,38 @@ class BasicDetails extends Component {
       console.log(error);
     }
   };
-  removefile = () => this.setState({ imgByte: "", imgnm: "", imgBase64: "" });
 
-  setByte = (byteCode, name, base64) =>
-    this.setState({ imgByte: byteCode, imgnm: name, imgBase64: base64 });
+  removefile = (setFieldValue) => {
+    this.changeDataForm("companyLogo", "");
+    setFieldValue("companyLogo", "");
+    this.changeDataForm("imgnm", "");
+    setFieldValue("imgnm", "");
+    this.changeDataForm("imgBase64", "");
+    setFieldValue("imgBase64", "");
+    this.setState({ companyLogo: "", imgnm: "", imgBase64: "" });
+  };
+
+  setByte = (byteCode, name, base64, setFieldValue) => {
+    this.changeDataForm("companyLogo", byteCode);
+    setFieldValue("companyLogo", byteCode);
+    this.changeDataForm("imgnm", name);
+    setFieldValue("imgnm", name);
+    this.changeDataForm("imgBase64", base64);
+    setFieldValue("imgBase64", base64);
+
+    this.setState({ companyLogo: byteCode, imgnm: name, imgBase64: base64 });
+  };
 
   handleSubmit = async (values, { setSubmitting }) => {
     try {
       const { gstType } = this.state;
-      console.log(gstType, values, "lll");
+
       // this.setState({ btnDisable: true });
       // setTimeout(() => {
       //   this.setState({ btnDisable: false });
       // }, 4500);
       this.props.changePartnerData("img", this.state.imgBase64);
+
       // this.props.changeData("basicDetailsData", {
       //   ...values,
       //   img: this.state.imgBase64,
@@ -100,6 +124,7 @@ class BasicDetails extends Component {
       // if (gstType && values.gst === "") {
       //   this.setState({ gstNoError: gstType && values.gst === "" });
       // } else this.props.countInc();
+
       this.props.countInc();
       setSubmitting(false);
     } catch (error) {
@@ -116,15 +141,16 @@ class BasicDetails extends Component {
         <h2 className="anime">{basicConst.basicDetail}</h2>
         <div className="formDiv">
           <Formik
-            enableReinitialize
             initialValues={partner}
             validationSchema={UserValidation}
             onSubmit={this.handleSubmit}
+            enableReinitialize
           >
             {({
               values,
               errors,
               touched,
+              onBlur,
               handleChange,
               handleBlur,
               handleSubmit,
@@ -236,8 +262,8 @@ class BasicDetails extends Component {
                       <RoundSwitch
                         left={basicConst.no + basicConst.reg}
                         right={basicConst.reg}
-                        checked={gstType}
-                        handleChange={this.switchChange}
+                        checked={partner.gstType}
+                        handleChange={() => this.switchChange(setFieldValue)}
                       />
                     </div>
                   </Col>
@@ -269,7 +295,7 @@ class BasicDetails extends Component {
                       <div className="form-error">{errors.pan}</div>
                     )}
                   </Col>
-                  {gstType ? (
+                  {partner?.gstType ? (
                     <Col
                       xs={24}
                       sm={24}
@@ -291,7 +317,7 @@ class BasicDetails extends Component {
                         <Input
                           name="gst"
                           onBlur={handleBlur}
-                          value={values.gst.toUpperCase()}
+                          value={values?.gst?.toUpperCase()}
                           handleChange={(e) => {
                             // handleChange(e);
                             this.changeDataForm("gst", e.target.value);
@@ -357,7 +383,9 @@ class BasicDetails extends Component {
                   >
                     <div className="field">
                       <Label title={basicConst.comLogo} />
-                      <div className="pointer">{this.fileUpload()}</div>
+                      <div className="pointer">
+                        {this.fileUpload(setFieldValue)}
+                      </div>
                     </div>
                   </Col>
                 </Row>

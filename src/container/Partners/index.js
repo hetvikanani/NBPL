@@ -5,21 +5,50 @@ import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import { Empty } from "antd";
 
 import { PartnersStyle } from "./style";
-import { Menu, Header, Table, Input } from "components/Form";
+import { Menu, Header, Table, Input, Pagination } from "components/Form";
 import { PartnersConst } from "./constant";
 import { ButtonConst } from "App/AppConstant";
 import { getPartners, deletePartner } from "redux/partner/action";
 
 class Partners extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataLength: 0,
+      currentPage: 1,
+    };
+  }
   async componentDidMount() {
+    const { currentPage } = this.state;
     var s = {
       parameter: "",
       pageSize: "10",
-      page: "1",
+      page: currentPage.toString(),
       sortColumn: "partnerid desc",
     };
     await this.props.getPartners(s);
   }
+  componentDidUpdate(prevProps) {
+    try {
+      const { partners } = this.props;
+      if (partners !== prevProps.partners) {
+        if (partners && partners.length > 0)
+          this.setState({ dataLength: partners[0].totalLenght });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  handlePagination = async (val) => {
+    var para = {
+      parameter: "",
+      pageSize: "10",
+      page: val.toString(),
+      sortColumn: "partnerid desc",
+    };
+    await this.props.getPartners(para);
+    this.setState({ currentPage: val.current });
+  };
   exportUI = (text) => {
     try {
       return <div className="exportAction pointer">{text}</div>;
@@ -31,6 +60,8 @@ class Partners extends Component {
   deletePartnerApi = (id) => this.props.deletePartner(id);
   editPartnerApi = (id) => this.props.history.push(`partner/edit/${id}`);
   render() {
+    const { loading, partners } = this.props;
+    const { dataLength, currentPage } = this.state;
     return (
       <PartnersStyle>
         <Menu />
@@ -68,6 +99,15 @@ class Partners extends Component {
               deletePartner={this.deletePartnerApi}
               edit={this.editPartnerApi}
             />
+            {dataLength > 10 && (
+              <div className="pagiDiv">
+                <Pagination
+                  onChange={this.handlePagination}
+                  current={currentPage}
+                  total={dataLength}
+                />
+              </div>
+            )}
           </div>
         </div>
       </PartnersStyle>

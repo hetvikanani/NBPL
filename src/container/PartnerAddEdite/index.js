@@ -51,6 +51,7 @@ class AdminPartner extends Component {
   };
 
   apiCall = (contacts) => {
+    // debugger;
     const { partner } = this.props;
     let id = 0;
     if (this?.props?.match?.params?.id)
@@ -60,12 +61,11 @@ class AdminPartner extends Component {
       companyName: partner.companyName,
       emailId: partner.email,
       mobile: partner.mobile?.toString(),
-      // gstType: partner.gstType,
       gstType: partner.gstType ? 1 : 0,
       gstNumber: partner.gst,
       pan: partner.pan,
       aadharNumber: partner.aadhar?.toString(),
-      companyLogo: partner.img,
+      companyLogo: partner.companyLogo,
       bankName: partner.bankName,
       branchName: partner.branchName,
       accountNumber: partner.accountNumber?.toString(),

@@ -7,6 +7,7 @@ import { axiosAuthPost, axiosAuthGet } from "modules/Axios";
 
 export const savePartner = (payload) => async (dispatch) => {
   try {
+    // debugger;
     dispatch({ type: actions.SAVE_PARTNER_INITIATED });
     let response = await axiosAuthPost(partnerConst.SAVE_PARTNER, payload);
     if (response.responseStatus === "1") {
@@ -32,7 +33,6 @@ export const getPartners = (payload) => async (dispatch) => {
   }
 };
 export const deletePartner = (id) => async (dispatch) => {
-  console.log(id, "idd");
   try {
     dispatch({ type: actions.DELETE_PARTNER_INITIATED });
     let response = await axiosAuthGet(partnerConst.DELETE_PARTNER + id);
@@ -71,10 +71,8 @@ export const getPartnerById = (id) => async (dispatch) => {
   try {
     dispatch({ type: actions.GET_PARTNER_BY_ID_INITIATED });
     let response = await axiosAuthGet(partnerConst.GET_PARTNER_BY_ID + id);
-    console.log(response, "rzz");
-    if (response.responseStatus === "1") {
-      console.log(response, "rzz");
 
+    if (response.responseStatus === "1") {
       message.success(response.message);
       await dispatch({
         type: actions.GET_PARTNER_BY_ID_SUCCESS,
