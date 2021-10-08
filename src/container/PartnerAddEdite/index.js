@@ -90,7 +90,11 @@ class AdminPartner extends Component {
           previous={this.previous}
         />
       ) : count === 2 ? (
-        <ContactDetails changeData={this.changeData} apiCall={this.apiCall} />
+        <ContactDetails
+          changeData={this.changeData}
+          apiCall={this.apiCall}
+          previous={this.previous}
+        />
       ) : (
         ""
       );

@@ -1,14 +1,22 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
-import { Empty } from "antd";
+import {
+  SearchOutlined,
+  PlusOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
+
+import { Modal } from "antd";
+import View from "./view";
 
 import { PartnersStyle } from "./style";
 import { Menu, Header, Table, Input, Pagination } from "components/Form";
 import { PartnersConst } from "./constant";
 import { ButtonConst } from "App/AppConstant";
 import { getPartners, deletePartner } from "redux/partner/action";
+import { partnerConst } from "modules/config";
+const { confirm } = Modal;
 
 class Partners extends Component {
   constructor(props) {
@@ -16,6 +24,8 @@ class Partners extends Component {
     this.state = {
       dataLength: 0,
       currentPage: 1,
+      viewModel: false,
+      modelData: {},
     };
   }
   async componentDidMount() {
@@ -57,11 +67,39 @@ class Partners extends Component {
     }
   };
 
-  deletePartnerApi = (id) => this.props.deletePartner(id);
+  deletePartnerApi = (id) => {
+    try {
+      confirm({
+        title: PartnersConst.title,
+        icon: <QuestionCircleOutlined />,
+        content: PartnersConst.content,
+        okText: PartnersConst.yes,
+        okType: "danger",
+        cancelText: PartnersConst.no,
+        onOk: () => {
+          this.props.deletePartner(id);
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   editPartnerApi = (id) => this.props.history.push(`partner/edit/${id}`);
+
+  viewPartner = (data) => {
+    console.log("model pewno", data);
+    this.setState({ viewModel: true, modelData: data });
+  };
+
+  close = () => {
+    this.setState({ viewModel: false });
+  };
+
   render() {
     const { loading, partners } = this.props;
     const { dataLength, currentPage } = this.state;
+    console.log(partners, "pp");
     return (
       <PartnersStyle>
         <Menu />
@@ -98,6 +136,7 @@ class Partners extends Component {
               data={this.props.partners}
               deletePartner={this.deletePartnerApi}
               edit={this.editPartnerApi}
+              view={this.viewPartner}
             />
             {dataLength > 10 && (
               <div className="pagiDiv">
@@ -107,6 +146,13 @@ class Partners extends Component {
                   total={dataLength}
                 />
               </div>
+            )}
+            {this.state.viewModel && (
+              <View
+                view={this.state.viewModel}
+                data={this.state.modelData}
+                modelCancle={this.close}
+              />
             )}
           </div>
         </div>

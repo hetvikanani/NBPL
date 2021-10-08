@@ -15,9 +15,12 @@ const UserValidation = Yup.object().shape({
   contactName: Yup.string()
     .trim()
     .required(" ")
-    .matches(/^[aA-zZ0-9\s]+$/, FormValidation.alphaValid),
+    .matches(/^[aA-zZ\s]+$/, FormValidation.alphaValid),
   emailId: Yup.string().trim().email().required(" "),
   mobile: Yup.string().trim().min(10).max(10).required(" "),
+  designation: Yup.string()
+    .trim()
+    .matches(/^[aA-zZ\s]+$/, FormValidation.alphaValid),
 });
 class ContactDetails extends Component {
   constructor(props) {
@@ -233,11 +236,23 @@ class ContactDetails extends Component {
                         className="anime"
                       >
                         <div className="field">
-                          <Label title={contactConst.designation} />
+                          <Label
+                            title={contactConst.designation}
+                            className={
+                              errors.designation && touched.designation
+                                ? "empty"
+                                : ""
+                            }
+                          />
                           <Input
                             onBlur={handleBlur}
                             name="designation"
                             value={values.designation}
+                            className={
+                              errors.designation && touched.designation
+                                ? "empty"
+                                : ""
+                            }
                             onChange={(e) => {
                               this.proex(
                                 e,
@@ -280,6 +295,16 @@ class ContactDetails extends Component {
                         )}
                       </div>
                       <div className="rightBtnDiv">
+                        <Button
+                          type="button"
+                          onClick={() => this.props.history.push("/partners")}
+                        >
+                          {contactConst.cancle}
+                        </Button>
+                        <Button type="button" onClick={this.props.previous}>
+                          {contactConst.previous}
+                        </Button>
+
                         <Button type="submit" disabled={disable}>
                           {partner?.contactDetails?.filter(
                             (d) => d.key === data.key

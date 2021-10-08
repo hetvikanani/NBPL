@@ -20,11 +20,13 @@ export const savePartner = (payload) => async (dispatch) => {
     dispatch({ type: actions.SAVE_PARTNER_ERROR, error: "Network Error" });
   }
 };
+
 export const getPartners = (payload) => async (dispatch) => {
   try {
     dispatch({ type: actions.GET_PARTNERS_INITIATED });
     let response = await axiosAuthPost(partnerConst.GET_PARTNERS, payload);
     if (response.responseStatus === "1") {
+      console.log(response, "gjb");
       await dispatch({ type: actions.GET_PARTNERS_SUCCESS, payload: response });
     } else dispatch({ type: actions.GET_PARTNERS_ERROR, error: response });
   } catch (error) {

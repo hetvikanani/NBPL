@@ -49,18 +49,26 @@ class TableUI extends Component {
   );
 
   adminActionUI = (record, type) => {
+    console.log("rr", record);
     try {
       return (
         <div className="actionUI">
-          <RenderDrop overlayClassName="actionUI"
+          <RenderDrop
+            overlayClassName="actionUI"
             item={<DashOutlined className="dash" />}
             data={[
               type === "partners" && (
-                <div className="actionBtn" onClick={() => this.props.view()}>
+                <div
+                  className="actionBtn"
+                  onClick={() => this.props.view(record)}
+                >
                   {this.adminActUI(view, TableConst.view)}
                 </div>
               ),
-              <div className="actionBtn" onClick={() => this.props.edit(record.partnerId)}>
+              <div
+                className="actionBtn"
+                onClick={() => this.props.edit(record.partnerId)}
+              >
                 {this.adminActUI(edit, TableConst.edit)}
               </div>,
               type === "partners" && (
@@ -81,7 +89,10 @@ class TableUI extends Component {
                   {this.adminActUI(sales, TableConst.sales)}
                 </div>
               ),
-              <div className="actionBtn" onClick={() => this.props.deletePartner(record.partnerId)}>
+              <div
+                className="actionBtn"
+                onClick={() => this.props.deletePartner(record.partnerId)}
+              >
                 {this.adminActUI(deleteSvg, TableConst.delete)}
               </div>,
             ]}

@@ -8,9 +8,17 @@ import { connect } from "react-redux";
 import { FinDetailsStyle } from "./style";
 import { Input, Label, Button } from "components/Form";
 import { changePartnerData } from "redux/partner/action";
+import { FormValidation } from "App/AppConstant";
+
 const UserValidation = Yup.object().shape({
-  bankName: Yup.string().trim().required(" "),
-  branchName: Yup.string().trim().required(" "),
+  bankName: Yup.string()
+    .trim()
+    .required(" ")
+    .matches(/^[aA-zZ\s]+$/, FormValidation.alphaValid),
+  branchName: Yup.string()
+    .trim()
+    .required(" ")
+    .matches(/^[aA-zZ\s]+$/, FormValidation.alphaValid),
   address: Yup.string().trim().required(" "),
   accountNumber: Yup.string().trim().min(11).max(11).required(" "),
   ifscCode: Yup.string()
@@ -257,32 +265,6 @@ class FinancialDetails extends Component {
                   >
                     <div className="field">
                       <Label
-                        title={finConst.city}
-                        className={errors.city && touched.city ? "empty" : ""}
-                      />
-                      <Input
-                        onBlur={handleBlur}
-                        name="city"
-                        value={values.city}
-                        handleChange={(e) => {
-                          handleChange(e);
-                          this.changeDataForm("city", e.target.value);
-                        }}
-                        tabIndex="7"
-                        className={errors.city && touched.city ? "empty" : ""}
-                      />
-                    </div>
-                  </Col>
-                  <Col
-                    xs={24}
-                    sm={24}
-                    md={24}
-                    lg={12}
-                    xl={12}
-                    className="anime"
-                  >
-                    <div className="field">
-                      <Label
                         title={finConst.state}
                         className={errors.state && touched.state ? "empty" : ""}
                       />
@@ -296,6 +278,32 @@ class FinancialDetails extends Component {
                         }}
                         tabIndex="8"
                         className={errors.state && touched.state ? "empty" : ""}
+                      />
+                    </div>
+                  </Col>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
+                    <div className="field">
+                      <Label
+                        title={finConst.city}
+                        className={errors.city && touched.city ? "empty" : ""}
+                      />
+                      <Input
+                        onBlur={handleBlur}
+                        name="city"
+                        value={values.city}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("city", e.target.value);
+                        }}
+                        tabIndex="7"
+                        className={errors.city && touched.city ? "empty" : ""}
                       />
                     </div>
                   </Col>

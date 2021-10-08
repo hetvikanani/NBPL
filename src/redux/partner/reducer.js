@@ -59,13 +59,15 @@ export default (state = initialState, action) => {
         message: false,
         loading: true,
       };
-    case actions.GET_PARTNERS_SUCCESS:
+    case actions.GET_PARTNERS_SUCCESS: {
+      console.log(action.payload.data, "aaa");
       return {
         ...state,
         loading: false,
         error: false,
         partners: action.payload.data,
       };
+    }
     case actions.GET_PARTNERS_ERROR:
       return {
         ...state,
@@ -113,7 +115,7 @@ export default (state = initialState, action) => {
         gst: data.gstNumber,
         gstType: data.gstType,
         companyName: data.companyName,
-        // companyLogo: data.companyLogo,
+        companyLogo: data.companyLogo,
         img: data.companyLogo,
         bankName: data.bankName,
         branchName: data.branchName,

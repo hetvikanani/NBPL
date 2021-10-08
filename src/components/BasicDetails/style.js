@@ -31,12 +31,13 @@ const BasicDetailsStyle = styled.div`
       margin-top: 2em;
       .btn {
         margin-left: auto;
-        button:first-child {
-          margin-right: 2em;
+        .nextBtn {
+          margin-top: 7px;
         }
         button {
           height: 35px;
           line-height: 35px;
+          margin-right: 1em;
         }
       }
     }

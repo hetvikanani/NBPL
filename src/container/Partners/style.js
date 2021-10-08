@@ -56,5 +56,9 @@ const PartnersStyle = styled.div`
     }
     
   }
+
+  }
+  .tableData{
+    padding: 0 6px 0 6px;
 `;
 export { PartnersStyle };

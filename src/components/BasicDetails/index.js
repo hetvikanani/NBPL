@@ -56,16 +56,15 @@ class BasicDetails extends Component {
     try {
       const { imgnm, imgByte } = this.state;
       const { partner } = this.props;
-
       let name = partner?.imgnm;
-      if (partner?.imgnm && partner?.companyLogo) {
-        let a = name.split(".");
-        name = a[0].substr(0, 5) + "." + a[1];
 
+      if (partner?.imgnm || partner?.companyLogo) {
+        let a = name?.split(".");
+        name = a?.[0]?.substr(0, 5) + "." + a?.[1];
         return (
           <>
             <span className="optionui">
-              <span className="txtWrap">{name}</span>
+              <span className="txtWrap">{"name"}</span>
               <CloseOutlined onClick={() => this.removefile(setFieldValue)} />
             </span>
             <Image src={partner?.companyLogo} width={50} height={30} />
@@ -135,7 +134,6 @@ class BasicDetails extends Component {
   render() {
     const { disable, gstType, gstNoError } = this.state;
     const { partner } = this.props;
-
     return (
       <BasicDetailsStyle>
         <h2 className="anime">{basicConst.basicDetail}</h2>
@@ -389,15 +387,21 @@ class BasicDetails extends Component {
                     </div>
                   </Col>
                 </Row>
+
                 <div className="bottomDiv">
                   <div className="btn anime">
                     <Button
                       type="button"
                       onClick={() => this.props.history.push("/partners")}
                     >
-                      {basicConst.previous}
+                      {basicConst.cancle}
                     </Button>
-                    <Button type="submit" disabled={disable}>
+
+                    <Button
+                      type="submit"
+                      className="nextBtn"
+                      disabled={disable}
+                    >
                       {basicConst.next}
                     </Button>
                   </div>

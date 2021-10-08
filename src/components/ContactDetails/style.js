@@ -47,6 +47,7 @@ const ContDetailsStyle = styled.div`
       button {
         height: 35px;
         line-height: 35px;
+        margin-right: 10px;
       }
     }
   }
