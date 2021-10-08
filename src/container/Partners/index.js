@@ -9,6 +9,8 @@ import {
 
 import { Modal } from "antd";
 import View from "./view";
+import ViewApi from "./viewApi";
+
 
 import { PartnersStyle } from "./style";
 import { Menu, Header, Table, Input, Pagination } from "components/Form";
@@ -147,8 +149,15 @@ class Partners extends Component {
                 />
               </div>
             )}
-            {this.state.viewModel && (
+            {/* {this.state.viewModel && (
               <View
+                view={this.state.viewModel}
+                data={this.state.modelData}
+                modelCancle={this.close}
+              />
+            )} */}
+            {this.state.viewModel && (
+              <ViewApi
                 view={this.state.viewModel}
                 data={this.state.modelData}
                 modelCancle={this.close}

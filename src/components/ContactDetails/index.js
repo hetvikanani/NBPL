@@ -103,222 +103,221 @@ class ContactDetails extends Component {
   render() {
     const { disable } = this.state;
     const { partner } = this.props;
+    let finalContactDetials = partner?.contactDetails?.filter(
+      (data) => data.isDelete !== 1
+    );
+    // console.log(finalContactDetials, "xxz");
 
     return (
       <ContDetailsStyle>
         <h3 className="anime">{contactConst.cd}</h3>
-        {partner?.contactDetails
-          ?.filter((data) => data.isDelete !== 1)
-          .map((data, index) => (
-            <div className="formDiv anime" key={index}>
-              <Formik
-                enableReinitialize
-                initialValues={data}
-                validationSchema={UserValidation}
-                onSubmit={this.handleSubmit}
-              >
-                {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  validateForm,
-                  setFieldValue,
-                  handleReset,
-                }) => (
-                  <Form onSubmit={handleSubmit}>
-                    <Row gutter={20}>
-                      <Col
-                        xs={24}
-                        sm={24}
-                        md={24}
-                        lg={12}
-                        xl={12}
-                        className="anime"
-                      >
-                        <div className="field">
-                          <Label
-                            title={contactConst.contactName}
-                            className={
-                              errors.contactName && touched.contactName
-                                ? "empty"
-                                : ""
-                            }
-                          />
-                          <Input
-                            onBlur={handleBlur}
-                            name="contactName"
-                            value={values.contactName}
-                            className={
-                              errors.contactName && touched.contactName
-                                ? "empty"
-                                : ""
-                            }
-                            onChange={(e) => {
-                              this.proex(
-                                e,
-                                index,
-                                setFieldValue,
-                                "contactName"
-                              );
-                            }}
-                            tabIndex="1"
-                          />
-                        </div>
-                      </Col>
-                      <Col
-                        xs={24}
-                        sm={24}
-                        md={24}
-                        lg={12}
-                        xl={12}
-                        className="anime"
-                      >
-                        <div className="field">
-                          <Label
-                            title={contactConst.mobile}
-                            className={
-                              errors.mobile && touched.mobile ? "empty" : ""
-                            }
-                          />
-                          <Input
-                            className={
-                              errors.mobile && touched.mobile ? "empty" : ""
-                            }
-                            onBlur={handleBlur}
-                            name="mobile"
-                            type="number"
-                            value={values.mobile}
-                            handleChange={(e) => {
-                              this.proex(e, index, setFieldValue, "mobile");
-                            }}
-                            tabIndex="2"
-                          />
-                        </div>
-                      </Col>
-                      <Col
-                        xs={24}
-                        sm={24}
-                        md={24}
-                        lg={12}
-                        xl={12}
-                        className="anime"
-                      >
-                        <div className="field">
-                          <Label
-                            title={contactConst.email}
-                            className={
-                              errors.emailId && touched.emailId ? "empty" : ""
-                            }
-                          />
-                          <Input
-                            className={
-                              errors.emailId && touched.emailId ? "empty" : ""
-                            }
-                            onBlur={handleBlur}
-                            name="emailId"
-                            value={values.emailId}
-                            onChange={(e) => {
-                              this.proex(e, index, setFieldValue, "emailId");
-                            }}
-                            tabIndex="3"
-                          />
-                        </div>
-                      </Col>
-                      <Col
-                        xs={24}
-                        sm={24}
-                        md={24}
-                        lg={12}
-                        xl={12}
-                        className="anime"
-                      >
-                        <div className="field">
-                          <Label
-                            title={contactConst.designation}
-                            className={
-                              errors.designation && touched.designation
-                                ? "empty"
-                                : ""
-                            }
-                          />
-                          <Input
-                            onBlur={handleBlur}
-                            name="designation"
-                            value={values.designation}
-                            className={
-                              errors.designation && touched.designation
-                                ? "empty"
-                                : ""
-                            }
-                            onChange={(e) => {
-                              this.proex(
-                                e,
-                                index,
-                                setFieldValue,
-                                "designation"
-                              );
-                            }}
-                            tabIndex="4"
-                          />
-                        </div>
-                      </Col>
-                    </Row>
-
-                    <div className="bottomDiv">
-                      <div className="leftBtnDiv anime">
-                        {partner?.contactDetails?.length - 1 === index && (
-                          <Button
-                            type="button"
-                            onClick={() => {
-                              validateForm().then((d) => {
-                                if (Object.keys(d).length === 0)
-                                  this.increase(data.key);
-                                else handleSubmit();
-                              });
-                            }}
-                          >
-                            {contactConst.add}
-                          </Button>
-                        )}
-                        {partner?.contactDetails?.length !== 1 && (
-                          <Button
-                            type="button"
-                            onClick={() => {
-                              this.remove(data.key, setFieldValue, handleReset);
-                            }}
-                          >
-                            {contactConst.remove}
-                          </Button>
-                        )}
+        {finalContactDetials?.map((data, index) => (
+          <div className="formDiv anime" key={index}>
+            <Formik
+              enableReinitialize
+              initialValues={data}
+              validationSchema={UserValidation}
+              onSubmit={this.handleSubmit}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                validateForm,
+                setFieldValue,
+                handleReset,
+              }) => (
+                <Form onSubmit={handleSubmit}>
+                  <Row gutter={20}>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={24}
+                      lg={12}
+                      xl={12}
+                      className="anime"
+                    >
+                      <div className="field">
+                        <Label
+                          title={contactConst.contactName}
+                          className={
+                            errors.contactName && touched.contactName
+                              ? "empty"
+                              : ""
+                          }
+                        />
+                        <Input
+                          onBlur={handleBlur}
+                          name="contactName"
+                          value={values.contactName}
+                          className={
+                            errors.contactName && touched.contactName
+                              ? "empty"
+                              : ""
+                          }
+                          onChange={(e) => {
+                            this.proex(e, index, setFieldValue, "contactName");
+                          }}
+                          tabIndex="1"
+                        />
                       </div>
-                      <div className="rightBtnDiv">
+                    </Col>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={24}
+                      lg={12}
+                      xl={12}
+                      className="anime"
+                    >
+                      <div className="field">
+                        <Label
+                          title={contactConst.mobile}
+                          className={
+                            errors.mobile && touched.mobile ? "empty" : ""
+                          }
+                        />
+                        <Input
+                          className={
+                            errors.mobile && touched.mobile ? "empty" : ""
+                          }
+                          onBlur={handleBlur}
+                          name="mobile"
+                          type="number"
+                          value={values.mobile}
+                          handleChange={(e) => {
+                            this.proex(e, index, setFieldValue, "mobile");
+                          }}
+                          tabIndex="2"
+                        />
+                      </div>
+                    </Col>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={24}
+                      lg={12}
+                      xl={12}
+                      className="anime"
+                    >
+                      <div className="field">
+                        <Label
+                          title={contactConst.email}
+                          className={
+                            errors.emailId && touched.emailId ? "empty" : ""
+                          }
+                        />
+                        <Input
+                          className={
+                            errors.emailId && touched.emailId ? "empty" : ""
+                          }
+                          onBlur={handleBlur}
+                          name="emailId"
+                          value={values.emailId}
+                          onChange={(e) => {
+                            this.proex(e, index, setFieldValue, "emailId");
+                          }}
+                          tabIndex="3"
+                        />
+                      </div>
+                    </Col>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={24}
+                      lg={12}
+                      xl={12}
+                      className="anime"
+                    >
+                      <div className="field">
+                        <Label
+                          title={contactConst.designation}
+                          className={
+                            errors.designation && touched.designation
+                              ? "empty"
+                              : ""
+                          }
+                        />
+                        <Input
+                          onBlur={handleBlur}
+                          name="designation"
+                          value={values.designation}
+                          className={
+                            errors.designation && touched.designation
+                              ? "empty"
+                              : ""
+                          }
+                          onChange={(e) => {
+                            this.proex(e, index, setFieldValue, "designation");
+                          }}
+                          tabIndex="4"
+                        />
+                      </div>
+                    </Col>
+                  </Row>
+
+                  <div className="bottomDiv">
+                    <div className="leftBtnDiv anime">
+                      {finalContactDetials?.length - 1 === index && (
                         <Button
                           type="button"
-                          onClick={() => this.props.history.push("/partners")}
+                          onClick={() => {
+                            validateForm().then((d) => {
+                              if (Object.keys(d).length === 0)
+                                this.increase(data.key);
+                              else handleSubmit();
+                            });
+                          }}
                         >
-                          {contactConst.cancle}
+                          {contactConst.add}
                         </Button>
-                        <Button type="button" onClick={this.props.previous}>
-                          {contactConst.previous}
+                      )}
+                      {finalContactDetials?.length !== 1 && (
+                        <Button
+                          type="button"
+                          onClick={() => {
+                            this.remove(data.key, setFieldValue, handleReset);
+                          }}
+                        >
+                          {contactConst.remove}
                         </Button>
-
-                        <Button type="submit" disabled={disable}>
-                          {partner?.contactDetails?.filter(
-                            (d) => d.key === data.key
-                          )[0]?.save
-                            ? "Save"
-                            : "Submit"}
-                        </Button>
-                      </div>
+                      )}
                     </div>
-                  </Form>
-                )}
-              </Formik>
-            </div>
-          ))}
+                    <div className="rightBtnDiv">
+                      {finalContactDetials?.length - 1 === index && (
+                        <>
+                          <Button
+                            type="button"
+                            onClick={() => this.props.history.push("/partners")}
+                          >
+                            {contactConst.cancle}
+                          </Button>
+                          <Button type="button" onClick={this.props.previous}>
+                            {contactConst.previous}
+                          </Button>
+                        </>
+                      )}
+
+                      <Button type="submit" disabled={disable}>
+                        {console.log(index)}
+                        {finalContactDetials.length - 1 === index
+                          ? "Submit"
+                          : finalContactDetials?.filter(
+                              (d) => d.key === data.key
+                            )[0]?.save
+                          ? "Save"
+                          : "Submit"}
+                      </Button>
+                    </div>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        ))}
       </ContDetailsStyle>
     );
   }
