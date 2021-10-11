@@ -92,7 +92,7 @@ export default class FinancialDetails extends Component {
                     }
                   />
                   <Select
-                    placeholder={FinancialConst.bank_nameplace}
+                    // placeholder={FinancialConst.bank_nameplace}
                     data={bank}
                     selectClass={
                       errors.bank_name && touched.bank_name ? "empty" : ""
@@ -113,7 +113,7 @@ export default class FinancialDetails extends Component {
                     }
                   />
                   <Input
-                    placeholder={FinancialConst.branch_nameplace}
+                    // placeholder={FinancialConst.branch_nameplace}
                     className={
                       errors.branch_name && touched.branch_name ? "empty" : ""
                     }
@@ -132,7 +132,7 @@ export default class FinancialDetails extends Component {
                     }
                   />
                   <Input
-                    placeholder={FinancialConst.account_noplace}
+                    // placeholder={FinancialConst.account_noplace}
                     type="number"
                     className={
                       errors.account_no && touched.account_no ? "empty" : ""
@@ -152,7 +152,7 @@ export default class FinancialDetails extends Component {
                     }
                   />
                   <Input
-                    placeholder={FinancialConst.ifscplace}
+                    // placeholder={FinancialConst.ifscplace}
                     className={
                       errors.ifsc_code && touched.ifsc_code ? "empty" : ""
                     }
@@ -170,7 +170,7 @@ export default class FinancialDetails extends Component {
                   />
                   <Input
                     rows={2}
-                    placeholder={FinancialConst.addressplace}
+                    // placeholder={FinancialConst.addressplace}
                     className={errors.address && touched.address ? "empty" : ""}
                     onBlur={handleBlur}
                     name="address"
@@ -185,7 +185,7 @@ export default class FinancialDetails extends Component {
                     className={errors.pincode && touched.pincode ? "empty" : ""}
                   />
                   <Input
-                    placeholder={FinancialConst.pincodeplace}
+                    // placeholder={FinancialConst.pincodeplace}
                     className={errors.pincode && touched.pincode ? "empty" : ""}
                     onBlur={handleBlur}
                     name="pincode"
@@ -208,7 +208,7 @@ export default class FinancialDetails extends Component {
                     className={errors.city && touched.city ? "empty" : ""}
                   />
                   <Select
-                    placeholder={FinancialConst.cityplace}
+                    // placeholder={FinancialConst.cityplace}
                     data={city}
                     selectClass={errors.city && touched.city ? "empty" : ""}
                     name="city"
@@ -232,7 +232,7 @@ export default class FinancialDetails extends Component {
                     className={errors.state && touched.state ? "empty" : ""}
                   />
                   <Select
-                    placeholder={FinancialConst.stateplace}
+                    // placeholder={FinancialConst.stateplace}
                     data={state}
                     selectClass={errors.state && touched.state ? "empty" : ""}
                     name="state"

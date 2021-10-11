@@ -1,23 +1,20 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { Modal, Spin } from "antd";
 import {
   SearchOutlined,
   PlusOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
 
-import { Modal } from "antd";
-import View from "./view";
 import ViewApi from "./viewApi";
-
-
 import { PartnersStyle } from "./style";
 import { Menu, Header, Table, Input, Pagination } from "components/Form";
 import { PartnersConst } from "./constant";
 import { ButtonConst } from "App/AppConstant";
 import { getPartners, deletePartner } from "redux/partner/action";
-import { partnerConst } from "modules/config";
+
 const { confirm } = Modal;
 
 class Partners extends Component {
@@ -32,13 +29,13 @@ class Partners extends Component {
   }
   async componentDidMount() {
     const { currentPage } = this.state;
-    var s = {
+    var para = {
       parameter: "",
       pageSize: "10",
       page: currentPage.toString(),
       sortColumn: "partnerid desc",
     };
-    await this.props.getPartners(s);
+    await this.props.getPartners(para);
   }
   componentDidUpdate(prevProps) {
     try {
@@ -61,14 +58,7 @@ class Partners extends Component {
     await this.props.getPartners(para);
     this.setState({ currentPage: val.current });
   };
-  exportUI = (text) => {
-    try {
-      return <div className="exportAction pointer">{text}</div>;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  exportUI = (text) => <div className="exportAction pointer">{text}</div>;
   deletePartnerApi = (id) => {
     try {
       confirm({
@@ -86,86 +76,79 @@ class Partners extends Component {
       console.log(error);
     }
   };
-
   editPartnerApi = (id) => this.props.history.push(`partner/edit/${id}`);
-
-  viewPartner = (data) => {
-    console.log("model pewno", data);
-    this.setState({ viewModel: true, modelData: data });
-  };
-
-  close = () => {
-    this.setState({ viewModel: false });
-  };
-
+  viewPartner = (data) => this.setState({ viewModel: true, modelData: data });
+  close = () => this.setState({ viewModel: false });
   render() {
-    const { loading, partners } = this.props;
+    const { loading } = this.props;
     const { dataLength, currentPage } = this.state;
-    console.log(partners, "pp");
     return (
-      <PartnersStyle>
-        <Menu />
-        <div className="container">
-          <Header />
-          <div className="allDiv anime">
-            <div className="headDiv anime">
-              <h2>{PartnersConst.partners}</h2>
-              <div
-                className="addButton pointer"
-                onClick={() => this.props.history.push("/partner/new")}
-              >
-                <PlusOutlined />
+      <Spin spinning={loading} size="large">
+        <PartnersStyle>
+          <Menu />
+          <div className="container">
+            <Header />
+            <div className="allDiv anime">
+              <div className="headDiv anime">
+                <h2>{PartnersConst.partners}</h2>
+                <div
+                  className="addButton pointer"
+                  onClick={() => this.props.history.push("/partner/new")}
+                >
+                  <PlusOutlined />
+                </div>
               </div>
-            </div>
-            <div className="exportDiv">
-              <div className="expo anime">
-                {this.exportUI("COPY")}
-                {this.exportUI("CSV")}
-                {this.exportUI("EXCEL")}
-                {this.exportUI("PDF")}
-                {this.exportUI("PRINT")}
+              <div className="exportDiv">
+                <div className="expo anime">
+                  {this.exportUI("COPY")}
+                  {this.exportUI("CSV")}
+                  {this.exportUI("EXCEL")}
+                  {this.exportUI("PDF")}
+                  {this.exportUI("PRINT")}
+                </div>
+                <div className="searchDiv">
+                  <Input
+                    placeholder={ButtonConst.search}
+                    suffix={<SearchOutlined />}
+                  />
+                </div>
               </div>
-              <div className="searchDiv">
-                <Input
-                  placeholder={ButtonConst.search}
-                  suffix={<SearchOutlined />}
-                />
-              </div>
-            </div>
-
-            <Table
-              type="partners"
-              data={this.props.partners}
-              deletePartner={this.deletePartnerApi}
-              edit={this.editPartnerApi}
-              view={this.viewPartner}
-            />
-            {dataLength > 10 && (
-              <div className="pagiDiv">
-                <Pagination
-                  onChange={this.handlePagination}
-                  current={currentPage}
-                  total={dataLength}
-                />
-              </div>
-            )}
-            {/* {this.state.viewModel && (
+              <Table
+                type="partners"
+                data={this.props.partners}
+                deleteRecord={this.deletePartnerApi}
+                editRecord={this.editPartnerApi}
+                viewRecord={this.viewPartner}
+              />
+              {dataLength > 10 && (
+                <div className="pagiDiv">
+                  <Pagination
+                    onChange={this.handlePagination}
+                    current={currentPage}
+                    total={dataLength}
+                    pageSize={10}
+                  />
+                </div>
+              )}
+              {/* {this.state.viewModel && (
               <View
                 view={this.state.viewModel}
                 data={this.state.modelData}
                 modelCancle={this.close}
               />
             )} */}
-            {this.state.viewModel && (
-              <ViewApi
-                view={this.state.viewModel}
-                data={this.state.modelData}
-                modelCancle={this.close}
-              />
-            )}
+              {this.state.viewModel && (
+                <ViewApi
+                  view={this.state.viewModel}
+                  data={this.state.modelData}
+                  modelCancle={this.close}
+               
+                />
+              )}
+            </div>
           </div>
-        </div>
-      </PartnersStyle>
+        </PartnersStyle>
+      </Spin>
     );
   }
 }

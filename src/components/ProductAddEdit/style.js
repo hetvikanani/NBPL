@@ -14,7 +14,12 @@ const ProAddEditStyle = styled.div`
       border: 2px solid #dadada;
       .rdw-editor-main {
         height: 10em;
+        padding: 0 1em;
       }
+    }
+    .editorError {
+      border: 1px solid #e81c1c;
+      box-shadow: 0 0 10px red !important;
     }
   }
   .compLogoDiv {
@@ -30,6 +35,18 @@ const ProAddEditStyle = styled.div`
       max-width: 10em;
       cursor: pointer;
       margin: auto;
+    }
+    .optionui{
+      margin-right: 10px;
+      .anticon {
+        margin:0 5px;
+      }
+    }
+    .imgcompanyLogo{
+      box-shadow: 0 0 10px rgb(0, 0, 0, 0.2);
+    }
+    .imgicon{
+      box-shadow: 0 0 10px rgb(0, 0, 0, 0.2);
     }
   }
   .addbtn {

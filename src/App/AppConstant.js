@@ -1,4 +1,6 @@
 const FormValidation = {
+  req: "*",
+  colon: ":",
   name: "Please enter Name",
   nameMin: "Please enter at least 3 characters.",
   emailRequired: "Email Is Required",
@@ -35,7 +37,7 @@ const ButtonConst = {
   download: "Download",
   answer: "Answer",
   decline: "Decline",
-  Upload: "Upload",
+  upload: "Upload",
   logout: "Logout",
   select: "Select",
   genLicence: "Generate Licence",

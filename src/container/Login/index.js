@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Spin, Image } from "antd";
+import { Spin, Image, message } from "antd";
 import { Formik, Form } from "formik";
 import { NavLink } from "react-router-dom";
 import Particles from "react-particles-js";
@@ -44,12 +44,16 @@ class Login extends Component {
         this.setState({ btnDisable: false });
       }, 4500);
       const { role } = this.state;
-      let data = {
-        userName: values.userName,
-        password: values.password,
-        role: role,
-      };
-      await this.props.login(data);
+      if (role === "partner" && values.userName === "Admin") {
+        message.error("can't login as admin");
+      } else {
+        let data = {
+          userName: values.userName,
+          password: values.password,
+          role: role,
+        };
+        await this.props.login(data);
+      }
       setSubmitting(false);
     } catch (error) {
       console.log(error);

@@ -2,11 +2,12 @@ import axios from "axios";
 import store from "redux/store";
 import { configVar } from "modules/config";
 import { errorHandler, errorEmpty } from "redux/app/actions";
+
 const token = localStorage.auth ? JSON.parse(localStorage.auth).token : "";
 const config = { headers: { Authorization: `Bearer ${token}` } };
+
 export const axiosGet = async (url) => {
   try {
-    // debugger;
     url = url.replace(/[^\x00-\x7F]/g, "");
     let { data: response } = await axios.get(configVar.BASE_URL + url);
     if (response.responseStatus !== "1")
@@ -26,7 +27,7 @@ export const axiosPost = async (url, payload) => {
       payload
     );
     if (response.responseStatus !== "1")
-      store.dispatch(errorHandler(response.kjiu));
+      store.dispatch(errorHandler(response.message));
     store.dispatch(errorEmpty());
     return response;
   } catch (error) {
@@ -48,9 +49,7 @@ export const axiosAuthGet = async (url) => {
 };
 export const axiosAuthPost = async (url, payload) => {
   try {
-    // debugger;
     url = url.replace(/[^\x00-\x7F]/g, "");
-    console.log(configVar.BASE_URL + url);
     let { data: response } = await axios.post(
       configVar.BASE_URL + url,
       payload,

@@ -1,68 +1,81 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { Button, Checkbox } from "components/Form";
 
 import { UserRoleStyle } from "./style";
-import { Label, Button, Select, Checkbox } from "components/Form";
-// import { PageConst, ButtonConst } from "App/AppConstant";
 import { userRoleConst } from "./constant";
+import { saveUser } from "redux/user/action";
+import { ButtonConst } from "App/AppConstant";
 
 class UserRole extends Component {
   constructor(props) {
     super(props);
     this.state = {
       btnDisable: false,
-      userRole: "",
-      userRoleError: false,
-      tableArray: [
-        {
-          id: 0,
-          value: "Partners",
-          all: false,
-          add: false,
-          edit: false,
-          view: false,
-          delete: false,
-        },
-        {
-          id: 1,
-          value: "Products",
-          all: false,
-          add: false,
-          edit: false,
-          view: false,
-          delete: false,
-        },
-        {
-          id: 0,
-          value: "Users",
-          all: false,
-          add: false,
-          edit: false,
-          view: false,
-          delete: false,
-        },
-      ],
+      isChecked: false,
+      checkboxes: [],
+      initState: {
+        rightsid: "",
+      },
+      tableArray: [],
     };
   }
-  handleSelect = (e) => {
-    this.setState({
-      userRole: e,
-      userRoleError: false,
-    });
-  };
-  handleSubmit = () => {
+  async componentDidMount() {
     try {
+      const { userById } = this.props;
+      let ids = [];
+      if (userById && userById.rights) {
+        userById.rights.forEach((a, i) => {
+          if (a.ischeck === 1) ids.push(a.rightsId);
+        });
+        this.setRigths(ids);
+      } else this.setRigths([]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  setRigths = (ids) => {
+    try {
+      let data = [];
+      for (let i = 0; i < 3; i++) {
+        data.push({
+          id: i,
+          value: i === 0 ? "Partners" : i === 1 ? "Products" : "Users",
+          add: ids.includes(i === 0 ? 1 : i === 1 ? 5 : 9),
+          edit: ids.includes(i === 0 ? 2 : i === 1 ? 6 : 10),
+          view: ids.includes(i === 0 ? 3 : i === 1 ? 7 : 11),
+          delete: ids.includes(i === 0 ? 4 : i === 1 ? 8 : 12),
+        });
+      }
+      this.setState({ tableArray: data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  handleSubmit = async ({ setSubmitting }) => {
+    try {
+      const { data } = this.props;
+      const { tableArray } = this.state;
       this.setState({ btnDisable: true });
       setTimeout(() => {
         this.setState({ btnDisable: false });
       }, 4500);
-      let flag = false;
-      let userRole = this.state.userRole;
-      if (userRole === "") {
-        this.setState({
-          userRoleError: true,
-        });
-        flag = true;
-      }
+      let count = 1;
+      let rights = [];
+      tableArray.forEach((a) => {
+        if (a.add) rights.push({ rightsid: count });
+        count = count + 1;
+        if (a.edit) rights.push({ rightsid: count });
+        count = count + 1;
+        if (a.view) rights.push({ rightsid: count });
+        count = count + 1;
+        if (a.delete) rights.push({ rightsid: count });
+        count = count + 1;
+      });
+      data.rights = rights;
+      await this.props.saveUser(data);
+      setSubmitting(false);
     } catch (error) {
       console.log(error);
     }
@@ -110,21 +123,9 @@ class UserRole extends Component {
     </td>
   );
   render() {
-    const { btnDisable, userRole, userRoleError } = this.state;
+    const { btnDisable } = this.state;
     return (
       <UserRoleStyle>
-        <div className="field anime">
-          <Label
-            title={userRoleConst.userRole}
-            className={userRoleError ? "empty" : ""}
-          />
-          <Select
-            value={userRole}
-            onChange={this.handleSelect}
-            data={["India", "US"]}
-            selectClass={userRoleError ? "empty" : ""}
-          />
-        </div>
         <div className="tableDiv">
           <table>
             <thead>
@@ -142,12 +143,34 @@ class UserRole extends Component {
         </div>
 
         <div className="btnDiv">
-          <Button disabled={btnDisable} onClick={this.handleSubmit}>
-            {userRoleConst.submit}
-          </Button>
+          <div className="nextDiv">
+            <Button onClick={() => this.props.history.push("/users")}>
+              {ButtonConst.cancel}
+            </Button>
+            <Button
+              disabled={btnDisable}
+              onClick={this.handleSubmit}
+              htmlType="submit"
+            >
+              {ButtonConst.submit}
+            </Button>
+          </div>
         </div>
       </UserRoleStyle>
     );
   }
 }
-export default UserRole;
+const mapStateToProps = (state) => ({
+  loading: state.user.loading,
+  error: state.user.error,
+  message: state.user.message,
+  user: state.user.user,
+  userById: state.user.userById,
+});
+const mapDispatchToProps = (dispatch) => ({
+  saveUser: (payload) => dispatch(saveUser(payload)),
+});
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(UserRole)
+);

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-// import { size } from "App/device";
 
 const TableStyle = styled.div`
   .ant-table-content table {

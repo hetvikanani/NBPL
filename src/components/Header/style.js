@@ -23,9 +23,14 @@ const StyleComponent = styled.div`
           margin-right: 1rem;
           font-size: 1.25rem;
           line-height: inherit;
+          padding-bottom: 0;
           :before {
             cursor: pointer;
           }
+        }
+        &.dropDiv .title {
+          line-height: 1.3em;
+          margin-left: 10px;
         }
       }
       div:last-child {

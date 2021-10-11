@@ -7,8 +7,8 @@ class FileUpload extends Component {
     try {
       const { image, video, pdf } = this.props;
       if (image || video) {
-        if (image && file.size > 300000)
-          message.error("Select smaller size image(less then 300kb)");
+        if (image && file.size > 3000000)
+          message.error("Select smaller size image(less then 3mb)");
         else if (video && file.size > 2000000)
           message.error("Select smaller size video(less then 500kb)");
         else {
@@ -24,7 +24,7 @@ class FileUpload extends Component {
         reader.readAsDataURL(file);
         reader.onloadend = () => {
           let base64 = file.name + "," + reader.result.split("base64,")[1];
-          this.props.sendByte(reader.result, file.name);
+          this.props.sendByte(reader.result, file.name,base64);
         };
         // let formdata = new FormData();
         // let ext = file.name.split(".");

@@ -1,7 +1,7 @@
 import { message } from "antd";
 
 import { partnerUsersConst } from "modules/config";
-import { axiosAuthPost, axiosAuthGet } from "modules/Axios";
+import { axiosAuthPost } from "modules/Axios";
 import * as actions from "./constant";
 
 export const saveContactus = (id) => async (dispatch) => {

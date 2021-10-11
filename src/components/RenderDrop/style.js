@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Theme } from "App/theme";
+
 const StyleComponent = styled.div`
   .ant-dropdown {
     max-width: 300px;

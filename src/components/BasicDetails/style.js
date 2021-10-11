@@ -5,7 +5,7 @@ const BasicDetailsStyle = styled.div`
   margin-top: 3em;
   padding: 1em;
   background-color: #ffff;
-  box-shadow: 0 0 10px rgb(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
   h2 {
     color: ${Theme.mainColor};
   }
@@ -31,8 +31,8 @@ const BasicDetailsStyle = styled.div`
       margin-top: 2em;
       .btn {
         margin-left: auto;
-        .nextBtn {
-          margin-top: 7px;
+        button:first-child {
+          margin-right: 2em;
         }
         button {
           height: 35px;

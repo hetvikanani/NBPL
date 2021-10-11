@@ -1,16 +1,25 @@
 import React, { Component } from "react";
 import { withRouter, NavLink } from "react-router-dom";
-import { Image, Modal, Popover } from "antd";
+import { Image, Modal } from "antd";
 import { connect } from "react-redux";
-import { QuestionCircleOutlined, UserOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 
+import { Theme } from "App/theme";
 import { headConst } from "./constant";
 import { StyleComponent } from "./style";
 import { RemoveConst } from "App/AppConstant";
 import { setCollapsMenu } from "redux/app/actions";
+import { logout } from "redux/login/actions";
+import { RenderDrop, Button } from "components/Form";
 import { getAuthRole, getAuthUserID } from "modules/helper";
-import { logo, logoWhite, logout, lock, profile } from "components/Images";
-import { Theme } from "App/theme";
+import {
+  logo,
+  logoWhite,
+  logoutImg,
+  lock,
+  profile,
+  user,
+} from "components/Images";
 
 var userRole = getAuthRole();
 var userId = getAuthUserID();
@@ -22,6 +31,7 @@ class Header extends Component {
     this.state = {
       visible: false,
       hidden: false,
+      read: false,
       width: "86%",
     };
   }
@@ -37,13 +47,21 @@ class Header extends Component {
       console.log(error);
     }
   }
-  // componentDidUpdate(prevProps) {
-  //   const { collapsed } = this.props;
-  //   this.setWidth();
-  //   if (collapsed !== prevProps.collapsed) {
-  //     this.setWidth();
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    // const { collapsed } = this.props;
+    // this.setWidth();
+    // if (collapsed !== prevProps.collapsed) {
+    //   this.setWidth();
+    // }
+    const { notification } = this.props;
+    if (notification !== prevProps.notification) {
+      let read = false;
+      notification.forEach((a) => {
+        if (a.isread === 0) read = true;
+      });
+      this.setState({ read });
+    }
+  }
   // setWidth = () => {
   //   try {
   //     const { width } = this.state;
@@ -56,14 +74,12 @@ class Header extends Component {
   //     console.log(error);
   //   }
   // };
-  handleVisible = (visible) => this.setState({ visible });
   iconUI = (cls, url) => (
     <i
       className={"fas " + cls}
       onClick={() => this.props.history.push(url)}
     ></i>
   );
-  handleVisible = (visible) => this.setState({ visible });
   openMenu = async () => {
     try {
       this.handleVisible(false);
@@ -74,25 +90,51 @@ class Header extends Component {
   };
   logoutWarn = () => {
     try {
-      this.handleVisible(false);
       confirm({
         title: RemoveConst.logout,
         icon: <QuestionCircleOutlined />,
-        content: RemoveConst.logMessage,
         okText: RemoveConst.yes,
-        okType: "danger",
         cancelText: RemoveConst.no,
+        content: RemoveConst.logMessage,
+        okType: "danger",
         getContainer: () => document.getElementById("App"),
-        onOk: () => this.props.logout(),
+        onOk: () => {
+          this.props.logout();
+        },
       });
     } catch (error) {
       console.log(error);
     }
   };
+  allNotif = () => {
+    try {
+      const { notification } = this.props;
+      return notification.map((a, i) => (
+        <div
+          key={i}
+          className={`notify-border ${!a.isread ? "read" : ""}`}
+          onClick={() => this.redirect(a.title, a.id)}
+        >
+          <span className="not-mrg">
+            <div className="not-txt">{a.title}</div>
+            <div className="not-txt"> {a.notification}</div>
+          </span>
+          {!a.isread && (
+            <CloseCircleOutlined
+              className="croIcon"
+              onClick={() => this.readNotify(a.id)}
+            />
+          )}
+        </div>
+      ));
+    } catch (error) {
+      console.log(error);
+    }
+  };
   render() {
-    const { show, collapsed } = this.props;
+    const { show, collapsed, history } = this.props;
+    // const { read } = this.state;notification
     let allwidth = window.innerWidth;
-    let title = { lineHeight: "1.3em", marginLeft: "10px" };
     let admin =
       localStorage.auth && JSON.parse(localStorage.auth).role === "admin";
     return (
@@ -112,69 +154,48 @@ class Header extends Component {
                 {admin ? headConst.admin : headConst.nbl}
               </h4>
             </div>
-            <div>
+            <div className="dropDiv">
               {!admin && (
                 <>
                   {this.iconUI("fa-shopping-cart", "/shop")}
                   {this.iconUI("fa-wallet", "/wallet")}
-                  {this.iconUI("fa-bell", "/shop")}
+                  <div className="headIcon">
+                    <RenderDrop item={<i className="fas fa-bell"></i>}>
+                      <div className="head-mrg">
+                        <div className="notify-Txthead">
+                          {/* {notification.length === 0 && headConst.no} */}
+                          {headConst.notif}
+                          {/* {notification.length > 0 && read && (<Button className="v-btn" onClick={() => this.readNotify(0)}>{headConst.va}</Button>)} */}
+                        </div>
+                      </div>
+                      <div className="notify-scroll"> {this.allNotif()}</div>
+                    </RenderDrop>
+                  </div>
                 </>
               )}
-              <Popover
-                visible={this.state.visible}
-                onVisibleChange={this.handleVisible}
-                style={{ top: "26" }}
-                content={
-                  <div>
-                    <div
-                      style={{
-                        display: "flex",
-                        cursor: "pointer",
-                        marginBottom: "8px",
-                      }}
-                      onClick={() => this.props.history.push("/profile")}
-                    >
-                      <UserOutlined
-                        style={{
-                          color: "#b5b5b5",
-                          fontSize: "1.2em",
-                          marginRight: "4px",
-                        }}
-                      />
-                      <div style={title}>{headConst.profile}</div>
-                    </div>
-                    <div
-                      style={{ display: "flex", cursor: "pointer" }}
-                      // onClick={this.openMenu}
-                      onClick={() =>
-                        this.props.history.push("/change-password")
-                      }
-                    >
-                      <Image src={lock} preview={false} width={20} />
-                      <div style={title}>{headConst.changePwd}</div>
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        cursor: "pointer",
-                        marginTop: "12px",
-                      }}
-                      onClick={this.logoutWarn}
-                    >
-                      <Image src={logout} preview={false} width={20} />
-                      <div style={title}>{RemoveConst.logout}</div>
-                    </div>
-                  </div>
+              <RenderDrop
+                item={
+                  admin ? (
+                    <Image src={profile} width={30} preview={false} />
+                  ) : (
+                    <i className={"fas fa-user"}></i>
+                  )
                 }
-                trigger="click"
-                placement="bottomRight"
-              >
-                {admin ? (
-                  <Image src={profile} width={30} preview={false}></Image>
-                ) : (
-                  <i className={"fas fa-user"}></i>
-                )}
-              </Popover>
+                data={[
+                  <div onClick={() => history.push("/profile")}>
+                    <Image src={user} width={18} preview={false} />
+                    <div className="title">{headConst.profile}</div>
+                  </div>,
+                  <div onClick={() => history.push("/change-password")}>
+                    <Image src={lock} preview={false} width={20} />
+                    <div className="title">{headConst.changePwd}</div>
+                  </div>,
+                  <div onClick={() => this.logoutWarn()}>
+                    <Image src={logoutImg} preview={false} width={20} />
+                    <div className="title">{RemoveConst.logout}</div>
+                  </div>,
+                ]}
+              />
             </div>
           </div>
           <NavLink to="/" className="flex mr-auto">
@@ -196,5 +217,6 @@ const mapStateToProps = (state) => ({
 });
 const mapStateToDispatch = (dispatch) => ({
   setCollapsMenu: (payload) => dispatch(setCollapsMenu(payload)),
+  logout: () => dispatch(logout()),
 });
 export default withRouter(connect(mapStateToProps, mapStateToDispatch)(Header));

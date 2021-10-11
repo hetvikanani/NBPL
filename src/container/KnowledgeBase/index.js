@@ -151,7 +151,7 @@ class Blog extends Component {
                         hoverable={true}
                         className="videoCard1"
                         cover={<img alt="blg" src={nbpl}></img>}
-                      ></ImageCard>
+                      />
                     </Col>
                     <br />
                     <Col>
@@ -159,7 +159,7 @@ class Blog extends Component {
                         hoverable={true}
                         className="videoCard1"
                         cover={<img alt="blg" src={vizman}></img>}
-                      ></ImageCard>
+                      />
                       <br />
                     </Col>
                     <Col>
@@ -167,7 +167,7 @@ class Blog extends Component {
                         hoverable={true}
                         className="videoCard1"
                         cover={<img alt="blg" src={vizman}></img>}
-                      ></ImageCard>
+                      />
                     </Col>
                     <br />
                     <Col>
@@ -175,7 +175,7 @@ class Blog extends Component {
                         hoverable={true}
                         className="videoCard1"
                         cover={<img alt="blg" src={vizman}></img>}
-                      ></ImageCard>
+                      />
                     </Col>
                   </div>
                 </ImageCard>
@@ -192,7 +192,7 @@ class Blog extends Component {
                           <ImageCard
                             className="videoCard1"
                             cover={<img alt="blg" src={blog1}></img>}
-                          ></ImageCard>
+                          />
                           <div className="overlay">
                             <div className="text">Lorem Ipsum</div>
                           </div>
@@ -203,7 +203,7 @@ class Blog extends Component {
                           <ImageCard
                             className="videoCard1"
                             cover={<img alt="blg" src={blog2}></img>}
-                          ></ImageCard>
+                          />
                           <div className="overlay">
                             <div className="text">Lorem Ipsum</div>
                           </div>
@@ -214,7 +214,7 @@ class Blog extends Component {
                           <ImageCard
                             className="videoCard1"
                             cover={<img alt="blg" src={blog3}></img>}
-                          ></ImageCard>
+                          />
                           <div className="overlay">
                             <div className="text">Lorem Ipsum</div>
                           </div>
@@ -225,7 +225,7 @@ class Blog extends Component {
                           <ImageCard
                             className="videoCard1"
                             cover={<img alt="blg" src={blog4}></img>}
-                          ></ImageCard>
+                          />
                           <div className="overlay">
                             <div className="text">Lorem Ipsum</div>
                           </div>

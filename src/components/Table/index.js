@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import TableStyle from "./style";
 import { Table, Image } from "antd";
 import { DashOutlined } from "@ant-design/icons";
+import { withRouter } from "react-router-dom";
+
+import TableStyle from "./style";
 
 import {
   editPen,
@@ -16,7 +18,6 @@ import {
 } from "components/Images";
 import { TableConst } from "./constant";
 import { RenderDrop } from "components/Form";
-import { withRouter } from "react-router";
 
 const { Column } = Table;
 
@@ -32,8 +33,10 @@ class TableUI extends Component {
     try {
       return (
         <div className="statusUI">
-          <span className={record.isActive === 0 ? "green" : "red"}>
-            {record.isActive === 0 ? "Active" : "Deactive"}
+          <span
+            className={record.isActive === 0 || record.status ? "green" : "red"}
+          >
+            {record.isActive === 0 || record.status ? "Active" : "Deactive"}
           </span>
         </div>
       );
@@ -41,15 +44,19 @@ class TableUI extends Component {
       console.log(error);
     }
   };
-  adminActUI = (img, text) => (
-    <>
-      <Image src={img} preview={false} width={15} />
-      <span className="text">{text}</span>
-    </>
-  );
-
+  adminActUI = (img, text) => {
+    try {
+      return (
+        <>
+          <Image src={img} preview={false} width={15} />
+          <span className="text">{text}</span>
+        </>
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
   adminActionUI = (record, type) => {
-    console.log("rr", record);
     try {
       return (
         <div className="actionUI">
@@ -60,23 +67,32 @@ class TableUI extends Component {
               type === "partners" && (
                 <div
                   className="actionBtn"
-                  onClick={() => this.props.view(record)}
+                  onClick={() => this.props.viewRecord(record)}
                 >
                   {this.adminActUI(view, TableConst.view)}
                 </div>
               ),
               <div
                 className="actionBtn"
-                onClick={() => this.props.edit(record.partnerId)}
+                onClick={() => this.props.editRecord(record.id)}
+                // className="actionBtn"
+                // onClick={() => this.props.getEditId(record.userId)}
               >
                 {this.adminActUI(edit, TableConst.edit)}
               </div>,
-              type === "partners" && (
-                <div className="actionBtn" onClick={() => this.props.wallet()}>
+              type === "partners" && record.isActive === 0 && (
+                <div
+                  className="actionBtn"
+                  onClick={() =>
+                    this.props.history.push(
+                      "wallet/" + window.btoa(record.partnerId)
+                    )
+                  }
+                >
                   {this.adminActUI(wallet, TableConst.wallet)}
                 </div>
               ),
-              type === "partners" && (
+              type === "partners" && record.isActive === 0 && (
                 <div
                   className="actionBtn"
                   onClick={() => this.props.prospect()}
@@ -84,17 +100,19 @@ class TableUI extends Component {
                   {this.adminActUI(prospect, TableConst.prospect)}
                 </div>
               ),
-              type === "partners" && (
+              type === "partners" && record.isActive === 0 && (
                 <div className="actionBtn" onClick={() => this.props.sales()}>
                   {this.adminActUI(sales, TableConst.sales)}
                 </div>
               ),
-              <div
-                className="actionBtn"
-                onClick={() => this.props.deletePartner(record.partnerId)}
-              >
-                {this.adminActUI(deleteSvg, TableConst.delete)}
-              </div>,
+              type === "partners" && record.isActive === 1 ? null : (
+                <div
+                  className="actionBtn"
+                  onClick={() => this.props.deleteRecord(record.id)}
+                >
+                  {this.adminActUI(deleteSvg, TableConst.delete)}
+                </div>
+              ),
             ]}
           />
         </div>
@@ -181,9 +199,12 @@ class TableUI extends Component {
 
           {type === "wallet" && (
             <>
-              <Column title={"Transaction ID"} dataIndex={"key"} />
-              <Column title={"Details"} dataIndex={"details"} />
-              <Column title={"Transaction Type"} dataIndex={"trType"} />
+              <Column title={"Transaction ID"} dataIndex={"transactionId"} />
+              <Column title={"Details"} dataIndex={"transactionDetails"} />
+              <Column
+                title={"Transaction Type"}
+                dataIndex={"transactionType"}
+              />
               <Column title={"Date"} dataIndex={"date"} />
               <Column title={"Amount"} dataIndex={"amount"} />
             </>
@@ -215,12 +236,12 @@ class TableUI extends Component {
                 <>
                   <Column
                     title={"User Name"}
-                    dataIndex={"username"}
+                    dataIndex={"firstname"}
                     className="center"
                   />
                   <Column
                     title={"Email id"}
-                    dataIndex={"emailid"}
+                    dataIndex={"emailId"}
                     className="center"
                   />
                 </>
@@ -229,12 +250,12 @@ class TableUI extends Component {
                 <>
                   <Column
                     title={"Package Type"}
-                    dataIndex={"packageType"}
+                    dataIndex={"package"}
                     className="center"
                   />
                   <Column
                     title={"Subscription Type"}
-                    dataIndex={"subsType"}
+                    dataIndex={"subscription"}
                     className="center"
                   />
                 </>
@@ -250,7 +271,8 @@ class TableUI extends Component {
           {type !== "wallet" &&
             type !== "partners" &&
             type !== "userList" &&
-            type !== "admin_sales" && (
+            type !== "admin_sales" &&
+            type !== "packageList" && (
               <Column
                 title={TableConst.action}
                 render={(record, i) => this.action(record, type)}
@@ -297,13 +319,21 @@ class TableUI extends Component {
   //   };
   render() {
     // const { pagination } = this.state;
-    const { data, search, size, print } = this.props;
-    let display = !search || search.trim() === "" ? data : this.searchData();
+    const { data, search, size, print, type } = this.props;
+    let display = data; //!search || search.trim() === "" ? data : this.searchData();
     display &&
       display.forEach((a, i) => {
         a.key = i + 1;
+        a.id =
+          type === "packageList"
+            ? a.packageId
+            : type === "partners"
+            ? a.partnerId
+            : type === "userList"
+            ? a.userId
+            : null;
       });
-    let pageSize = size ? size : 5;
+    // let pageSize = size ? size : 5;
     return (
       <TableStyle>
         <Table

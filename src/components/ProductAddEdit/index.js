@@ -9,40 +9,105 @@ import {
   DeleteOutlined,
 } from "@ant-design/icons";
 import { Editor } from "react-draft-wysiwyg";
+import {
+  EditorState,
+  convertToRaw,
+  ContentState,
+  convertFromHTML,
+} from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import { EditorState, convertToRaw } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 import { ProAddEditStyle } from "./style";
 import { Input, Label, Button, FileUpload } from "components/Form";
 import { ButtonConst } from "App/AppConstant";
 import { proAddConst } from "./constant";
+import { configVar } from "modules/config";
 const ProductValidation = Yup.object().shape({
   productName: Yup.string().trim().required(" "),
 });
 class ProAddEditDetail extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       editor: EditorState.createEmpty(),
       productDescri: "",
+      prodDesError: false,
       btnDisable: false,
       comLogoName: null,
       comLogoByte: null,
+      comLogoBase64: null,
+      comLogoError: false,
       title: "",
       iconName: null,
       iconByte: null,
+      iconBase64: null,
+      featureId: 0,
+      productId: 0,
       features: [],
       initialState: {
         productName: "",
+        productTitle: "",
       },
     };
+  }
+  componentDidUpdate(prevProps) {
+    try {
+      const { features } = this.state;
+      const { data } = this.props;
+      if (data !== prevProps.data) {
+        let url = configVar.BASE_URL.slice("/", -1);
+        let comLogoName =
+          data.productLogo !== ""
+            ? data.productLogo.split("/ProductLogo/")
+            : null;
+        let init = {
+          productName: data.productname,
+          productTitle: data.productTitle,
+        };
+        let editorState = EditorState.createWithContent(
+          ContentState.createFromBlockArray(
+            convertFromHTML(
+              data.productDescription !== "" ? data.productDescription : ""
+            )
+          )
+        );
+        data.productFeatures &&
+          data.productFeatures.length > 0 &&
+          data.productFeatures.map((a) => {
+            if (a.pfName !== "" && a.pfIcon !== "") {
+              features.push({
+                featureId: a.pfId,
+                title: a.pfName,
+                iconByte: a.pfIcon !== "" ? url + a.pfIcon : null,
+                iconBase64: a.pfIcon !== "" ? a.pfIcon : null,
+                isDelete:a.isDelete,
+              });
+            }
+          });
+        this.setState({
+          productId: data.productId,
+          initialState: init,
+          comLogoName: comLogoName[1],
+          comLogoBase64: data.productLogo !== "" ? data.productLogo : null,
+          comLogoByte: data.productLogo !== "" ? url + data.productLogo : null,
+          editor: editorState,
+          productDescri: data.productDescription,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
   handalTitle = (e) => this.setState({ title: e.target.value });
   hendalEditor = (editorState) => {
     try {
       let val = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-      this.setState({ editor: editorState, productDescri: val });
+      this.setState({
+        editor: editorState,
+        productDescri: val,
+        prodDesError: val.trim() === "" || val === "<p></p>\n",
+      });
     } catch (error) {
       console.log(error);
     }
@@ -64,13 +129,18 @@ class ProAddEditDetail extends Component {
                 }
               />
             </span>
-            <Image src={b} width={50} height={30} preview={false} />
+            <Image
+              src={b}
+              width={50}
+              height={30}
+              className={c ? "img" + c : ""}
+            />
           </>
         );
       }
       return (
         <FileUpload
-          accept=".jpg, .jpeg, .png"
+          accept=".jpg, .jpeg, .png,.svg"
           image={true}
           sendByte={c === "companyLogo" ? this.setComLogo : this.setIcon}
           elements={<UploadOutlined />}
@@ -80,31 +150,63 @@ class ProAddEditDetail extends Component {
       console.log(error);
     }
   };
-  setComLogo = (byteCode, name) =>
-    this.setState({ comLogoByte: byteCode, comLogoName: name });
-  setIcon = (byteCode, name) =>
-    this.setState({ iconByte: byteCode, iconName: name });
+  setComLogo = (byteCode, name, base64) => {
+    this.setState({
+      comLogoByte: byteCode,
+      comLogoName: name,
+      comLogoBase64: base64,
+      comLogoError: !base64,
+    });
+  };
+  setIcon = (byteCode, name, base64) =>
+    this.setState({ iconByte: byteCode, iconName: name, iconBase64: base64 });
   removeCompLogo = () =>
-    this.setState({ comLogoByte: null, comLogoName: null });
-  removeIcon = () => this.setState({ iconByte: null, iconName: null });
+    this.setState({
+      comLogoByte: null,
+      comLogoName: null,
+      comLogoBase64: null,
+    });
+  removeIcon = () =>
+    this.setState({ iconByte: null, iconName: null, iconBase64: null });
   deleteIcon = (i) => {
     try {
-      const { features } = this.state;
-      features.splice(i, 1);
-      this.setState({ features });
+      const {features,productId } = this.state;
+      if (productId !== 0) {
+        features[i].isDelete=1;
+        this.setState({ features });
+      } else {
+        features.splice(i, 1);
+        this.setState({ features });
+      }
     } catch (error) {
       console.log(error);
     }
   };
-  addIcon = (title, iconByte, iconName) => {
+  addIcon = () => {
     try {
-      const { features } = this.state;
-      if (title !== "" && iconByte && iconName && features.length < 25) {
-        features.push({ title: title, iconByte: iconByte, iconName: iconName });
-        this.setState({ title: "", iconByte: null, iconName: null });
+      const { features, title, iconByte, iconBase64, featureId} =
+        this.state;
+      if (title.trim() !== "" && iconBase64 && features.length < 25) {
+        features.push({
+          featureId: featureId,
+          title: title,
+          iconByte: iconByte,
+          iconBase64: iconBase64,
+          isDelete: 0,
+        });
+        this.setState({
+          title: "",
+          iconByte: null,
+          iconName: null,
+          iconBase64: null,
+        });
       } else {
-        // message.info("max 25 icon add");
-        this.setState({ title: "", iconByte: null, iconName: null });
+        this.setState({
+          title: "",
+          iconByte: null,
+          iconName: null,
+          iconBase64: null,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -113,31 +215,96 @@ class ProAddEditDetail extends Component {
   imagesUI = () => {
     try {
       const { features } = this.state;
-      return features.map((a, i) => (
-        <div className="imgDiv" key={i}>
-          <Image src={a.iconByte} width={160} height={100} preview={false} />
-          <div>
-            <span className="txtWrap">{a.title}</span>
-            <DeleteOutlined onClick={() => this.deleteIcon(i)} />
-          </div>
-        </div>
-      ));
+      return features.map(
+        (a, i) =>
+          a.isDelete === 0 && (
+            <div className="imgDiv" key={i}>
+              <Image
+                src={a.iconByte}
+                width={160}
+                height={100}
+                preview={false}
+              />
+              <div>
+                <span className="txtWrap">{a.title}</span>
+                <DeleteOutlined onClick={() => this.deleteIcon(i)} />
+              </div>
+            </div>
+          )
+      );
     } catch (error) {
       console.log(error);
     }
   };
   handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const { title, iconName, iconByte, features } = this.state;
+      const {
+        title,
+        iconByte,
+        iconBase64,
+        features,
+        productDescri,
+        comLogoBase64,
+        featureId,
+        productId,
+      } = this.state;
+      let productFeatures = [];
+      let flag = false;
       this.setState({ btnDisable: true });
       setTimeout(() => {
         this.setState({ btnDisable: false });
       }, 4500);
-      if (title !== "" && iconName && iconByte) {
-        features.push({ title: title, iconByte: iconByte, iconName: iconName });
+      if (productDescri.trim() === "" || productDescri === "<p></p>\n") {
+        this.setState({ prodDesError: true });
+        flag = true;
       }
-      this.props.countInc();
-      console.log(features);
+      if (!comLogoBase64) {
+        this.setState({ comLogoError: true });
+        flag = true;
+      }
+      if (title.trim() !== "" && iconBase64 && features.length < 25) {
+        features.push({
+          featureId: featureId,
+          title: title.trim(),
+          iconByte: iconByte,
+          iconBase64: iconBase64,
+          isDelete:0,
+        });
+      }
+      if (features && features.length > 0) {
+        features.forEach((a) => {
+          productFeatures.push({
+            pfId: a.featureId,
+            productId: productId,
+            pfName: a.title,
+            pfIcon: a.iconBase64,
+            isDelete:a.isDelete,
+          });
+        });
+      }
+      if (flag === false) {
+        if (productId !== 0) {
+          let data = this.props.data;
+          data.productId = productId;
+          data.productname = values.productName.trim();
+          data.productTitle = values.productTitle.trim();
+          data.productDescription = productDescri;
+          data.productLogo = comLogoBase64 !== null ? comLogoBase64 : "";
+          data.productFeatures = productFeatures;
+
+          this.props.countInc(data);
+        } else {
+          let sendData = {
+            productId: productId,
+            productname: values.productName.trim(),
+            productTitle: values.productTitle.trim(),
+            productDescription: productDescri,
+            productLogo: comLogoBase64 !== null ? comLogoBase64 : "",
+            productFeatures: productFeatures,
+          };
+          this.props.countInc(sendData);
+        }
+      }
       setSubmitting(false);
     } catch (error) {
       console.log(error);
@@ -153,6 +320,8 @@ class ProAddEditDetail extends Component {
       title,
       iconName,
       iconByte,
+      comLogoError,
+      prodDesError,
     } = this.state;
     return (
       <ProAddEditStyle>
@@ -194,13 +363,22 @@ class ProAddEditDetail extends Component {
                 </Col>
                 <Col xs={24} sm={24} md={24} lg={12} xl={12} className="anime">
                   <div className="compLogoDiv">
-                    <Label title={proAddConst.company} />
+                    <Label
+                      title={proAddConst.company}
+                      className={comLogoError ? "empty" : ""}
+                    />
                     {this.fileUpload(comLogoName, comLogoByte, "companyLogo")}
                   </div>
                 </Col>
                 <Col xs={24} sm={24} md={24} lg={12} xl={12} className="anime">
                   <div className="field">
                     <Label title={proAddConst.productTitle} />
+                    <Input
+                      onBlur={handleBlur}
+                      name="productTitle"
+                      value={values.productTitle}
+                      handleChange={handleChange}
+                    />
                   </div>
                 </Col>
 
@@ -208,6 +386,7 @@ class ProAddEditDetail extends Component {
                   <div className="field">
                     <Label title={proAddConst.productDes} />
                     <Editor
+                      wrapperClassName={prodDesError ? "editorError" : ""}
                       editorState={editor}
                       onEditorStateChange={this.hendalEditor}
                     />
@@ -229,10 +408,7 @@ class ProAddEditDetail extends Component {
                   </div>
                 </Col>
                 <Col xs={12} sm={12} md={12} lg={6} xl={6} className="addbtn">
-                  <div
-                    className="addButton pointer"
-                    onClick={() => this.addIcon(title, iconByte, iconName)}
-                  >
+                  <div className="addButton pointer" onClick={this.addIcon}>
                     <PlusOutlined />
                   </div>
                 </Col>

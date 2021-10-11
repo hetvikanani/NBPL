@@ -1,16 +1,18 @@
 import { push } from "connected-react-router";
 import { message, notification } from "antd";
+
 import { axiosGet } from "modules/Axios";
 import { loader } from "redux/app/actions";
 import { apiConstant, partnerUsersConst } from "modules/config";
 import * as actions from "./constant";
+
 export const login = (payload) => async (dispatch) => {
   try {
     dispatch({ type: actions.LOGIN_INITIATED });
     let url =
       payload.role === "admin"
         ? apiConstant.AUTH_LOGIN
-        : partnerUsersConst.LOGIN;
+        : apiConstant.PARTNER_LOGIN;
     let response = await axiosGet(
       url + payload.userName + "/" + payload.password
     );
@@ -25,14 +27,14 @@ export const login = (payload) => async (dispatch) => {
       };
       localStorage.setItem("auth", JSON.stringify(data));
       await dispatch({ type: actions.LOGIN_SUCCESS, payload: response });
-      let msg = "Login as" + payload.role;
+      let msg = "Login as " + payload.role;
       if (window.innerWidth > 1000) {
         notification["success"]({
           message: "User Authorized",
           description: msg,
         });
       } else message.success(msg);
-      dispatch(push("/")); 
+      dispatch(push("/"));
       window.location.reload();
     } else dispatch({ type: actions.LOGIN_ERROR, error: response.message });
   } catch (error) {

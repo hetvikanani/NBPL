@@ -34,7 +34,7 @@ import logo from "assets/images/logo.png";
 import license from "assets/images/activeLicense.png";
 import logoWhite from "assets/images/logoWhite.png";
 import lock from "assets/images/lock.svg";
-import logout from "assets/images/logout.svg";
+import logoutImg from "assets/images/logout.svg";
 import monthlySale from "assets/images/monthlySale.png";
 import meeting from "assets/images/meeting.svg";
 import nbpl from "assets/images/nbpl.png";
@@ -58,6 +58,7 @@ import adminPartner from "assets/images/adminPartners.svg";
 import adminProduct from "assets/images/adminProduct.svg";
 import adminSubscribe from "assets/images/adminSubscribe.svg";
 import adminUsers from "assets/images/adminUsers.svg";
+import user from "assets/images/user.png";
 
 export {
   meeting,
@@ -119,5 +120,6 @@ export {
   adminSubscribe,
   adminUsers,
   lock,
-  logout,
+  logoutImg,
+  user,
 };

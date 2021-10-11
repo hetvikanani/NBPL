@@ -1,15 +1,32 @@
 import React, { Component } from "react";
 import { Row, Col, Card, InputNumber } from "antd";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 
 import { WalletStyle } from "./style";
-import { Menu, Button, Header, Input, Table } from "components/Form";
-import { topRowData, tableData, WalletConst } from "./constatnt";
+import {
+  Menu,
+  Button,
+  Header,
+  Input,
+  Table,
+  Pagination,
+} from "components/Form";
+import { topRowData, WalletConst } from "./constatnt";
+import {
+  getTaransactionHistory,
+  getCurrentBalence,
+  addWithdarawMoney,
+} from "redux/wallet/action";
 
-// const onSearch = (value) => console.log(value);
 class Salse extends Component {
-  constructor() {
-    super();
+  constructor(prop) {
+    super(prop);
     this.state = {
+      pageSize: 10,
+      dataLength: 0,
+      currentPage: 1,
+      partnerId: "0",
       addMoney: "",
       withDraw: "",
       addMoneyError: false,
@@ -17,13 +34,57 @@ class Salse extends Component {
       submitClicked: false,
     };
   }
+  async componentDidMount() {
+    try {
+      const { match } = this.props;
+      const { currentPage, pageSize } = this.state;
+      if (match.params.id) {
+        let id = window.atob(match.params.id);
+        let para = {
+          parameter: " where partnerid=" + id,
+          pageSize: pageSize.toString(),
+          page: currentPage.toString(),
+          sortColumn: "tid",
+        };
+        await this.props.getTaransactionHistory(para);
+        await this.props.getCurrentBalence(id);
+        this.setState({ partnerId: id });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    try {
+      const { trHistory } = this.props;
+      if (trHistory !== prevProps.trHistory) {
+        if (trHistory && trHistory.length > 0)
+          this.setState({ dataLength: trHistory[0].totalLenght });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  handlePagination = async (val) => {
+    const { partnerId, pageSize } = this.state;
+    var para = {
+      parameter: " where partnerid=" + partnerId,
+      pageSize: pageSize.toString(),
+      page: val.toString(),
+      sortColumn: "partnerid desc",
+    };
+    await this.props.getTaransactionHistory(para);
+    this.setState({ currentPage: val.current });
+  };
   onChange = (value) => {
     console.log("changed", value);
   };
 
-  handleSubmit = (a) => {
+  handleSubmit = async (a) => {
     try {
-      const { addMoney, withDraw } = this.state;
+      const { addMoney, withDraw, partnerId } = this.state;
       this.setState({ submitClicked: true });
       let flag = false;
       if (a === "Add Money") {
@@ -37,7 +98,12 @@ class Salse extends Component {
           this.setState({ withDrawError: true });
           flag = true;
         }
-      } else {
+      }
+      if (flag === false) {
+        let url = `${partnerId}/${a === "Add Money" ? addMoney : withDraw}/${
+          a === "Add Money" ? "0" : "1"
+        }`;
+        await this.props.addWithdarawMoney(url);
       }
     } catch (error) {
       console.log(error);
@@ -59,13 +125,16 @@ class Salse extends Component {
   };
   topRowUi = () => {
     try {
+      const { currBal } = this.props;
+      let balence =
+        currBal && currBal.length > 0 ? currBal[0].currentBalence : 0;
       const { addMoney, withDraw, addMoneyError, withDrawError } = this.state;
       return topRowData.map((a, i) => (
         <Col xs={24} sm={24} md={24} lg={24} xl={8} key={i}>
           <Card className="box">
             <h3 className="name">{a.name}</h3>
             <div className="input-div">
-              {i === 0 && <h1 className="mark">{a.value}</h1>}
+              {i === 0 && <h1 className="mark">{"₹ " + balence}</h1>}
               {i !== 0 && (
                 <>
                   <Input
@@ -78,6 +147,7 @@ class Salse extends Component {
                     }  `}
                     value={a.name === "Add Money" ? addMoney : withDraw}
                     type="number"
+                    max={25}
                     handleChange={(e) => {
                       this.handleInput(
                         a.name === "Add Money" ? "addMoney" : "withDraw",
@@ -127,12 +197,14 @@ class Salse extends Component {
     }
   };
   render() {
+    const { trHistory } = this.props;
+    const { dataLength, currentPage, pageSize } = this.state;
     return (
       <WalletStyle>
         <Menu />
         <div className="container">
           <Header />
-          <div className="allDiv">
+          <div className="allDiv anime">
             <Row gutter={20}>{this.topRowUi()}</Row>
             <div className="boxDiv">
               <h2>{WalletConst.tranHistory}</h2>
@@ -141,10 +213,20 @@ class Salse extends Component {
                 <div className="searchDiv">{this.SearchUI()}</div>
               </div>
               <div className="table-div">
-                <Table data={tableData} type="wallet" size={10} />
+                <Table data={trHistory} type="wallet" size={10} />
               </div>
-              <div>
+              <div className="bottomDiv">
                 <p className="last-para">Showing 1 to 3 of 3 entries </p>
+                {dataLength > 10 && (
+                  <div className="pagiDiv">
+                    <Pagination
+                      onChange={this.handlePagination}
+                      current={currentPage}
+                      total={dataLength}
+                      pageSize={pageSize}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -153,5 +235,17 @@ class Salse extends Component {
     );
   }
 }
-
-export default Salse;
+const mapStateToProps = (state) => ({
+  // loading: state.wallet.loading,
+  // error: state.wallet.error,
+  // message: state.wallet.message,
+  trHistory: state.wallet.trHistory,
+  currBal: state.wallet.currBal,
+});
+const mapDispatchToProps = (dispatch) => ({
+  getTaransactionHistory: (payload) =>
+    dispatch(getTaransactionHistory(payload)),
+  getCurrentBalence: (payload) => dispatch(getCurrentBalence(payload)),
+  addWithdarawMoney: (payload) => dispatch(addWithdarawMoney(payload)),
+});
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Salse));

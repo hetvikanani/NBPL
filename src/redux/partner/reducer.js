@@ -1,5 +1,6 @@
 import * as actions from "./constant";
 import { v4 as uuidv4 } from "uuid";
+import { assertClassPrivateMethod, tsNeverKeyword } from "@babel/types";
 
 const initialState = {
   error: false,
@@ -25,7 +26,6 @@ const initialState = {
   },
   partners: [],
 };
-
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -37,6 +37,7 @@ export default (state = initialState, action) => {
         isSaved: false,
         loading: true,
       };
+
     case actions.SAVE_PARTNER_SUCCESS:
       return {
         ...state,
@@ -59,15 +60,13 @@ export default (state = initialState, action) => {
         message: false,
         loading: true,
       };
-    case actions.GET_PARTNERS_SUCCESS: {
-      console.log(action.payload.data, "aaa");
+    case actions.GET_PARTNERS_SUCCESS:
       return {
         ...state,
         loading: false,
         error: false,
         partners: action.payload.data,
       };
-    }
     case actions.GET_PARTNERS_ERROR:
       return {
         ...state,

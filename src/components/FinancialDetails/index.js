@@ -44,7 +44,6 @@ class FinancialDetails extends Component {
         this.setState({ btnDisable: false });
       }, 4500);
       this.props.countInc();
-      // this.props.changeData("financialDetailsData", values);
       setSubmitting(false);
     } catch (error) {
       console.log(error);

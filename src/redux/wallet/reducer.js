@@ -4,79 +4,78 @@ const initialState = {
   loading: false,
   message: false,
   isAdded: false,
-  isDeleted: false,
-  products: [],
+  trHistory: [],
+  currBal: [],
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case actions.SAVE_PRODUCT_INITIATED:
+    case actions.ADD_WITHDARAW_MONEY_INITIATED:
       return {
         ...state,
         error: false,
-        isAdded: false,
         message: false,
+        isAdded: false,
         loading: true,
       };
-    case actions.SAVE_PRODUCT_SUCCESS:
+    case actions.ADD_WITHDARAW_MONEY_SUCCESS:
       return {
         ...state,
         error: false,
         loading: false,
         isAdded: true,
       };
-    case actions.SAVE_PRODUCT_ERROR:
+    case actions.ADD_WITHDARAW_MONEY_ERROR:
       return {
         ...state,
-        loading: false,
         error: true,
         isAdded: false,
+        loading: false,
         message: action.error,
       };
-    case actions.GET_PRODUCT_INITIATED:
+    case actions.TARANSACTION_HISTORY_INITIATED:
       return {
         ...state,
         error: false,
         message: false,
         loading: true,
       };
-    case actions.GET_PRODUCT_SUCCESS:
+    case actions.TARANSACTION_HISTORY_SUCCESS:
       return {
         ...state,
-        error: false,
         loading: false,
-        products: action.payload.data,
+        error: false,
+        trHistory: action.payload.data,
       };
-    case actions.GET_PRODUCT_ERROR:
+    case actions.TARANSACTION_HISTORY_ERROR:
       return {
         ...state,
         error: true,
         loading: false,
         message: action.error,
       };
-    case actions.DELETE_PRODUCT_INITIATED:
+    case actions.GET_CURRENTBALENCE_INITIATED:
       return {
         ...state,
         error: false,
-        message: false,
-        isDeleted: false,
         loading: true,
+        message: false,
       };
-    case actions.DELETE_PRODUCT_SUCCESS:
+    case actions.GET_CURRENTBALENCE_SUCCESS:
       return {
         ...state,
         error: false,
         loading: false,
-        isDeleted: true,
+        currBal: action.payload.data,
       };
-    case actions.DELETE_PRODUCT_ERROR:
+    case actions.GET_CURRENTBALENCE_ERROR:
       return {
         ...state,
         error: true,
         loading: false,
-        isDeleted: false,
         message: action.error,
       };
+
     default:
       return state;
   }

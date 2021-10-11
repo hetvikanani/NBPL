@@ -3,121 +3,123 @@ const initialState = {
   error: false,
   loading: false,
   message: false,
-  isAdded: false,
+  isSaved: false,
   isDeleted: false,
-  packageSelect:[],
-  packageDetail: [],
-  packages: [],
+  user: {},
+  userRights: [],
+  userList: [],
+  userById: [],
 };
 export default (state = initialState, action) => {
   switch (action.type) {
-    case actions.GET_PACKAGE_INITIATED:
+    case actions.GET_USER_RIGHTS_INITIATED:
       return {
         ...state,
         message: false,
         error: false,
         loading: true,
       };
-    case actions.GET_PACKAGE_SUCCESS:
+    case actions.GET_USER_RIGHTS_SUCCESS:
       return {
         ...state,
         loading: false,
         error: false,
-        packageSelect:action.payload.data,
+        userRights: action.payload.data,
       };
-    case actions.GET_PACKAGE_ERROR:
+    case actions.GET_USER_RIGHTS_ERROR:
       return {
         ...state,
-        loading: false,
         error: true,
+        loading: false,
         message: action.error,
       };
-    case actions.SAVE_PRODUCT_PACKAGE_INITIATED:
+    case actions.SAVE_USER_INITIATED:
       return {
-        ...state,
-        isAdded: false,
-        message: false,
-        error: false,
-        loading: true,
-      };
-    case actions.SAVE_PRODUCT_PACKAGE_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        error: false,
-        isAdded: true,
-      };
-    case actions.SAVE_PRODUCT_PACKAGE_ERROR:
-      return {
-        ...state,
-        loading: false,
-        error: true,
-        isAdded: false,
-        message: action.error,
-      };
-    case actions.GET_PRODUCT_PACKAGE_INITIATED:
-      return {
+        isSaved: false,
         ...state,
         message: false,
         error: false,
         loading: true,
       };
-    case actions.GET_PRODUCT_PACKAGE_SUCCESS:
+    case actions.SAVE_USER_SUCCESS:
+      return {
+        ...state,
+        isSaved: true,
+        loading: false,
+        error: false,
+      };
+    case actions.SAVE_USER_ERROR:
+      return {
+        ...state,
+        isSaved: false,
+        error: true,
+        loading: false,
+        message: action.error,
+      };
+    case actions.GET_USERS_INITIATED:
+      return {
+        ...state,
+        message: false,
+        error: false,
+        loading: true,
+      };
+    case actions.GET_USERS_SUCCESS:
       return {
         ...state,
         loading: false,
         error: false,
-        packageDetail: action.payload.data,
+        userList: action.payload.data,
       };
-    case actions.GET_PRODUCT_PACKAGE_ERROR:
+    case actions.GET_USERS_ERROR:
       return {
         ...state,
-        loading: false,
         error: true,
+        loading: false,
         message: action.error,
       };
-    case actions.DELETE_PRODUCT_PACKAGE_INITIATED:
+    case actions.DELETE_USER_INITIATED:
       return {
-        ...state,
         isDeleted: false,
+        ...state,
         message: false,
         error: false,
         loading: true,
       };
-    case actions.DELETE_PRODUCT_PACKAGE_SUCCESS:
+    case actions.DELETE_USER_SUCCESS:
       return {
         ...state,
-        loading: false,
-        error: false,
         isDeleted: true,
+        loading: false,
+        error: false,
+        userRights: action.payload.data,
       };
-    case actions.DELETE_PRODUCT_PACKAGE_ERROR:
+    case actions.DELETE_USER_ERROR:
       return {
         ...state,
-        loading: false,
-        error: true,
         isDeleted: false,
+        error: true,
+        loading: false,
         message: action.error,
       };
-          case actions.GET_PACKAGE_BY_ID_INITIATED:
+    case actions.GET_USER_BY_ID_INITIATED:
       return {
         ...state,
-        loading: true,
-        error: false,
         message: false,
+        error: false,
+        loading: true,
       };
-    case actions.GET_PACKAGE_BY_ID_SUCCESS:
+    case actions.GET_USER_BY_ID_SUCCESS:
       return {
         ...state,
         loading: false,
         error: false,
-        packages: action.payload.data,
+        userById: action.payload.data,
       };
-    case actions.GET_PACKAGE_BY_ID_ERROR:
+    case actions.GET_USER_BY_ID_ERROR:
       return {
         ...state,
-        loading: false,
         error: true,
+        loading: false,
         message: action.error,
       };
     default:

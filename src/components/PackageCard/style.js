@@ -49,11 +49,7 @@ const PackageStyle = styled.div`
       min-height: 12em;
       .list {
         margin-top: 0.5em;
-        .fas {
-          color: ${Theme.mainColor};
-          font-size: 8px;
-          margin-right: 8px;
-        }
+        // .fas {color: ${Theme.mainColor};font-size: 8px;margin-right: 8px;}
       }
     }
     button {

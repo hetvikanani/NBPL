@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Menu, Dropdown } from "antd";
 import { StyleComponent } from "./style";
-// import { debounce } from "lodash-es";
 
 class RenderDrop extends Component {
   menu = () => {
@@ -11,7 +10,7 @@ class RenderDrop extends Component {
         {!data ? (
           <Menu.Item key="1">{children}</Menu.Item>
         ) : (
-          data.map((a, i) => <Menu.Item key={i + 1}>{a}</Menu.Item>)
+          data.map((a, i) => a && <Menu.Item key={i + 1}>{a}</Menu.Item>)
         )}
       </Menu>
     );

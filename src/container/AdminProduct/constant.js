@@ -2,6 +2,7 @@ const adminProConst = {
   colon: ":",
   products: "Products",
   addNewPro: "Add New Product",
+  addEditPro: "Edit Product",
   prodName: "Product Name",
   comLogo: "Company Logo",
   prodDes: "Product Description",

@@ -1,30 +1,83 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 import Carousel from "react-multi-carousel";
-import { Row, Col, Image, Card } from "antd";
+import { Row, Col, Image, Card, Spin } from "antd";
 import { FilePdfFilled } from "@ant-design/icons";
 import "react-multi-carousel/lib/styles.css";
 
 import { ProDetailstyle } from "./style";
 import { Menu, RoundSwitch, Header, PackageCard } from "components/Form";
-import { FeaturesData, MonthlyData, CarouselData, PdConst } from "./constatnt";
-import { vizman, iPing, act, eAuction, eVoting, ezeo } from "components/Images";
+import { PdConst } from "./constatnt";
+import { getProduct } from "redux/product/action";
+import { configVar } from "modules/config";
 
 const responsive = {
-  superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 5 },
-  desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
-  tablet: { breakpoint: { max: 1024, min: 464 }, items: 2 },
-  mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 3,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+  },
 };
-export default class ProductDetails extends Component {
+class ProductDetails extends Component {
   constructor() {
     super();
-    this.state = { checked: false, item: "" };
+    this.state = {
+      checked: false,
+      item: "",
+      allData: {},
+      pdfData:[],
+      monthlyData:[],
+      yearlyData:[],
+      videoData:[],
+    };
   }
-  componentDidMount() {
+  async componentDidMount() {
     try {
       const { match } = this.props;
-      if (match.params.name) {
+      if (match.params.id) {
+        let id = window.atob(match.params.id);
+        await this.props.getProduct(id);
         this.setState({ item: match.params.name });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  componentDidUpdate(prevProps) {
+    try {
+      const { products } = this.props;
+      if (products !== prevProps.products) {
+        let subscripData =  products[0].productSubscriptiondetails;
+        let monthly = [];
+        let yearly = [];
+        if (subscripData && subscripData.length > 0) {
+          subscripData.forEach((a) => {
+            if (a.subscription === "Monthly") {
+              monthly.push(a);
+            } else if (a.subscription === "Yearly") {
+              yearly.push(a);
+            }
+          });
+        }
+        products && products[0] && this.setState({
+           allData: products[0],
+           pdfData: products[0].productDocument,
+           monthlyData:monthly,
+           yearlyData:yearly,
+           videoData:  products[0].productVideo,
+          });
       }
     } catch (error) {
       console.log(error);
@@ -36,13 +89,19 @@ export default class ProductDetails extends Component {
   };
   featureUI = () => {
     try {
-      return FeaturesData.map((a, i) => (
+      const { allData } = this.state;
+      return allData.productFeatures.map((a, i) => (
         <Col xs={24} sm={12} md={12} lg={12} xl={6} key={i} className="anime">
           <Card hoverable className="Feature-card">
             <div className="img-div">
-              <Image src={a.img} preview={false} />
+              <Image
+                src={configVar.BASE_URL + a.pfIcon}
+                preview={false}
+                width={40}
+                height={40}
+              />
             </div>
-            <h5>{a.heading}</h5>
+            <h4>{a.pfName}</h4>
           </Card>
         </Col>
       ));
@@ -52,21 +111,34 @@ export default class ProductDetails extends Component {
   };
   subscriptionUI = () => {
     try {
-      const { checked } = this.state;
-      return MonthlyData.map((a, i) => (
-        <Col xs={24} sm={24} md={24} lg={8} xl={8} key={i} className="anime">
-          <PackageCard data={a} period="Month" checked={checked} />
-        </Col>
-      ));
+      const { checked,monthlyData,yearlyData } = this.state;
+      let data = checked?yearlyData:monthlyData;
+      return data.map((a, i) => (
+            <Col
+              xs={24}
+              sm={24}
+              md={24}
+              lg={8}
+              xl={8}
+              key={i}
+              className="anime"
+            >
+              <PackageCard data={a} />
+            </Col>
+          ));
     } catch (error) {
       console.log(error);
     }
   };
   carouselUI = () => {
     try {
-      return CarouselData.map((a, i) => (
+      const {videoData} =this.state;
+     
+    
+      return videoData.map((a, i) => (
         <div className="carousel-img" key={i}>
-          <Image src={a} preview={false} />
+          <iframe id="fr" width="300" height="150" src={a.videoUrl.replace("watch?v=", "embed/")}></iframe>
+          {/* <Image src={a} preview={false} /> */}
         </div>
       ));
     } catch (error) {
@@ -75,23 +147,11 @@ export default class ProductDetails extends Component {
   };
   headerImg = () => {
     try {
-      const { item } = this.state;
+      const { item, allData } = this.state;
       return (
         <>
           <Image
-            src={
-              item === "iping"
-                ? iPing
-                : item === "Act"
-                ? act
-                : item === "eAuction"
-                ? eAuction
-                : item === "eVoting"
-                ? eVoting
-                : item === "EZEO"
-                ? ezeo
-                : vizman
-            }
+            src={configVar.BASE_URL + allData.productLogo}
             width={150}
             preview={false}
           />
@@ -101,96 +161,112 @@ export default class ProductDetails extends Component {
       console.log(error);
     }
   };
-  pdfImg = () => (
-    <a
-      href="https://www.vizman.app/downloads/VizManUserManual.pdf"
-      target="_blank"
-      rel="noreferrer"
-    >
-      <div className="pdfIcon">
-        <FilePdfFilled />
+  pdfImg = () => {
+    const{ pdfData}=this.state;
+    return pdfData.map((a)=>
+      <div className="pdfS">
+        <h3 className="txtHead">{a.documentTitle}</h3>
+          <div className="pdfIcon">
+        <a
+          href={a.documentPath !==""? configVar.BASE_URL + a.documentPath : ""}
+          target="_blank"
+          rel="noreferrer"
+        >
+            <FilePdfFilled />
+        </a>
+          </div>
       </div>
-    </a>
-  );
+    )
+  };
   render() {
-    const { checked, item } = this.state;
+    const { checked, item, allData } = this.state;
+    const { loading } = this.props;
     return (
-      <ProDetailstyle>
-        <Menu />
-        <div className="container">
-          <Header />
-          <div className="allDiv anime">
-            <h2>{PdConst.pd}</h2>
-            <div className="boxDiv anime">
-              {this.headerImg()}
-              <h3 className="txtHead">{item} - Visitor Management System</h3>
-              <p>
-                It is a long established fact that a reader will be distracted
-                by the readable content of a page when looking at its layout.
-                The point of using Lorem Ipsum is that it has a more-or-less
-                normal distribution of letters,
-              </p>
-              <p>
-                It is a long established fact that a reader will be distracted
-                by the readable content of a page when looking at its layout.
-                The point of using Lorem Ipsum is that it has a more-or-less
-                normal distribution of letters,
-              </p>
-            </div>
-            <div className="boxDiv">
-              <h3 className="txtHead">{PdConst.feat}</h3>
-              <Row gutter={20}>{this.featureUI()} </Row>
-            </div>
-            <div className="box3">
+      <Spin spinning={loading} size="large">
+        <ProDetailstyle>
+          <Menu />
+          <div className="container">
+            <Header />
+            <div className="allDiv anime">
+              <h2>{PdConst.pd}</h2>
+              <div className="boxDiv anime">
+                {this.headerImg()}
+                <h3 className="txtHead">
+                  {allData.productname}{" "}
+                  {allData.productTitle !== ""
+                    ? " - " + allData.productTitle
+                    : ""}
+                </h3>
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: allData.productDescription,
+                  }}
+                ></p>
+              </div>
               <div className="boxDiv">
-                <h3 className="txtHead">{PdConst.SubDet}</h3>
-                <div className="switch-div">
-                  <RoundSwitch
-                    left="MONTHLY"
-                    right="ANNUAL"
-                    checked={checked}
-                    handleChange={this.switchChange}
-                  />
+                <h3 className="txtHead">{PdConst.feat}</h3>
+                <Row gutter={20}>{this.featureUI()} </Row>
+              </div>
+              <div className="box3">
+                <div className="boxDiv">
+                  <h3 className="txtHead">{PdConst.SubDet}</h3>
+                  <div className="switch-div">
+                    <RoundSwitch
+                      left="MONTHLY"
+                      right="ANNUAL"
+                      checked={checked}
+                      handleChange={this.switchChange}
+                    />
+                  </div>
+                  <div className="Card-Div">
+                    <Row gutter={20}> {this.subscriptionUI()} </Row>
+                  </div>
                 </div>
-                <div className="Card-Div">
-                  <Row gutter={20}> {this.subscriptionUI()} </Row>
+              </div>
+              {/* <div className="box4">
+                <div className="boxDiv">
+                  <h3 className="txtHead">{PdConst.partDet}</h3>
+                  <p>
+                    We Provide a Variety of Visitor Management and Workspace
+                    Reservation Solutions. We Also Provide You with Employee
+                    Parcel Management The point of using Lorem Ipsum is that it
+                    has a more-or-less normal distribution of letters.
+                  </p>
                 </div>
+              </div> */}
+              <div className="box5">
+                <div className="boxDiv">{this.pdfImg()}</div>
               </div>
-            </div>
-            <div className="box4">
-              <div className="boxDiv">
-                <h3 className="txtHead">{PdConst.partDet}</h3>
-                <p>
-                  We Provide a Variety of Visitor Management and Workspace
-                  Reservation Solutions. We Also Provide You with Employee
-                  Parcel Management The point of using Lorem Ipsum is that it
-                  has a more-or-less normal distribution of letters.
-                </p>
-              </div>
-            </div>
-            <div className="box5">
-              <div className="boxDiv">
-                <h3 className="txtHead">{PdConst.userMan}</h3>
-                {this.pdfImg()}
-              </div>
-            </div>
-            <div className="box6">
-              <div className="boxDiv">
-                <h3 className="txtHead">{PdConst.sugVid}</h3>
-                <Carousel
-                  dotListClass="custom-dot-list-style"
-                  swipeable={false}
-                  draggable={false}
-                  showDots={true}
-                  responsive={responsive}
-                >
-                  {this.carouselUI()}
-                </Carousel>
+              <div className="box6">
+                <div className="boxDiv">
+                  <h3 className="txtHead">{PdConst.sugVid}</h3>
+                  <Carousel
+                    dotListClass="custom-dot-list-style"
+                    swipeable={false}
+                    draggable={false}
+                    showDots={true}
+                    responsive={responsive}
+                  >
+                    {this.carouselUI()}
+                  </Carousel>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </ProDetailstyle>
+        </ProDetailstyle>
+      </Spin>
     );
   }
 }
+const mapStateToProps = (state) => ({
+  loading: state.product.loading,
+  error: state.product.error,
+  message: state.product.message,
+  products: state.product.products,
+});
+const mapDispatchToProps = (dispatch) => ({
+  getProduct: (payload) => dispatch(getProduct(payload)),
+});
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(ProductDetails)
+);

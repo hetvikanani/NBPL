@@ -3,38 +3,6 @@ const topRowData = [
   { name: "Add Money" },
   { name: "Withdraw" },
 ];
-const tableData = [
-  {
-    details: "System Architect",
-    trType: "Edinburgh",
-    date: "25/08/21",
-    amount: "5000",
-  },
-  {
-    details: "System Architect",
-    trType: "Edinburgh",
-    date: "25/08/21",
-    amount: "5000",
-  },
-  {
-    details: "System Architect",
-    trType: "Edinburgh",
-    date: "25/08/21",
-    amount: "5000",
-  },
-  {
-    details: "System Architect",
-    trType: "Edinburgh",
-    date: "25/08/21",
-    amount: "5000",
-  },
-  {
-    details: "System Architect",
-    trType: "Edinburgh",
-    date: "25/08/21",
-    amount: "5000",
-  },
-];
 const WalletConst = {
   entries: "entries",
   show: "Show",
@@ -42,4 +10,4 @@ const WalletConst = {
   tranHistory: "Transaction History",
 };
 
-export { topRowData, tableData, WalletConst };
+export { topRowData, WalletConst };

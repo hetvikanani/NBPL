@@ -33,7 +33,6 @@ class AdminPartner extends Component {
       console.log(error);
     }
   }
-
   countInc = () => {
     try {
       const { count } = this.state;
@@ -49,9 +48,7 @@ class AdminPartner extends Component {
     const { count } = this.state;
     this.setState({ count: count - 1 });
   };
-
   apiCall = (contacts) => {
-    // debugger;
     const { partner } = this.props;
     let id = 0;
     if (this?.props?.match?.params?.id)

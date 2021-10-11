@@ -33,9 +33,23 @@ class ContactDetails extends Component {
   changeDataForm = (fieldName, value) =>
     this.props.changePartnerData(fieldName, value);
 
-  increase = (key, val) => {
-    const { prev } = this.state;
+  increase = (key, val, setFieldError) => {
     const { partner } = this.props;
+    let finalContactDetails = partner?.contactDetails?.filter(
+      (data) => data.isDelete !== 1
+    );
+    const number = finalContactDetails?.filter((d, index) =>
+      finalContactDetails
+        ?.filter((x, i) => i !== index)
+        ?.find((el) => el.mobile === d.mobile)
+    );
+    console.log(number);
+    if (number[0]) {
+      setFieldError("mobile", "Mobile Number Match");
+      console.log("aaaaa");
+      return;
+    }
+    const { prev } = this.state;
     const newData = partner?.contactDetails?.map((data) => {
       if (data.key === key) {
         return { ...data, save: true };
@@ -75,7 +89,6 @@ class ContactDetails extends Component {
   };
   handleSubmit = async (values, { setSubmitting }) => {
     try {
-      // debugger;
       const { partner } = this.props;
       const { prev } = this.state;
       this.setState({ btnDisable: true, check: true });
@@ -100,13 +113,19 @@ class ContactDetails extends Component {
     this.changeDataForm("contactDetails", data);
     setFieldValue(fieldName, e.target.value);
   };
+
+  myValidationNumber = (e, index, setFieldValue, fieldName, setFieldError) => {
+    const { partner } = this.props;
+    this.proex(e, index, setFieldValue, fieldName);
+    // else setFieldError(fieldName, "Mobile Number Match");
+    // console.log(number, e.target.value, "match");
+  };
   render() {
     const { disable } = this.state;
     const { partner } = this.props;
     let finalContactDetials = partner?.contactDetails?.filter(
       (data) => data.isDelete !== 1
     );
-    // console.log(finalContactDetials, "xxz");
 
     return (
       <ContDetailsStyle>
@@ -129,6 +148,7 @@ class ContactDetails extends Component {
                 validateForm,
                 setFieldValue,
                 handleReset,
+                setFieldError,
               }) => (
                 <Form onSubmit={handleSubmit}>
                   <Row gutter={20}>
@@ -174,6 +194,7 @@ class ContactDetails extends Component {
                       className="anime"
                     >
                       <div className="field">
+                        {console.log(errors, touched)}
                         <Label
                           title={contactConst.mobile}
                           className={
@@ -189,10 +210,24 @@ class ContactDetails extends Component {
                           type="number"
                           value={values.mobile}
                           handleChange={(e) => {
-                            this.proex(e, index, setFieldValue, "mobile");
+                            this.myValidationNumber(
+                              e,
+                              index,
+                              setFieldValue,
+                              "mobile",
+                              setFieldError
+                            );
+                            // this.proex(e, index, setFieldValue, "mobile");
+
+                            // partner.contactDetails.filter(
+                            //   (x) => x.mobile === e.value
+                            // );
                           }}
                           tabIndex="2"
                         />
+                        {errors.mobile && (
+                          <spn className="empty">{errors.mobile}</spn>
+                        )}
                       </div>
                     </Col>
                     <Col
@@ -267,7 +302,7 @@ class ContactDetails extends Component {
                           onClick={() => {
                             validateForm().then((d) => {
                               if (Object.keys(d).length === 0)
-                                this.increase(data.key);
+                                this.increase(data.key, null, setFieldError);
                               else handleSubmit();
                             });
                           }}
@@ -302,7 +337,6 @@ class ContactDetails extends Component {
                       )}
 
                       <Button type="submit" disabled={disable}>
-                        {console.log(index)}
                         {finalContactDetials.length - 1 === index
                           ? "Submit"
                           : finalContactDetials?.filter(

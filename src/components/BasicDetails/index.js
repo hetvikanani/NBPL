@@ -3,14 +3,14 @@ import { Row, Col, Image } from "antd";
 import { CloseOutlined, UploadOutlined } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import { BasicDetailsStyle } from "./style";
-import { basicConst } from "./constant";
-import { Input, Label, RoundSwitch, Button, FileUpload } from "components/Form";
-import { FormValidation, gstConst, panConst } from "App/AppConstant";
 import { connect } from "react-redux";
+import * as Yup from "yup";
+
+import { basicConst } from "./constant";
+import { BasicDetailsStyle } from "./style";
 import { changePartnerData } from "redux/partner/action";
-import { values } from "lodash";
+import { FormValidation, gstConst, panConst } from "App/AppConstant";
+import { Input, Label, RoundSwitch, Button, FileUpload } from "components/Form";
 
 const UserValidation = Yup.object().shape({
   companyName: Yup.string()
@@ -29,7 +29,6 @@ const UserValidation = Yup.object().shape({
     .min(12, FormValidation.aadharInvalid)
     .max(12, FormValidation.aadharInvalid),
 });
-
 class BasicDetails extends Component {
   constructor(props) {
     super(props);
@@ -45,16 +44,13 @@ class BasicDetails extends Component {
   }
   changeDataForm = (fieldName, value) =>
     this.props.changePartnerData(fieldName, value);
-
   switchChange = (setFieldValue) => {
     this.changeDataForm("gstType", !this.state.gstType);
     setFieldValue("gstType", !this.state.gstType);
     this.setState({ gstType: !this.state.gstType });
   };
-
   fileUpload = (setFieldValue) => {
     try {
-      const { imgnm, imgByte } = this.state;
       const { partner } = this.props;
       let name = partner?.imgnm;
 
@@ -64,7 +60,7 @@ class BasicDetails extends Component {
         return (
           <>
             <span className="optionui">
-              <span className="txtWrap">{"name"}</span>
+              <span className="txtWrap">{name || ""}</span>
               <CloseOutlined onClick={() => this.removefile(setFieldValue)} />
             </span>
             <Image src={partner?.companyLogo} width={50} height={30} />
@@ -83,7 +79,6 @@ class BasicDetails extends Component {
       console.log(error);
     }
   };
-
   removefile = (setFieldValue) => {
     this.changeDataForm("companyLogo", "");
     setFieldValue("companyLogo", "");
@@ -93,7 +88,6 @@ class BasicDetails extends Component {
     setFieldValue("imgBase64", "");
     this.setState({ companyLogo: "", imgnm: "", imgBase64: "" });
   };
-
   setByte = (byteCode, name, base64, setFieldValue) => {
     this.changeDataForm("companyLogo", byteCode);
     setFieldValue("companyLogo", byteCode);
@@ -101,38 +95,24 @@ class BasicDetails extends Component {
     setFieldValue("imgnm", name);
     this.changeDataForm("imgBase64", base64);
     setFieldValue("imgBase64", base64);
-
     this.setState({ companyLogo: byteCode, imgnm: name, imgBase64: base64 });
   };
-
   handleSubmit = async (values, { setSubmitting }) => {
     try {
       const { gstType } = this.state;
-
-      // this.setState({ btnDisable: true });
-      // setTimeout(() => {
-      //   this.setState({ btnDisable: false });
-      // }, 4500);
+      this.setState({ btnDisable: true });
+      setTimeout(() => {
+        this.setState({ btnDisable: false });
+      }, 4500);
       this.props.changePartnerData("img", this.state.imgBase64);
-
-      // this.props.changeData("basicDetailsData", {
-      //   ...values,
-      //   img: this.state.imgBase64,
-      //   // gstType: this.state.gstType,
-      // });
-      // if (gstType && values.gst === "") {
-      //   this.setState({ gstNoError: gstType && values.gst === "" });
-      // } else this.props.countInc();
-
       this.props.countInc();
       setSubmitting(false);
     } catch (error) {
       console.log(error, "handle error");
     }
   };
-
   render() {
-    const { disable, gstType, gstNoError } = this.state;
+    const { disable, gstNoError } = this.state;
     const { partner } = this.props;
     return (
       <BasicDetailsStyle>
@@ -178,7 +158,6 @@ class BasicDetails extends Component {
                         onBlur={handleBlur}
                         value={values.companyName}
                         handleChange={(e) => {
-                          // handleChange(e);
                           this.changeDataForm("companyName", e.target.value);
                           setFieldValue("companyName", e.target.value);
                         }}
@@ -208,7 +187,6 @@ class BasicDetails extends Component {
                         value={values.email}
                         onBlur={handleBlur}
                         handleChange={(e) => {
-                          // handleChange(e);
                           this.changeDataForm("email", e.target.value);
                           setFieldValue("email", e.target.value);
                         }}
@@ -237,7 +215,6 @@ class BasicDetails extends Component {
                         value={values.mobile}
                         onBlur={handleBlur}
                         handleChange={(e) => {
-                          // handleChange(e);
                           this.changeDataForm("mobile", e.target.value);
                           setFieldValue("mobile", e.target.value);
                         }}
@@ -283,7 +260,6 @@ class BasicDetails extends Component {
                         value={values.pan}
                         onBlur={handleBlur}
                         handleChange={(e) => {
-                          // handleChange(e);
                           this.changeDataForm("pan", e.target.value);
                         }}
                         className={errors.pan && touched.pan ? "empty" : ""}
@@ -317,7 +293,6 @@ class BasicDetails extends Component {
                           onBlur={handleBlur}
                           value={values?.gst?.toUpperCase()}
                           handleChange={(e) => {
-                            // handleChange(e);
                             this.changeDataForm("gst", e.target.value);
                             setFieldValue("gst", e.target.value);
                           }}
@@ -359,7 +334,6 @@ class BasicDetails extends Component {
                         value={values.aadhar}
                         onBlur={handleBlur}
                         handleChange={(e, z) => {
-                          // handleChange(e);
                           this.changeDataForm("aadhar", e.target.value);
                         }}
                         className={
@@ -387,7 +361,6 @@ class BasicDetails extends Component {
                     </div>
                   </Col>
                 </Row>
-
                 <div className="bottomDiv">
                   <div className="btn anime">
                     <Button
@@ -396,7 +369,6 @@ class BasicDetails extends Component {
                     >
                       {basicConst.cancle}
                     </Button>
-
                     <Button
                       type="submit"
                       className="nextBtn"

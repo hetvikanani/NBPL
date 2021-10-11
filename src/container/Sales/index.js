@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col, Card, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { withRouter } from "react-router-dom";
 
 import { SelesStyle } from "./style";
 import { Menu, Header, Table } from "components/Form";
@@ -73,4 +74,4 @@ class Sales extends Component {
   }
 }
 
-export default Sales;
+export default withRouter(Sales);

@@ -48,10 +48,13 @@ const ProDocStyle = styled.div`
     margin-right: 2em;
     margin-top: 2em;
     // text-align: center;
-    .anticon-file-pdf {
-      svg {
-        width: 2em;
-        height: 2em;
+    a{
+      color:${Theme.mainColor};
+      .anticon-file-pdf {
+        svg {
+          width: 2em;
+          height: 2em;
+        }
       }
     }
     .anticon-delete {

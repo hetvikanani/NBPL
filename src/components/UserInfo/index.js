@@ -1,17 +1,28 @@
 import React, { Component } from "react";
+import * as Yup from "yup";
 import { Row, Col } from "antd";
 import { Formik, Form } from "formik";
-import * as Yup from "yup";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 import { UserInfoStyle } from "./style";
-import { Input, Label, Button } from "components/Form";
-import { FormValidation } from "App/AppConstant";
 import { userInfoConst } from "./constant";
+import { Input, Label, Button } from "components/Form";
+import { FormValidation, ButtonConst } from "App/AppConstant";
 
 const ValidationSchema = Yup.object().shape({
-  firstName: Yup.string().trim().required(" "),
-  emailId: Yup.string().trim().email(FormValidation.emailInvalid),
-  mobileNo: Yup.string()
+  firstname: Yup.string()
+    .trim()
+    .required(" ")
+    .matches(/^[A-Za-z]*$/, FormValidation.nameValid),
+  middleName: Yup.string()
+    .trim()
+    .matches(/^[A-Za-z]*$/, FormValidation.nameValid),
+  lastName: Yup.string()
+    .trim()
+    .matches(/^[A-Za-z]*$/, FormValidation.nameValid),
+  emailId: Yup.string().trim().email(FormValidation.emailInvalid).required(" "),
+  mobile: Yup.string()
     .trim()
     .required(" ")
     .min(10, FormValidation.mobileInvalid)
@@ -24,13 +35,29 @@ class userInfo extends Component {
     this.state = {
       btnDisable: false,
       initState: {
-        firstName: "",
+        userId: 0,
+        firstname: "",
         middleName: "",
         lastName: "",
         emailId: "",
-        mobileNo: "",
+        mobile: "",
       },
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    const { userById } = this.props;
+    if (prevProps.userById !== userById) {
+      let data = {
+        userId: userById.userId,
+        firstname: userById.firstname,
+        middleName: userById.middleName,
+        lastName: userById.lastName,
+        emailId: userById.emailId,
+        mobile: userById.mobile,
+      };
+      this.setState({ initState: data });
+    }
   }
   handleSubmit = async (values, { setSubmitting }) => {
     try {
@@ -38,8 +65,15 @@ class userInfo extends Component {
       setTimeout(() => {
         this.setState({ btnDisable: false });
       }, 4500);
-      this.props.countInc();
-
+      let userData = {
+        userId: values.userId,
+        firstname: values.firstname.trim(),
+        middleName: values.middleName.trim(),
+        lastName: values.lastName.trim(),
+        emailId: values.emailId.trim(),
+        mobile: values.mobile,
+      };
+      this.props.countInc(userData);
       setSubmitting(false);
     } catch (error) {
       console.log(error);
@@ -47,6 +81,7 @@ class userInfo extends Component {
   };
   render() {
     const { initState, btnDisable } = this.state;
+    // const { user } = this.props;
     return (
       <UserInfoStyle>
         <Formik
@@ -70,38 +105,72 @@ class userInfo extends Component {
                 <Col xs={24} sm={24} md={12} lg={12} xl={12} className="anime">
                   <div className="field">
                     <Label
-                      title={userInfoConst.firstName}
+                      title={
+                        userInfoConst.firstName +
+                        FormValidation.req +
+                        FormValidation.colon
+                      }
                       className={
-                        errors.firstName && touched.firstName ? "empty" : ""
+                        errors.firstname && touched.firstname ? "empty" : ""
                       }
                     />
                     <Input
                       className={
-                        errors.firstName && touched.firstName ? "empty" : ""
+                        errors.firstname && touched.firstname ? "empty" : ""
                       }
                       onBlur={handleBlur}
-                      name="firstName"
-                      value={values.firstName}
+                      name="firstname"
+                      value={values.firstname}
                       handleChange={handleChange}
                     />
                   </div>
                 </Col>
                 <Col xs={24} sm={24} md={12} lg={12} xl={12} className="anime">
                   <div className="field">
-                    <Label title={userInfoConst.middleName} />
-                    <Input />
-                  </div>
-                </Col>
-                <Col xs={24} sm={24} md={12} lg={12} xl={12} className="anime">
-                  <div className="field">
-                    <Label title={userInfoConst.lastName} />
-                    <Input />
+                    <Label
+                      title={userInfoConst.middleName + FormValidation.colon}
+                      className={
+                        errors.middleName && touched.middleName ? "empty" : ""
+                      }
+                    />
+                    <Input
+                      onBlur={handleBlur}
+                      name="middleName"
+                      value={values.middleName}
+                      handleChange={handleChange}
+                      className={
+                        errors.middleName && touched.middleName ? "empty" : ""
+                      }
+                    />
                   </div>
                 </Col>
                 <Col xs={24} sm={24} md={12} lg={12} xl={12} className="anime">
                   <div className="field">
                     <Label
-                      title={userInfoConst.email}
+                      title={userInfoConst.lastName + FormValidation.colon}
+                      className={
+                        errors.lastName && touched.lastName ? "empty" : ""
+                      }
+                    />
+                    <Input
+                      onBlur={handleBlur}
+                      name="lastName"
+                      value={values.lastName}
+                      handleChange={handleChange}
+                      className={
+                        errors.lastName && touched.lastName ? "empty" : ""
+                      }
+                    />
+                  </div>
+                </Col>
+                <Col xs={24} sm={24} md={12} lg={12} xl={12} className="anime">
+                  <div className="field">
+                    <Label
+                      title={
+                        userInfoConst.email +
+                        FormValidation.req +
+                        FormValidation.colon
+                      }
                       className={
                         errors.emailId && touched.emailId ? "empty" : ""
                       }
@@ -123,31 +192,36 @@ class userInfo extends Component {
                 <Col xs={24} sm={24} md={12} lg={12} xl={12} className="anime">
                   <div className="field">
                     <Label
-                      title={userInfoConst.mobile}
-                      className={
-                        errors.mobileNo && touched.mobileNo ? "empty" : ""
+                      title={
+                        userInfoConst.mobile +
+                        FormValidation.req +
+                        FormValidation.colon
                       }
+                      className={errors.mobile && touched.mobile ? "empty" : ""}
                     />
                     <Input
-                      className={
-                        errors.mobileNo && touched.mobileNo ? "empty" : ""
-                      }
+                      className={errors.mobile && touched.mobile ? "empty" : ""}
                       type="number"
                       onBlur={handleBlur}
-                      name="mobileNo"
-                      value={values.mobileNo}
+                      name="mobile"
+                      value={values.mobile}
                       handleChange={handleChange}
                     />
-                    {errors.mobileNo && touched.mobileNo && (
-                      <div className="form-error">{errors.mobileNo}</div>
+                    {errors.mobile && touched.mobile && (
+                      <div className="form-error">{errors.mobile}</div>
                     )}
                   </div>
                 </Col>
               </Row>
               <div className="btnDiv">
-                <Button type="submit" disabled={btnDisable}>
-                  {userInfoConst.next}
-                </Button>
+                <div className="nextDiv">
+                  <Button onClick={() => this.props.history.push("/users")}>
+                    {ButtonConst.cancel}
+                  </Button>
+                  <Button type="submit" disabled={btnDisable}>
+                    {ButtonConst.next}
+                  </Button>
+                </div>
               </div>
             </Form>
           )}
@@ -156,4 +230,17 @@ class userInfo extends Component {
     );
   }
 }
-export default userInfo;
+const mapStateToProps = (state) => ({
+  loading: state.user.loading,
+  error: state.user.error,
+  message: state.user.message,
+  user: state.user.user,
+  userById: state.user.userById,
+});
+const mapDispatchToProps = (dispatch) => ({
+  // getUserById: (id) => dispatch(getUserById(id)),
+});
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(userInfo)
+);

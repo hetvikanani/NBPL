@@ -26,6 +26,8 @@ import ForgetPassword from "container/ForgetPassword";
 import ChangePassword from "container/ChangePassword";
 import PackageAddEdit from "container/PackageAddEdit";
 import PartnerAddEdite from "container/PartnerAddEdite";
+// import NewUser from "container/NewUserAddEdite";
+// import UserList from "container/UserList";
 // import ForgetPassword from "container/Forgetpwd";
 // import ResetPassword from "container/ResetPwd";
 const type = localStorage.auth && JSON.parse(localStorage.auth).role;
@@ -122,7 +124,25 @@ const routes = [
     component: SalesAddEdit,
   },
   {
-    path: "/productDetail/:name",
+    path: "/users",
+    exact: true,
+    AuthRoute: true,
+    component: UserList,
+  },
+  {
+    path: "/user/new",
+    exact: true,
+    AuthRoute: true,
+    component: NewUser,
+  },
+  {
+    path: "/edit-user/:id",
+    exact: true,
+    AuthRoute: true,
+    component: NewUser,
+  },
+  {
+    path: "/productDetail/:name/:id",
     exact: true,
     AuthRoute: true,
     component: ProductDetail,
@@ -135,6 +155,12 @@ const routes = [
   },
   {
     path: "/wallet",
+    exact: true,
+    AuthRoute: true,
+    component: Wallet,
+  },
+  {
+    path: "/wallet/:id",
     exact: true,
     AuthRoute: true,
     component: Wallet,
@@ -182,19 +208,31 @@ const routes = [
     component: AdminProduct,
   },
   {
+    path: "/product/edit/:id",
+    exact: true,
+    AuthRoute: true,
+    component: AdminProduct,
+  },
+  {
     path: "/product",
     exact: true,
     AuthRoute: true,
     component: Products,
   },
   {
-    path: "/package-list/:name",
+    path: "/package-list/:name/:id",
     exact: true,
     AuthRoute: true,
     component: PackageList,
   },
   {
-    path: "/package/new",
+    path: "/package/:name/new/:id",
+    exact: true,
+    AuthRoute: true,
+    component: PackageAddEdit,
+  },
+  {
+    path: "/package/:name/edit/:id/:editid",
     exact: true,
     AuthRoute: true,
     component: PackageAddEdit,

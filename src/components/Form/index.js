@@ -23,8 +23,8 @@ import UserRole from "components/UserRole";
 import ContactDetails from "components/ContactDetails";
 import BasicDetails from "components/BasicDetails";
 import FinancialDetails from "components/FinancialDetails";
-import ProAddEditDetail from "components/ProductAddEdit";
-import ProductDocument from "components/ProductDoc";
+import ProductAddEdit from "components/ProductAddEdit";
+import ProductDocument from "components/ProductDocument";
 import Pagination from "components/Pagination";
 
 export {
@@ -53,7 +53,7 @@ export {
   ContactDetails,
   BasicDetails,
   FinancialDetails,
-  ProAddEditDetail,
+  ProductAddEdit,
   ProductDocument,
   Pagination,
 };

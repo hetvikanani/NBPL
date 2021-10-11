@@ -24,7 +24,7 @@ const UserRoleStyle = styled.div`
     }
   }
   .tableDiv {
-    margin-top: 2em;
+    padding-top: 1em;
     overflow-x: auto;
     table {
       width: 100%;

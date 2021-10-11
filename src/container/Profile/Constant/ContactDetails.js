@@ -68,7 +68,7 @@ export default class ContactDetails extends Component {
                     }
                   />
                   <Input
-                    placeholder={ContactConst.contact_nameplace}
+                    // placeholder={ContactConst.contact_nameplace}
                     className={
                       errors.contact_name && touched.contact_name ? "empty" : ""
                     }
@@ -87,7 +87,7 @@ export default class ContactDetails extends Component {
                     }
                   />
                   <Input
-                    placeholder={ContactConst.mobileplace}
+                    // placeholder={ContactConst.mobileplace}
                     type="number"
                     className={
                       errors.mobile_no && touched.mobile_no ? "empty" : ""
@@ -110,7 +110,7 @@ export default class ContactDetails extends Component {
                     }
                   />
                   <Input
-                    placeholder={ContactConst.emailplace}
+                    // placeholder={ContactConst.emailplace}
                     className={
                       errors.email_id && touched.email_id ? "empty" : ""
                     }
@@ -127,7 +127,9 @@ export default class ContactDetails extends Component {
 
                 <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
                   <Label title={ContactConst.designation} />
-                  <Input placeholder={ContactConst.designationplace} />
+                  <Input
+                  // placeholder={ContactConst.designationplace}
+                  />
                 </Col>
               </Row>
               <div className="btnDiv anime">
