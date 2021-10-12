@@ -2,34 +2,44 @@ import React, { Component } from "react";
 import { Row, Col, Divider } from "antd";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import { changePartnerData } from "redux/partner/action";
 import { Input, Label, Button } from "components/Form";
 import { ContactConst } from "../constant";
 import { ButtonConst, FormValidation } from "App/AppConstant";
 
-const ValidationSchema = Yup.object().shape({
-  contact_name: Yup.string()
+const UserValidation = Yup.object().shape({
+  contactName: Yup.string()
     .trim()
     .required(FormValidation.alphaNumValid)
     .matches(/^[aA-zZ0-9\s]+$/, FormValidation.alphaValid),
-  mobile_no: Yup.string()
+  mobile: Yup.string()
     .trim()
     .min(10)
     .max(10)
     .required(FormValidation.mobileInvalid),
-  email_id: Yup.string().trim().email().required(FormValidation.emailInvalid),
+  emailId: Yup.string().trim().email().required(FormValidation.emailInvalid),
+  designation: Yup.string()
+    .trim()
+    .matches(/^[aA-zZ\s]+$/, FormValidation.alphaValid),
 });
 
-export default class ContactDetails extends Component {
+class ContactDetails extends Component {
   constructor() {
     super();
     this.state = {
-      initState: { contact_name: "", mobile_no: "", email_id: "" },
+      disable: false,
+      prev: [],
     };
   }
 
+  changeDataForm = (fieldName, value) =>
+    this.props.changePartnerData(fieldName, value);
+
   handleSubmit = async (values, { setSubmitting }) => {
     try {
+      const { prev } = this.state;
       this.setState({ btnDisable: true });
       setTimeout(() => {
         this.setState({ btnDisable: false });
@@ -41,12 +51,14 @@ export default class ContactDetails extends Component {
   };
 
   render() {
-    const { initState } = this.state;
+    const { disable } = this.state;
+    const { partner } = this.props;
     return (
       <div>
         <Formik
-          initialValues={initState}
-          validationSchema={ValidationSchema}
+          enableReinitialize
+          // initialValues={data}
+          validationSchema={UserValidation}
           onSubmit={this.handleSubmit}
         >
           {({
@@ -64,17 +76,16 @@ export default class ContactDetails extends Component {
                   <Label
                     title={ContactConst.contact_name}
                     className={
-                      errors.contact_name && touched.contact_name ? "empty" : ""
+                      errors.contactName && touched.contactName ? "empty" : ""
                     }
                   />
                   <Input
-                    // placeholder={ContactConst.contact_nameplace}
                     className={
-                      errors.contact_name && touched.contact_name ? "empty" : ""
+                      errors.contactName && touched.contactName ? "empty" : ""
                     }
                     onBlur={handleBlur}
-                    name="contact_name"
-                    value={values.contact_name}
+                    name="contactName"
+                    value={values.contactName}
                     handleChange={handleChange}
                     tabIndex="1"
                   />
@@ -82,54 +93,42 @@ export default class ContactDetails extends Component {
                 <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
                   <Label
                     title={ContactConst.mobile}
-                    className={
-                      errors.mobile_no && touched.mobile_no ? "empty" : ""
-                    }
+                    className={errors.mobile && touched.mobile ? "empty" : ""}
                   />
                   <Input
-                    // placeholder={ContactConst.mobileplace}
                     type="number"
-                    className={
-                      errors.mobile_no && touched.mobile_no ? "empty" : ""
-                    }
+                    className={errors.mobile && touched.mobile ? "empty" : ""}
                     onBlur={handleBlur}
-                    name="mobile_no"
-                    value={values.mobile_no}
+                    name="mobile"
+                    value={values.mobile}
                     handleChange={handleChange}
                     tabIndex="2"
                   />
-                  {errors.mobile_no && touched.mobile_no && (
-                    <div className="form-error">{errors.mobile_no}</div>
+                  {errors.mobile && touched.mobile && (
+                    <div className="form-error">{errors.mobile}</div>
                   )}
                 </Col>
                 <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
                   <Label
                     title={ContactConst.email}
-                    className={
-                      errors.email_id && touched.email_id ? "empty" : ""
-                    }
+                    className={errors.emailId && touched.emailId ? "empty" : ""}
                   />
                   <Input
-                    // placeholder={ContactConst.emailplace}
-                    className={
-                      errors.email_id && touched.email_id ? "empty" : ""
-                    }
+                    className={errors.emailId && touched.emailId ? "empty" : ""}
                     onBlur={handleBlur}
-                    name="email_id"
-                    value={values.email_id}
+                    name="emailId"
+                    value={values.emailId}
                     handleChange={handleChange}
                     tabIndex="3"
                   />
-                  {errors.email_id && touched.email_id && (
-                    <div className="form-error">{errors.email_id}</div>
+                  {errors.emailId && touched.emailId && (
+                    <div className="form-error">{errors.emailId}</div>
                   )}
                 </Col>
 
                 <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
                   <Label title={ContactConst.designation} />
-                  <Input
-                  // placeholder={ContactConst.designationplace}
-                  />
+                  <Input />
                 </Col>
               </Row>
               <div className="btnDiv anime">
@@ -143,3 +142,17 @@ export default class ContactDetails extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  loading: state.partner.loading,
+  error: state.partner.error,
+  message: state.partner.message,
+  partners: state.partner.partners,
+  partner: state.partner.partner,
+});
+const mapDispatchToProps = (dispatch) => ({
+  changePartnerData: (key, value) => dispatch(changePartnerData(key, value)),
+});
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(ContactDetails)
+);

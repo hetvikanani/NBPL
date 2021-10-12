@@ -175,5 +175,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 .highZ{z-index: 22;}
 .highZ2{z-index: 20;}
+
+.empty{
+  color: red;
+}
+
 `;
 export default GlobalStyle;

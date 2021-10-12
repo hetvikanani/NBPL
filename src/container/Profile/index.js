@@ -63,7 +63,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => ({
   getPartners: (payload) => dispatch(getPartners(payload)),
-  getPartnerById: (id) => dispatch(getPartnerById(2)),
+  getPartnerById: (id) => dispatch(getPartnerById(20)),
 });
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(Profile)

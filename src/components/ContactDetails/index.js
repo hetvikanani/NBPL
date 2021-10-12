@@ -1,16 +1,17 @@
 import React, { Component } from "react";
-import { Row, Col } from "antd";
+import { Row, Col, message } from "antd";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
 import { contactConst } from "./constant";
 import { connect } from "react-redux";
-import { changePartnerData, getPartnerById } from "redux/partner/action";
+import { changePartnerData } from "redux/partner/action";
 
 import { ContDetailsStyle } from "./style";
 import { Input, Label, Button } from "components/Form";
 import { FormValidation } from "App/AppConstant";
 import { withRouter } from "react-router";
+
 const UserValidation = Yup.object().shape({
   contactName: Yup.string()
     .trim()
@@ -22,6 +23,7 @@ const UserValidation = Yup.object().shape({
     .trim()
     .matches(/^[aA-zZ\s]+$/, FormValidation.alphaValid),
 });
+
 class ContactDetails extends Component {
   constructor(props) {
     super(props);
@@ -34,33 +36,38 @@ class ContactDetails extends Component {
     this.props.changePartnerData(fieldName, value);
 
   increase = (key, val) => {
-    const { prev } = this.state;
     const { partner } = this.props;
-    const newData = partner?.contactDetails?.map((data) => {
-      if (data.key === key) {
-        return { ...data, save: true };
-      } else return data;
-    });
-    let prevData = prev;
-    prevData.push(val);
-    this.changeDataForm("contactDetails", [
-      ...newData,
-      {
-        contactId: 0,
-        partnerId: 0,
-        key: uuidv4(),
-        contactName: "",
-        mobile: "",
-        emailId: "",
-        designation: "",
-        check: false,
-        save: false,
-        isDelete: 0,
-      },
-    ]);
-    this.setState({
-      prev: prevData,
-    });
+
+    const { prev } = this.state;
+    let mobile = this.checkMobile(val.mobile);
+    let emailId = this.checkEmail(val.emailId);
+    if (mobile && emailId) {
+      const newData = partner?.contactDetails?.map((data) => {
+        if (data.key === key) {
+          return { ...data, save: true };
+        } else return data;
+      });
+      let prevData = prev;
+      prevData.push(val);
+      this.changeDataForm("contactDetails", [
+        ...newData,
+        {
+          contactId: 0,
+          partnerId: 0,
+          key: uuidv4(),
+          contactName: "",
+          mobile: "",
+          emailId: "",
+          designation: "",
+          check: false,
+          save: false,
+          isDelete: 0,
+        },
+      ]);
+      this.setState({
+        prev: prevData,
+      });
+    }
   };
 
   remove = (key, setFieldValue, handleReset) => {
@@ -75,17 +82,19 @@ class ContactDetails extends Component {
   };
   handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const { partner } = this.props;
+      // const { partner } = this.props;
       const { prev } = this.state;
       this.setState({ btnDisable: true, check: true });
       setTimeout(() => {
         this.setState({ btnDisable: false });
       }, 4500);
       let prevData = prev;
-      prevData.push(values);
-
-      this.props.apiCall();
-
+      let mobile = this.checkMobile(values.mobile);
+      let emailId = this.checkEmail(values.emailId);
+      if (mobile && emailId) {
+        prevData.push(values);
+        this.props.apiCall();
+      }
       setSubmitting(false);
     } catch (error) {
       console.log(error);
@@ -98,6 +107,45 @@ class ContactDetails extends Component {
     data[index][fieldName] = e.target.value;
     this.changeDataForm("contactDetails", data);
     setFieldValue(fieldName, e.target.value);
+  };
+
+  checkMobile = (val) => {
+    try {
+      const { partner } = this.props;
+      let final = partner?.contactDetails?.filter(
+        (data) => data.isDelete !== 1
+      );
+      if (final) {
+        const inx = final.findIndex((d) => d.mobile === val.toString());
+        if (inx > -1 && final.length - 1 !== inx) {
+          message.error("Mobile Number already used");
+          return false;
+        }
+      }
+      return true;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  checkEmail = (val) => {
+    try {
+      const { partner } = this.props;
+      let final = partner?.contactDetails?.filter(
+        (data) => data.isDelete !== 1
+      );
+      if (final) {
+        const inx = final.findIndex((d) => d.emailId === val.toString());
+        if (inx > -1 && final.length - 1 !== inx) {
+          message.error("Email already used");
+          return false;
+        }
+      }
+
+      return true;
+    } catch (error) {
+      console.log(error);
+    }
   };
   render() {
     const { disable } = this.state;
@@ -127,6 +175,7 @@ class ContactDetails extends Component {
                 validateForm,
                 setFieldValue,
                 handleReset,
+                setFieldError,
               }) => (
                 <Form onSubmit={handleSubmit}>
                   <Row gutter={20}>
@@ -172,6 +221,7 @@ class ContactDetails extends Component {
                       className="anime"
                     >
                       <div className="field">
+                        {console.log(errors, touched)}
                         <Label
                           title={contactConst.mobile}
                           className={
@@ -186,15 +236,15 @@ class ContactDetails extends Component {
                           name="mobile"
                           type="number"
                           value={values.mobile}
-                          handleChange={(e) => {
+                          handleChange={handleChange}
+                          onChange={(e) => {
                             this.proex(e, index, setFieldValue, "mobile");
-
-                            // partner.contactDetails.filter(
-                            //   (x) => x.mobile === e.value
-                            // );
                           }}
                           tabIndex="2"
                         />
+                        {errors.mobile && (
+                          <span className="empty">{errors.mobile}</span>
+                        )}
                       </div>
                     </Col>
                     <Col
@@ -206,6 +256,8 @@ class ContactDetails extends Component {
                       className="anime"
                     >
                       <div className="field">
+                        {console.log(errors, touched)}
+
                         <Label
                           title={contactConst.email}
                           className={
@@ -219,11 +271,14 @@ class ContactDetails extends Component {
                           onBlur={handleBlur}
                           name="emailId"
                           value={values.emailId}
+                          handleChange={handleChange}
                           onChange={(e) => {
                             this.proex(e, index, setFieldValue, "emailId");
                           }}
-                          tabIndex="3"
                         />
+                        {errors.emailId && (
+                          <span className="empty">{errors.emailId}</span>
+                        )}
                       </div>
                     </Col>
                     <Col
@@ -269,7 +324,7 @@ class ContactDetails extends Component {
                           onClick={() => {
                             validateForm().then((d) => {
                               if (Object.keys(d).length === 0)
-                                this.increase(data.key);
+                                this.increase(data.key, values, setFieldError);
                               else handleSubmit();
                             });
                           }}
@@ -279,7 +334,6 @@ class ContactDetails extends Component {
                       )}
                       {finalContactDetials?.length !== 1 && (
                         <Button
-                          type="button"
                           onClick={() => {
                             this.remove(data.key, setFieldValue, handleReset);
                           }}
@@ -292,12 +346,11 @@ class ContactDetails extends Component {
                       {finalContactDetials?.length - 1 === index && (
                         <>
                           <Button
-                            type="button"
                             onClick={() => this.props.history.push("/partners")}
                           >
                             {contactConst.cancle}
                           </Button>
-                          <Button type="button" onClick={this.props.previous}>
+                          <Button onClick={this.props.previous}>
                             {contactConst.previous}
                           </Button>
                         </>

@@ -51,6 +51,7 @@ class BasicDetails extends Component {
   };
   fileUpload = (setFieldValue) => {
     try {
+      debugger;
       const { partner } = this.props;
       let name = partner?.imgnm;
 
@@ -60,7 +61,7 @@ class BasicDetails extends Component {
         return (
           <>
             <span className="optionui">
-              <span className="txtWrap">{"name"}</span>
+              <span className="txtWrap">{"name" || ""}</span>
               <CloseOutlined onClick={() => this.removefile(setFieldValue)} />
             </span>
             <Image src={partner?.companyLogo} width={50} height={30} />

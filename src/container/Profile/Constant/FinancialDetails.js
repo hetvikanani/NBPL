@@ -3,18 +3,20 @@ import { Input, Label, Button, Select } from "components/Form";
 import { Row, Col } from "antd";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { ProfileStyle } from "../style";
 import { FinancialConst } from "../constant";
 import { ButtonConst } from "App/AppConstant";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { changePartnerData } from "redux/partner/action";
 
-const ValidationSchema = Yup.object().shape({
-  bank_name: Yup.string().trim().required(" "),
-  branch_name: Yup.string()
+const UserValidation = Yup.object().shape({
+  bankName: Yup.string().trim().required(" "),
+  branchName: Yup.string()
     .trim()
     .required(" ")
     .matches(/^[aA-zZ\s]+$/, ""),
-  account_no: Yup.string().trim().min(11).max(11).required(" "),
-  ifsc_code: Yup.string()
+  accountNumber: Yup.string().trim().min(11).max(11).required(" "),
+  ifscCode: Yup.string()
     .trim()
     .required(" ")
     .matches(/^[A-Z]{4}0[A-Z0-9]{6}$/, "only"),
@@ -24,20 +26,11 @@ const ValidationSchema = Yup.object().shape({
   state: Yup.string().trim().required(" "),
 });
 
-export default class FinancialDetails extends Component {
+class FinancialDetails extends Component {
   constructor() {
     super();
     this.state = {
-      initState: {
-        bank_name: "",
-        branch_name: "",
-        account_no: "",
-        ifsc_code: "",
-        address: "",
-        pincode: "",
-        city: "",
-        state: "",
-      },
+      disable: false,
     };
   }
 
@@ -53,7 +46,13 @@ export default class FinancialDetails extends Component {
     }
   };
 
+  changeDataForm = (fieldName, value) =>
+    this.props.changePartnerData(fieldName, value);
+
   render() {
+    const { disable } = this.state;
+    const { partner } = this.props;
+
     let bank = [
       "Canara Bank",
       "Bank of India",
@@ -63,14 +62,15 @@ export default class FinancialDetails extends Component {
     let city = ["Rajkot", "Ahmedabad", "Surat", "Baroda"];
     let state = ["Gujarat", "Utter Pradesh", "Goa", "Maharastra"];
 
-    const { initState } = this.state;
+    // const { initState } = this.state;
 
     return (
       <div>
         <Formik
-          initialValues={initState}
-          validationSchema={ValidationSchema}
+          initialValues={partner}
+          validationSchema={UserValidation}
           onSubmit={this.handleSubmit}
+          enableReinitialize
         >
           {({
             values,
@@ -88,39 +88,41 @@ export default class FinancialDetails extends Component {
                   <Label
                     title={FinancialConst.bank_name}
                     className={
-                      errors.bank_name && touched.bank_name ? "empty" : ""
+                      errors.bankName && touched.bankName ? "empty" : ""
                     }
                   />
-                  <Select
-                    // placeholder={FinancialConst.bank_nameplace}
-                    data={bank}
-                    selectClass={
-                      errors.bank_name && touched.bank_name ? "empty" : ""
-                    }
-                    name="bank_name"
-                    tabIndex="1"
-                    value={values.bank_name}
-                    onChange={(value) => {
-                      setFieldValue("bank_name", value);
+                  <Input
+                    onBlur={handleBlur}
+                    name="bankName"
+                    value={values.bankName}
+                    handleChange={(e) => {
+                      handleChange(e);
+                      this.changeDataForm("bankName", e.target.value);
                     }}
+                    tabIndex="1"
+                    className={
+                      errors.bankName && touched.bankName ? "empty" : ""
+                    }
                   />
                 </Col>
                 <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
                   <Label
                     title={FinancialConst.branch_name}
                     className={
-                      errors.branch_name && touched.branch_name ? "empty" : ""
+                      errors.branchName && touched.branchName ? "empty" : ""
                     }
                   />
                   <Input
-                    // placeholder={FinancialConst.branch_nameplace}
                     className={
-                      errors.branch_name && touched.branch_name ? "empty" : ""
+                      errors.branchName && touched.branchName ? "empty" : ""
                     }
                     onBlur={handleBlur}
-                    name="branch_name"
-                    value={values.branch_name}
-                    handleChange={handleChange}
+                    name="branchName"
+                    value={values.branchName}
+                    handleChange={(e) => {
+                      handleChange(e);
+                      this.changeDataForm("branchName", e.target.value);
+                    }}
                     tabIndex="2"
                   />
                 </Col>
@@ -128,19 +130,25 @@ export default class FinancialDetails extends Component {
                   <Label
                     title={FinancialConst.account_no}
                     className={
-                      errors.account_no && touched.account_no ? "empty" : ""
+                      errors.accountNumber && touched.accountNumber
+                        ? "empty"
+                        : ""
                     }
                   />
                   <Input
-                    // placeholder={FinancialConst.account_noplace}
                     type="number"
                     className={
-                      errors.account_no && touched.account_no ? "empty" : ""
+                      errors.accountNumber && touched.accountNumber
+                        ? "empty"
+                        : ""
                     }
                     onBlur={handleBlur}
-                    name="account_no"
-                    value={values.account_no}
-                    handleChange={handleChange}
+                    name="accountNumber"
+                    value={values.accountNumber}
+                    handleChange={(e) => {
+                      handleChange(e);
+                      this.changeDataForm("accountNumber", e.target.value);
+                    }}
                     tabIndex="3"
                   />
                 </Col>
@@ -152,14 +160,16 @@ export default class FinancialDetails extends Component {
                     }
                   />
                   <Input
-                    // placeholder={FinancialConst.ifscplace}
                     className={
-                      errors.ifsc_code && touched.ifsc_code ? "empty" : ""
+                      errors.ifscCode && touched.ifscCode ? "empty" : ""
                     }
                     onBlur={handleBlur}
-                    name="ifsc_code"
-                    value={values.ifsc_code}
-                    handleChange={handleChange}
+                    name="ifscCode"
+                    value={values.ifscCode}
+                    handleChange={(e) => {
+                      handleChange(e);
+                      this.changeDataForm("ifscCode", e.target.value);
+                    }}
                     tabIndex="4"
                   />
                 </Col>
@@ -170,12 +180,14 @@ export default class FinancialDetails extends Component {
                   />
                   <Input
                     rows={2}
-                    // placeholder={FinancialConst.addressplace}
                     className={errors.address && touched.address ? "empty" : ""}
                     onBlur={handleBlur}
                     name="address"
+                    handleChange={(e) => {
+                      handleChange(e);
+                      this.changeDataForm("address", e.target.value);
+                    }}
                     value={values.address}
-                    handleChange={handleChange}
                     tabIndex="5"
                   />
                 </Col>
@@ -185,38 +197,16 @@ export default class FinancialDetails extends Component {
                     className={errors.pincode && touched.pincode ? "empty" : ""}
                   />
                   <Input
-                    // placeholder={FinancialConst.pincodeplace}
                     className={errors.pincode && touched.pincode ? "empty" : ""}
                     onBlur={handleBlur}
                     name="pincode"
                     type="number"
                     value={values.pincode}
-                    handleChange={handleChange}
-                    tabIndex="6"
-                  />
-                </Col>
-                <Col
-                  xs={24}
-                  sm={24}
-                  md={12}
-                  lg={8}
-                  xl={8}
-                  className="anime highZ"
-                >
-                  <Label
-                    title={FinancialConst.city}
-                    className={errors.city && touched.city ? "empty" : ""}
-                  />
-                  <Select
-                    // placeholder={FinancialConst.cityplace}
-                    data={city}
-                    selectClass={errors.city && touched.city ? "empty" : ""}
-                    name="city"
-                    tabIndex="7"
-                    value={values.city}
-                    onChange={(value) => {
-                      setFieldValue("city", value);
+                    handleChange={(e) => {
+                      handleChange(e);
+                      this.changeDataForm("pincode", e.target.value);
                     }}
+                    tabIndex="6"
                   />
                 </Col>
                 <Col
@@ -231,16 +221,40 @@ export default class FinancialDetails extends Component {
                     title={FinancialConst.state}
                     className={errors.state && touched.state ? "empty" : ""}
                   />
-                  <Select
-                    // placeholder={FinancialConst.stateplace}
-                    data={state}
-                    selectClass={errors.state && touched.state ? "empty" : ""}
+                  <Input
+                    onBlur={handleBlur}
                     name="state"
-                    tabIndex="8"
                     value={values.state}
-                    onChange={(value) => {
-                      setFieldValue("state", value);
+                    handleChange={(e) => {
+                      handleChange(e);
+                      this.changeDataForm("state", e.target.value);
                     }}
+                    tabIndex="8"
+                    className={errors.state && touched.state ? "empty" : ""}
+                  />
+                </Col>
+                <Col
+                  xs={24}
+                  sm={24}
+                  md={12}
+                  lg={8}
+                  xl={8}
+                  className="anime highZ"
+                >
+                  <Label
+                    title={FinancialConst.city}
+                    className={errors.city && touched.city ? "empty" : ""}
+                  />
+                  <Input
+                    onBlur={handleBlur}
+                    name="city"
+                    value={values.city}
+                    handleChange={(e) => {
+                      handleChange(e);
+                      this.changeDataForm("city", e.target.value);
+                    }}
+                    tabIndex="7"
+                    className={errors.city && touched.city ? "empty" : ""}
                   />
                 </Col>
               </Row>
@@ -254,3 +268,17 @@ export default class FinancialDetails extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  loading: state.partner.loading,
+  error: state.partner.error,
+  message: state.partner.message,
+  partners: state.partner.partners,
+  partner: state.partner.partner,
+});
+const mapDispatchToProps = (dispatch) => ({
+  changePartnerData: (key, value) => dispatch(changePartnerData(key, value)),
+});
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(FinancialDetails)
+);
