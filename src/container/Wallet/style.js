@@ -63,15 +63,19 @@ const WalletStyle = styled.div`
       .table-div {
         margin-top: 2em;
         overflow-x: auto;
-        // .ant-table-tbody{
-        //   tr:nth-child(odd){
-        //     background-color: #e2e2e2;
-        //   }
-        // }
+        // .ant-table-tbody{tr:nth-child(odd){background-color: #e2e2e2;}}
       }
-      .last-para {
-        font-weight: 600;
-        margin-top: 16px;
+      .bottomDiv {
+        display: flex;
+        align-items: center;
+        margin-top: 1em;
+        .last-para {
+          font-weight: 600;
+          margin-bottom: 0;
+        }
+        .pagiDiv {
+          margin-left: auto;
+        }
       }
       .inputNum-div {
         margin: 25px 0 0 0;
@@ -83,7 +87,7 @@ const WalletStyle = styled.div`
           display: flex;
           justify-content: center;
           align-items: center;
-          @media ${size["tablet-sm-max"]}{
+          @media ${size["tablet-sm-max"]} {
             justify-content: flex-start;
           }
           // .ant-input-number {
@@ -103,7 +107,7 @@ const WalletStyle = styled.div`
             margin-left: 0;
             margin-top: 10px;
           }
-        }        
+        }
       }
     }
   }

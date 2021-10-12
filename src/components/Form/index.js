@@ -2,7 +2,7 @@ import Button from "components/Button";
 import Checkbox from "components/Checkbox";
 import DatePicker from "components/DatePicker";
 import Dropdown from "components/Dropdown";
-import Header from "components/Header2";
+import Header from "components/Header";
 import Input from "components/Input";
 import Label from "components/Label";
 import PageLoader from "components/PageLoader";
@@ -23,8 +23,9 @@ import UserRole from "components/UserRole";
 import ContactDetails from "components/ContactDetails";
 import BasicDetails from "components/BasicDetails";
 import FinancialDetails from "components/FinancialDetails";
-import ProAddEditDetail from "components/ProAddEditDetail";
+import ProductAddEdit from "components/ProductAddEdit";
 import ProductDocument from "components/ProductDocument";
+import Pagination from "components/Pagination";
 
 export {
   Button,
@@ -52,6 +53,7 @@ export {
   ContactDetails,
   BasicDetails,
   FinancialDetails,
-  ProAddEditDetail,
+  ProductAddEdit,
   ProductDocument,
+  Pagination,
 };

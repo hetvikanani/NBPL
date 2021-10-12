@@ -8,7 +8,7 @@ const ContDetailsStyle = styled.div`
   background-color: #ffff;
   box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
 
-  h2 {
+  h3 {
     color: ${Theme.mainColor};
   }
   .formDiv {
@@ -36,9 +36,8 @@ const ContDetailsStyle = styled.div`
             margin-top: 1em;
           }
         }
-        
       }
-      .rightBtnDiv{
+      .rightBtnDiv {
         margin-left: auto;
         @media ${size["mobile-md-max"]} {
           margin-top: 1em;
@@ -48,6 +47,7 @@ const ContDetailsStyle = styled.div`
       button {
         height: 35px;
         line-height: 35px;
+        margin-right: 10px;
       }
     }
   }

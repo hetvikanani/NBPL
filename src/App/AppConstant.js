@@ -1,4 +1,6 @@
 const FormValidation = {
+  req: "*",
+  colon: ":",
   name: "Please enter Name",
   nameMin: "Please enter at least 3 characters.",
   emailRequired: "Email Is Required",
@@ -17,11 +19,13 @@ const FormValidation = {
   alphaValid: "Only alphabets are allowed for this field",
   gstvalid: "Enter valid GST no.",
   panValid: "Enter valid pan no.",
+  alphaNumValid:
+    "Please enter only alphanumeric letters. Special characters are not allowed",
 };
 const pwdMatch =
   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$*#?&^_()[\]])[A-Za-z\d@$*#?&^_()[\]]{8,}$/;
 const gstConst = /\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}/;
-const panConst = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
+const panConst = /[A-Z]{5}\d{4}[A-Z]{1}/;
 const ButtonConst = {
   next: "Next",
   cancel: "Cancel",
@@ -33,16 +37,17 @@ const ButtonConst = {
   download: "Download",
   answer: "Answer",
   decline: "Decline",
-  Upload: "Upload",
+  upload: "Upload",
   logout: "Logout",
   select: "Select",
   genLicence: "Generate Licence",
   payment: "Payment",
   updatePWD: "Update Password",
-  search:"search..."
+  update: "Update",
+  search: "search...",
 };
 const ConfirmConst = {
-  header: "Log-out",
+  header: "Log out",
   message: "Are you sure you want to log-out?",
   yes: "Yes",
   no: "No",
@@ -53,7 +58,7 @@ const RemoveConst = {
   no: "No ",
   header: "Delete ",
   que: " ?",
-  logout:"Log-out",
+  logout: "Log-out",
   deleteMessage: "Are you sure you want to remove ",
   logMessage: "Are you sure you want to logout?",
   dropText: "Drop image here or click to browse file here",

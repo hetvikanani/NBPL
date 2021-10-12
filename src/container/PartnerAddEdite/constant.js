@@ -1,4 +1,4 @@
-const PartnerAddEditConst={
-    addNewPart:"Add New Partner"
-    }
-      export {PartnerAddEditConst};
+const PartnerAddEditConst = {
+  addPart: "Add New Partner",
+};
+export { PartnerAddEditConst };

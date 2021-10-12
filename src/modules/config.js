@@ -1,17 +1,16 @@
 // export const configVar = { BASE_URL: "https://partnerapi.naapbooks.com/" };
 export const configVar = { BASE_URL: "http://192.168.1.59/" };
-
-
 export const apiConstant = {
   AUTH_LOGIN: "api/Admin​/Login/",
   AUTH_LOGOUT: "api/Account/Logout/",
-  FORGET_PASSWORD: "/api/Admin​/ForgotPassword​/",
+  FORGET_PASSWORD: "api/Admin​/ForgotPassword​/",
+  PARTNER_LOGIN: "​api​/Partner​/Login​/",
+  FORGET_PARTNER_PASSWORD: "api/Partner​/ForgotPassword​/",
   // CHECK_SESSION: "api/Account/CheckSession/",
   // CHANGE_PASSWORD: "api/Account/ChangePassword",
   // AUTH_REGISTER: "/api/Chat/Registration",
   // GET_ALL_USER: "/api/User/GetAllUsers",}
 };
-
 export const crmConst = {
   SAVE_PROSPECT: "api​/Partner​/SaveProspect​/",
   GET_PROSPECT: "api​/Partner​/GetProspectList",
@@ -31,6 +30,7 @@ export const crmConst = {
   GET_LEAD_CUSTOMER: "api​/Partner​/GetLeadCustomer/",
   SAVE_SALES: "api​/Partner​/SaveSales/",
   GET_SALES: "api​/Partner​/GetSalesList/",
+  GET_SALES_DASHBOARD: "​/api​/Partner​/GetSalesDashboard​/",
 };
 export const partnerConst = {
   SAVE_PARTNER: "api​/Admin​/SavePartner/",
@@ -39,14 +39,12 @@ export const partnerConst = {
   GET_PARTNER_BY_ID: "api​/Admin​/GetPartnerbyId​/",
 };
 export const partnerUsersConst = {
-  LOGIN: "api​/Partner​/Login/",
-  FORGET_PASSWORD: "api​/Partner​/ForgotPassword/",
   SAVE_CONTACTUS: "api​/Partner​/SaveContactus​/",
   SAVE_SUPPORT: "api​/Partner​/SaveSupport/",
 };
 export const productConst = {
-  SAVE_PRODUCT: "api​/Admin​/SaveProduct/",
-  GET_PRODUCT: "api​/Admin​/GetProductList/",
+  SAVE_PRODUCT: "api​/Admin​/SaveProduct",
+  GET_PRODUCT: "api​/Admin​/GetProductList",
   DELETE_PRODUCT: "api​/Admin​/DeleteProduct​/",
 };
 export const subscribeConst = {
@@ -54,7 +52,20 @@ export const subscribeConst = {
   SAVE_PRODUCT_PACKAGE: "api​/Subscribe​/SaveProductPackage​/",
   GET_PRODUCT_PACKAGE: "api​/Subscribe​/GetProductPackageList​/",
   DELETE_PRODUCT_PACKAGE: "api​/Subscribe​/DeleteProductPackage​/",
+  GET_PACKAGE_BY_ID: "api​/Subscribe​/GetPackageByProductId​/",
 };
 export const weatherConst = {
   WEATHER_FORECAST: "​/WeatherForecast/",
+};
+export const userConst = {
+  GET_USER_RIGHTS: "api​/Admin​/GetUserRights",
+  SAVE_USER: "api​/Admin​/SaveUser",
+  GET_USERS: "api​/Admin​/GetUserList",
+  DELETE_USER: "api​/Admin​/DeleteUser​/",
+  GET_USER_BY_ID: "api​/Admin​/GetUserrbyId​/",
+};
+export const WalletConst = {
+  ADD_WITHDARAW_MONEY: "api​/Admin​/AddWithdrawMoney/",
+  TARANSACTION_HISTORY: "api​/Admin​/TransactionHistoryList",
+  CURRENTBALENCE: "api​/Admin​/CurrentBalence/",
 };

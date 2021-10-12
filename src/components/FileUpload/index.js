@@ -5,10 +5,10 @@ import { withRouter } from "react-router-dom";
 class FileUpload extends Component {
   beforeUpload = async (file) => {
     try {
-      const { image, video,pdf } = this.props;
+      const { image, video, pdf } = this.props;
       if (image || video) {
-        if (image && file.size > 300000)
-          message.error("Select smaller size image(less then 300kb)");
+        if (image && file.size > 3000000)
+          message.error("Select smaller size image(less then 3mb)");
         else if (video && file.size > 2000000)
           message.error("Select smaller size video(less then 500kb)");
         else {
@@ -19,7 +19,7 @@ class FileUpload extends Component {
             this.props.sendByte(reader.result, file.name,base64);
           };
         }
-      }else if(pdf) {
+      } else if (pdf) {
         let reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = () => {

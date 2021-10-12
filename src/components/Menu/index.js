@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { StyledComponent } from "./style";
 import { MenuItems, HelpMenu, CRMMenu, AdminItems } from "./constant";
 import { logoWhite, nbpl } from "components/Images";
+import { Theme } from "App/theme";
 
 const { SubMenu } = Menu;
 
@@ -57,15 +58,7 @@ class MenuComponent extends Component {
       let url = path.toLowerCase();
       url = url.replace("-", " ");
       let mi = [];
-
-      let admin =
-        pathname === "/partners" ||
-        pathname === "/add-new-partner" ||
-        pathname === "/admin-product" ||
-        pathname === "/add-new-product" ||
-        pathname === "/users" ||
-        pathname === "/add-new-user";
-      if (admin === true) mi = AdminItems;
+      if (type === "admin") mi = AdminItems;
       else mi = MenuItems;
       return mi.map((a, i) => {
         let cls =
@@ -109,8 +102,12 @@ class MenuComponent extends Component {
     const { openKey } = this.state;
     let path = location.pathname.slice(1);
     let key = [];
+    let admin =
+      localStorage.auth && JSON.parse(localStorage.auth).role === "admin";
     return (
-      <StyledComponent>
+      <StyledComponent
+        style={{ backgroundColor: admin ? Theme.adColor : Theme.mainColor }}
+      >
         <div className="logo">
           <Image
             width={collapsed ? 30 : 128}

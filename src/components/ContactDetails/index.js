@@ -3,17 +3,24 @@ import { Row, Col } from "antd";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
-import { contactDetailConst } from "./constant";
+import { contactConst } from "./constant";
+import { connect } from "react-redux";
+import { changePartnerData, getPartnerById } from "redux/partner/action";
+
 import { ContDetailsStyle } from "./style";
 import { Input, Label, Button } from "components/Form";
-
+import { FormValidation } from "App/AppConstant";
+import { withRouter } from "react-router";
 const UserValidation = Yup.object().shape({
   contactName: Yup.string()
     .trim()
     .required(" ")
-    .matches(/^[aA-zZ0-9\s]+$/, "Only alphabets are allowed for this field "),
+    .matches(/^[aA-zZ\s]+$/, FormValidation.alphaValid),
+  emailId: Yup.string().trim().email().required(" "),
   mobile: Yup.string().trim().min(10).max(10).required(" "),
-  email: Yup.string().trim().email().required(" "),
+  designation: Yup.string()
+    .trim()
+    .matches(/^[aA-zZ\s]+$/, FormValidation.alphaValid),
 });
 class ContactDetails extends Component {
   constructor(props) {
@@ -21,83 +28,89 @@ class ContactDetails extends Component {
     this.state = {
       disable: false,
       prev: [],
-      initialState: [
-        {
-          key: uuidv4(),
-          contactName: "",
-          mobile: "",
-          email: "",
-          designation: "",
-          check: false,
-          save: false,
-        },
-      ],
     };
   }
+  changeDataForm = (fieldName, value) =>
+    this.props.changePartnerData(fieldName, value);
+
   increase = (key, val) => {
-    const { initialState, prev } = this.state;
-    const newData = initialState.map((data) => {
+    const { prev } = this.state;
+    const { partner } = this.props;
+    const newData = partner?.contactDetails?.map((data) => {
       if (data.key === key) {
         return { ...data, save: true };
       } else return data;
     });
     let prevData = prev;
     prevData.push(val);
+    this.changeDataForm("contactDetails", [
+      ...newData,
+      {
+        contactId: 0,
+        partnerId: 0,
+        key: uuidv4(),
+        contactName: "",
+        mobile: "",
+        emailId: "",
+        designation: "",
+        check: false,
+        save: false,
+        isDelete: 0,
+      },
+    ]);
     this.setState({
       prev: prevData,
-      initialState: [
-        ...newData,
-        {
-          key: uuidv4(),
-          contactName: "",
-          mobile: "",
-          email: "",
-          designation: "",
-          check: false,
-          save: false,
-        
-        },
-      ],
     });
   };
+
   remove = (key, setFieldValue, handleReset) => {
-    const newData = this.state.initialState.filter((data) => data.key !== key);
-    this.setState({ initialState: newData }, () => {
-      handleReset();
+    const { partner } = this.props;
+    const newData = partner?.contactDetails?.map((data) => {
+      if (data.key === key) {
+        return { ...data, isDelete: 1 };
+      } else return data;
     });
+    this.changeDataForm("contactDetails", newData);
+    handleReset();
   };
   handleSubmit = async (values, { setSubmitting }) => {
     try {
+      const { partner } = this.props;
       const { prev } = this.state;
       this.setState({ btnDisable: true, check: true });
-      // debugger;
-      // setTimeout(() => {
-      //   this.setState({ btnDisable: false });
-      // }, 4500);
+      setTimeout(() => {
+        this.setState({ btnDisable: false });
+      }, 4500);
       let prevData = prev;
       prevData.push(values);
-      this.props.changeData("contractDetailsData", this.state.initialState);
-      this.props.apiCall(this.state.initialState);
-      // console.log("data", data);
+
+      this.props.apiCall();
+
       setSubmitting(false);
     } catch (error) {
-      console.log(error, "handle error");
+      console.log(error);
     }
   };
-  proex = (e, index, setFieldValue, fildName) => {
-    const { initialState } = this.state;
-    let data = [...initialState];
-    data[index][fildName] = e.target.value;
-    this.setState({ initialState: data });
-    setFieldValue(fildName, e.target.value);
+
+  proex = (e, index, setFieldValue, fieldName) => {
+    const { partner } = this.props;
+    let data = [...partner?.contactDetails];
+    data[index][fieldName] = e.target.value;
+    this.changeDataForm("contactDetails", data);
+    setFieldValue(fieldName, e.target.value);
   };
   render() {
-    const { initialState, disable } = this.state;
+    const { disable } = this.state;
+    const { partner } = this.props;
+    let finalContactDetials = partner?.contactDetails?.filter(
+      (data) => data.isDelete !== 1
+    );
+
     return (
       <ContDetailsStyle>
-        <h2>{contactDetailConst.contactDetail}</h2>
-        {initialState.map((data, index) => (
-          <div className="formDiv" key={index}>
+        <h3 className="anime">{contactConst.cd}</h3>
+        {finalContactDetials?.map((data, index) => (
+          <div className="formDiv anime" key={index}>
             <Formik
               enableReinitialize
               initialValues={data}
@@ -117,10 +130,17 @@ class ContactDetails extends Component {
               }) => (
                 <Form onSubmit={handleSubmit}>
                   <Row gutter={20}>
-                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={24}
+                      lg={12}
+                      xl={12}
+                      className="anime"
+                    >
                       <div className="field">
                         <Label
-                          title={contactDetailConst.contactName}
+                          title={contactConst.contactName}
                           className={
                             errors.contactName && touched.contactName
                               ? "empty"
@@ -143,10 +163,17 @@ class ContactDetails extends Component {
                         />
                       </div>
                     </Col>
-                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={24}
+                      lg={12}
+                      xl={12}
+                      className="anime"
+                    >
                       <div className="field">
                         <Label
-                          title={contactDetailConst.mobile}
+                          title={contactConst.mobile}
                           className={
                             errors.mobile && touched.mobile ? "empty" : ""
                           }
@@ -161,40 +188,70 @@ class ContactDetails extends Component {
                           value={values.mobile}
                           handleChange={(e) => {
                             this.proex(e, index, setFieldValue, "mobile");
+
+                            // partner.contactDetails.filter(
+                            //   (x) => x.mobile === e.value
+                            // );
                           }}
                           tabIndex="2"
                         />
                       </div>
                     </Col>
-                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={24}
+                      lg={12}
+                      xl={12}
+                      className="anime"
+                    >
                       <div className="field">
                         <Label
-                          title={contactDetailConst.email}
+                          title={contactConst.email}
                           className={
-                            errors.email && touched.email ? "empty" : ""
+                            errors.emailId && touched.emailId ? "empty" : ""
                           }
                         />
                         <Input
                           className={
-                            errors.email && touched.email ? "empty" : ""
+                            errors.emailId && touched.emailId ? "empty" : ""
                           }
                           onBlur={handleBlur}
-                          name="email"
-                          value={values.email}
+                          name="emailId"
+                          value={values.emailId}
                           onChange={(e) => {
-                            this.proex(e, index, setFieldValue, "email");
+                            this.proex(e, index, setFieldValue, "emailId");
                           }}
                           tabIndex="3"
                         />
                       </div>
                     </Col>
-                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={24}
+                      lg={12}
+                      xl={12}
+                      className="anime"
+                    >
                       <div className="field">
-                        <Label title={contactDetailConst.designation} />
+                        <Label
+                          title={contactConst.designation}
+                          className={
+                            errors.designation && touched.designation
+                              ? "empty"
+                              : ""
+                          }
+                        />
                         <Input
                           onBlur={handleBlur}
                           name="designation"
                           value={values.designation}
+                          className={
+                            errors.designation && touched.designation
+                              ? "empty"
+                              : ""
+                          }
                           onChange={(e) => {
                             this.proex(e, index, setFieldValue, "designation");
                           }}
@@ -203,36 +260,55 @@ class ContactDetails extends Component {
                       </div>
                     </Col>
                   </Row>
+
                   <div className="bottomDiv">
-                    <div className="leftBtnDiv">
-                      {initialState.length - 1 === index && (
+                    <div className="leftBtnDiv anime">
+                      {finalContactDetials?.length - 1 === index && (
                         <Button
                           type="button"
                           onClick={() => {
                             validateForm().then((d) => {
                               if (Object.keys(d).length === 0)
-                                this.increase(data.key, values);
+                                this.increase(data.key);
                               else handleSubmit();
                             });
                           }}
                         >
-                          {contactDetailConst.add}
+                          {contactConst.add}
                         </Button>
                       )}
-                      {initialState.length !== 1 && (
+                      {finalContactDetials?.length !== 1 && (
                         <Button
                           type="button"
                           onClick={() => {
                             this.remove(data.key, setFieldValue, handleReset);
                           }}
                         >
-                          {contactDetailConst.remove}
+                          {contactConst.remove}
                         </Button>
                       )}
                     </div>
                     <div className="rightBtnDiv">
+                      {finalContactDetials?.length - 1 === index && (
+                        <>
+                          <Button
+                            type="button"
+                            onClick={() => this.props.history.push("/partners")}
+                          >
+                            {contactConst.cancle}
+                          </Button>
+                          <Button type="button" onClick={this.props.previous}>
+                            {contactConst.previous}
+                          </Button>
+                        </>
+                      )}
+
                       <Button type="submit" disabled={disable}>
-                        {initialState.filter((d) => d.key === data.key)[0]?.save
+                        {finalContactDetials.length - 1 === index
+                          ? "Submit"
+                          : finalContactDetials?.filter(
+                              (d) => d.key === data.key
+                            )[0]?.save
                           ? "Save"
                           : "Submit"}
                       </Button>
@@ -247,4 +323,17 @@ class ContactDetails extends Component {
     );
   }
 }
-export default ContactDetails;
+
+const mapStateToProps = (state) => ({
+  loading: state.partner.loading,
+  error: state.partner.error,
+  message: state.partner.message,
+  partners: state.partner.partners,
+  partner: state.partner.partner,
+});
+const mapDispatchToProps = (dispatch) => ({
+  changePartnerData: (key, value) => dispatch(changePartnerData(key, value)),
+});
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(ContactDetails)
+);

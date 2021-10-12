@@ -3,11 +3,14 @@ import { Row, Col, Image } from "antd";
 import { CloseOutlined, UploadOutlined } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import { Formik, Form } from "formik";
+import { connect } from "react-redux";
 import * as Yup from "yup";
-import { BasicDetailsStyle } from "./style";
+
 import { basicConst } from "./constant";
-import { Input, Label, RoundSwitch, Button, FileUpload } from "components/Form";
+import { BasicDetailsStyle } from "./style";
+import { changePartnerData } from "redux/partner/action";
 import { FormValidation, gstConst, panConst } from "App/AppConstant";
+import { Input, Label, RoundSwitch, Button, FileUpload } from "components/Form";
 
 const UserValidation = Yup.object().shape({
   companyName: Yup.string()
@@ -16,14 +19,16 @@ const UserValidation = Yup.object().shape({
     .matches(/^[aA-zZ\s]+$/, FormValidation.alphaValid),
   email: Yup.string().trim().email().required(" "),
   mobile: Yup.string().trim().min(10).max(10).required(" "),
-  gst: Yup.string().trim().matches(gstConst, FormValidation.gstvalid),
+  gst: Yup.string()
+    .trim()
+    .nullable()
+    .matches(gstConst, FormValidation.gstvalid),
   pan: Yup.string().trim().matches(panConst, FormValidation.panValid),
   aadhar: Yup.string()
     .trim()
     .min(12, FormValidation.aadharInvalid)
     .max(12, FormValidation.aadharInvalid),
 });
-
 class BasicDetails extends Component {
   constructor(props) {
     super(props);
@@ -34,40 +39,39 @@ class BasicDetails extends Component {
       imgnm: "",
       imgByte: "",
       imgBase64: "",
-      initialState: {
-        pan: "",
-        email: "",
-        mobile: "",
-        aadhar: "",
-        gst: "",
-        companyName: "",
-      },
+      isDataSet: false,
     };
   }
-  switchChange = () => this.setState({ gstType: !this.state.gstType });
-
-  fileUpload = () => {
+  changeDataForm = (fieldName, value) =>
+    this.props.changePartnerData(fieldName, value);
+  switchChange = (setFieldValue) => {
+    this.changeDataForm("gstType", !this.state.gstType);
+    setFieldValue("gstType", !this.state.gstType);
+    this.setState({ gstType: !this.state.gstType });
+  };
+  fileUpload = (setFieldValue) => {
     try {
-      const { imgnm, imgByte } = this.state;
-      let name = imgnm;
-      if (imgnm && imgByte) {
-        let a = name.split(".");
-        name = a[0].substr(0, 5) + "." + a[1];
+      const { partner } = this.props;
+      let name = partner?.imgnm;
+
+      if (partner?.imgnm || partner?.companyLogo) {
+        let a = name?.split(".");
+        name = a?.[0]?.substr(0, 5) + "." + a?.[1];
         return (
           <>
             <span className="optionui">
-              <span className="txtWrap">{name}</span>
-              <CloseOutlined onClick={() => this.removefile()} />
+              <span className="txtWrap">{"name"}</span>
+              <CloseOutlined onClick={() => this.removefile(setFieldValue)} />
             </span>
-            <Image src={imgByte} width={50} height={30} />
+            <Image src={partner?.companyLogo} width={50} height={30} />
           </>
         );
       }
       return (
         <FileUpload
-          accept=".jpg, .jpeg, .png"
+          accept=".jpg, .jpeg, .png , .svg"
           image={true}
-          sendByte={this.setByte}
+          sendByte={(a, b, c) => this.setByte(a, b, c, setFieldValue)}
           elements={<UploadOutlined />}
         />
       );
@@ -75,11 +79,24 @@ class BasicDetails extends Component {
       console.log(error);
     }
   };
-  removefile = () => this.setState({ imgByte: "", imgnm: "", imgBase64: "" });
-
-  setByte = (byteCode, name, base64) =>
-    this.setState({ imgByte: byteCode, imgnm: name, imgBase64: base64 });
-
+  removefile = (setFieldValue) => {
+    this.changeDataForm("companyLogo", "");
+    setFieldValue("companyLogo", "");
+    this.changeDataForm("imgnm", "");
+    setFieldValue("imgnm", "");
+    this.changeDataForm("imgBase64", "");
+    setFieldValue("imgBase64", "");
+    this.setState({ companyLogo: "", imgnm: "", imgBase64: "" });
+  };
+  setByte = (byteCode, name, base64, setFieldValue) => {
+    this.changeDataForm("companyLogo", byteCode);
+    setFieldValue("companyLogo", byteCode);
+    this.changeDataForm("imgnm", name);
+    setFieldValue("imgnm", name);
+    this.changeDataForm("imgBase64", base64);
+    setFieldValue("imgBase64", base64);
+    this.setState({ companyLogo: byteCode, imgnm: name, imgBase64: base64 });
+  };
   handleSubmit = async (values, { setSubmitting }) => {
     try {
       const { gstType } = this.state;
@@ -87,29 +104,22 @@ class BasicDetails extends Component {
       setTimeout(() => {
         this.setState({ btnDisable: false });
       }, 4500);
-
-      this.props.changeData("basicDetailsData", {
-        ...values,
-        img: this.state.imgBase64,
-        gstType:this.state.gstType,
-      });
-      if (gstType && values.gst === "") {
-        this.setState({ gstNoError: gstType && values.gst === "" });
-      } else this.props.countInc();
+      this.props.changePartnerData("img", this.state.imgBase64);
+      this.props.countInc();
       setSubmitting(false);
     } catch (error) {
       console.log(error, "handle error");
     }
   };
   render() {
-    const { initialState, disable, gstType, gstNoError } = this.state;
-    console.log(this.state);
+    const { disable, gstNoError } = this.state;
+    const { partner } = this.props;
     return (
       <BasicDetailsStyle>
-        <h2>{basicConst.basicDetail}</h2>
+        <h2 className="anime">{basicConst.basicDetail}</h2>
         <div className="formDiv">
           <Formik
-            initialValues={initialState}
+            initialValues={partner}
             validationSchema={UserValidation}
             onSubmit={this.handleSubmit}
             enableReinitialize
@@ -118,13 +128,22 @@ class BasicDetails extends Component {
               values,
               errors,
               touched,
+              onBlur,
               handleChange,
               handleBlur,
               handleSubmit,
+              setFieldValue,
             }) => (
               <Form onSubmit={handleSubmit}>
                 <Row gutter={24}>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
                         title={basicConst.comName}
@@ -138,7 +157,10 @@ class BasicDetails extends Component {
                         name="companyName"
                         onBlur={handleBlur}
                         value={values.companyName}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          this.changeDataForm("companyName", e.target.value);
+                          setFieldValue("companyName", e.target.value);
+                        }}
                         className={
                           errors.companyName && touched.companyName
                             ? "empty"
@@ -147,7 +169,14 @@ class BasicDetails extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
                         title={basicConst.email}
@@ -157,12 +186,22 @@ class BasicDetails extends Component {
                         name="email"
                         value={values.email}
                         onBlur={handleBlur}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          this.changeDataForm("email", e.target.value);
+                          setFieldValue("email", e.target.value);
+                        }}
                         className={errors.email && touched.email ? "empty" : ""}
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
                         title={basicConst.mobile}
@@ -175,25 +214,42 @@ class BasicDetails extends Component {
                         type="number"
                         value={values.mobile}
                         onBlur={handleBlur}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          this.changeDataForm("mobile", e.target.value);
+                          setFieldValue("mobile", e.target.value);
+                        }}
                         className={
                           errors.mobile && touched.mobile ? "empty" : ""
                         }
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label title={basicConst.gst} />
                       <RoundSwitch
-                        left={basicConst.nr}
+                        left={basicConst.no + basicConst.reg}
                         right={basicConst.reg}
-                        checked={gstType}
-                        handleChange={this.switchChange}
+                        checked={partner.gstType}
+                        handleChange={() => this.switchChange(setFieldValue)}
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
                         title={basicConst.pan}
@@ -203,7 +259,9 @@ class BasicDetails extends Component {
                         name="pan"
                         value={values.pan}
                         onBlur={handleBlur}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          this.changeDataForm("pan", e.target.value);
+                        }}
                         className={errors.pan && touched.pan ? "empty" : ""}
                       />
                     </div>
@@ -211,8 +269,15 @@ class BasicDetails extends Component {
                       <div className="form-error">{errors.pan}</div>
                     )}
                   </Col>
-                  {gstType ? (
-                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  {partner?.gstType ? (
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={24}
+                      lg={12}
+                      xl={12}
+                      className="anime"
+                    >
                       <div className="field">
                         <Label
                           title={basicConst.gstNum}
@@ -226,8 +291,11 @@ class BasicDetails extends Component {
                         <Input
                           name="gst"
                           onBlur={handleBlur}
-                          value={values.gst.toUpperCase()}
-                          handleChange={handleChange}
+                          value={values?.gst?.toUpperCase()}
+                          handleChange={(e) => {
+                            this.changeDataForm("gst", e.target.value);
+                            setFieldValue("gst", e.target.value);
+                          }}
                           className={
                             (errors.gst && touched.gst) ||
                             (gstNoError && values.gst === "")
@@ -241,9 +309,23 @@ class BasicDetails extends Component {
                       </div>
                     </Col>
                   ) : (
-                    <Col xs={24} sm={24} md={24} lg={12} xl={12}></Col>
+                    <Col
+                      xs={24}
+                      sm={24}
+                      md={24}
+                      lg={12}
+                      xl={12}
+                      className="anime"
+                    ></Col>
                   )}
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label title={basicConst.aadhar} />
                       <Input
@@ -251,7 +333,9 @@ class BasicDetails extends Component {
                         type="number"
                         value={values.aadhar}
                         onBlur={handleBlur}
-                        handleChange={handleChange}
+                        handleChange={(e, z) => {
+                          this.changeDataForm("aadhar", e.target.value);
+                        }}
                         className={
                           errors.aadhar && touched.aadhar ? "empty" : ""
                         }
@@ -261,22 +345,35 @@ class BasicDetails extends Component {
                       )}
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label title={basicConst.comLogo} />
-                      <div className="pointer">{this.fileUpload()}</div>
+                      <div className="pointer">
+                        {this.fileUpload(setFieldValue)}
+                      </div>
                     </div>
                   </Col>
                 </Row>
                 <div className="bottomDiv">
-                  <div className="btn">
+                  <div className="btn anime">
                     <Button
                       type="button"
                       onClick={() => this.props.history.push("/partners")}
                     >
-                      {basicConst.previous}
+                      {basicConst.cancle}
                     </Button>
-                    <Button type="submit" disabled={disable}>
+                    <Button
+                      type="submit"
+                      className="nextBtn"
+                      disabled={disable}
+                    >
                       {basicConst.next}
                     </Button>
                   </div>
@@ -289,5 +386,15 @@ class BasicDetails extends Component {
     );
   }
 }
-
-export default withRouter(BasicDetails);
+const mapStateToProps = (state) => ({
+  loading: state.partner.loading,
+  error: state.partner.error,
+  message: state.partner.message,
+  partner: state.partner.partner,
+});
+const mapDispatchToProps = (dispatch) => ({
+  changePartnerData: (key, value) => dispatch(changePartnerData(key, value)),
+});
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(BasicDetails)
+);

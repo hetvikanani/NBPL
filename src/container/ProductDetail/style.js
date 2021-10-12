@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import { Theme } from "App/theme";
 const ProDetailstyle = styled.div`
   height: 100vh;
   overflow-y: auto;
@@ -24,28 +24,32 @@ const ProDetailstyle = styled.div`
     .txtHead {
       margin-top: 6px;
     }
-
     .Feature-card {
       text-align: center;
-      margin-top: 3em; 
-      border-radius: 5px;     
+      margin-top: 3em;
+      border-radius: 5px;
       .img-div {
-        border: 1px solid orange;
+        // border: 1px solid ${Theme.mainColor};
         height: 3em;
         border-radius: 25px;
         width: 3em;
         display: flex;
         margin: auto;
-        bottom: 53px;
+        bottom: 4.7em;
         position: absolute;
         right: 20px;
         left: 20px;
+        align-items: center;
+        justify-content: center;
       }
-      .ant-image-img {
-        display: block;
-        margin: auto;
-        height: auto;
-        width: 67%;
+      // .ant-image-img {
+      //   display: block;
+      //   margin: auto;
+      //   height: auto;
+      //   width: 67%;
+      // }
+      h4{
+        padding-top: 10px;
       }
     }
     .box3 {
@@ -58,17 +62,28 @@ const ProDetailstyle = styled.div`
         justify-content: center;
       }
       .Card-Div {
-        margin-top: 3em;      
+        margin-top: 3em;
       }
     }
     .box5 {
       .boxDiv {
-        .pdfIcon {
-          box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
-          width: 1.5em;
-          color: #16548b;
-          font-size: 50px;
+        .pdfS{
+          width: 10em;
           text-align: center;
+          word-break: break-word;
+          display: inline-block;
+          .pdfIcon {
+            text-align: center;
+            display: inline-block;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
+            width: 1.5em;
+            font-size: 50px;
+            text-align: center;
+            a{
+              color:${Theme.mainColor};
+            }
+          }
         }
       }
     }
@@ -78,20 +93,18 @@ const ProDetailstyle = styled.div`
           min-width: 34px;
           min-height: 34px;
         }
-
         .react-multi-carousel-track {
           padding: 22px;
           margin: 5px;
         }
-
         .react-multi-carousel-dot button {
           display: inline-block;
           margin-right: 0;
           margin: 0 5px;
         }
-        .ant-image-img {
-          width: 114%;
-        }
+        // .ant-image-img {
+        //   width: 114%;
+        // }
       }
     }
   }

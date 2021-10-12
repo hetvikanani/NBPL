@@ -3,31 +3,34 @@ import { Route, Switch, Redirect } from "react-router-dom";
 
 import { getAuthUserID } from "modules/helper";
 import Login from "container/Login";
-// import ForgetPassword from "container/Forgetpwd";
-// import ResetPassword from "container/ResetPwd";
-import PageLoader from "components/PageLoader";
-import Registration from "container/Registration";
-import Dashboard from "container/Dashboard";
 import Leads from "container/Leads";
-import Support from "container/Support";
-import Products from "container/Products";
-import ContactUs from "container/ContactUs";
-import ProductDetail from "container/ProductDetail";
-import Profile from "container/Profile";
 import Sales from "container/Sales";
-import SalesAddEdit from "container/SalesAddEdit";
 import Wallet from "container/Wallet";
-import ForgetPassword from "container/ForgetPassword";
-import KnowledgeBase from "container/KnowledgeBase";
-import ChangePassword from "container/ChangePassword";
+import Support from "container/Support";
+import Profile from "container/Profile";
+import Products from "container/Products";
 import Partners from "container/Partners";
 import UserList from "container/UserList";
-import NewUser from "container/NewUserAddEdite";
-import PartnerAddEdite from "container/PartnerAddEdite";
-import AdminProduct from "container/AdminProduct";
-import PackageList from "container/PackageList";
-import PackageAddEdit from "container/PackageAddEdit";
+import Dashboard from "container/Dashboard";
+import ContactUs from "container/ContactUs";
 import AdminSales from "container/AdminSales";
+import PageLoader from "components/PageLoader";
+import NewUser from "container/NewUserAddEdite";
+import PackageList from "container/PackageList";
+import AdminProduct from "container/AdminProduct";
+import Registration from "container/Registration";
+import SalesAddEdit from "container/SalesAddEdit";
+import ProductDetail from "container/ProductDetail";
+import KnowledgeBase from "container/KnowledgeBase";
+import ForgetPassword from "container/ForgetPassword";
+import ChangePassword from "container/ChangePassword";
+import PackageAddEdit from "container/PackageAddEdit";
+import PartnerAddEdite from "container/PartnerAddEdite";
+// import NewUser from "container/NewUserAddEdite";
+// import UserList from "container/UserList";
+// import ForgetPassword from "container/Forgetpwd";
+// import ResetPassword from "container/ResetPwd";
+const type = localStorage.auth && JSON.parse(localStorage.auth).role;
 
 const routes = [
   {
@@ -57,7 +60,7 @@ const routes = [
   {
     path: "/change-password",
     exact: true,
-    AuthRoute: false,
+    AuthRoute: true,
     component: ChangePassword,
   },
   // {
@@ -75,53 +78,71 @@ const routes = [
   {
     path: "/",
     exact: true,
-    AuthRoute: false,
-    component: Dashboard,
+    AuthRoute: true,
+    component: type && type === "admin" ? Partners : Dashboard,
   },
   {
     path: "/dashboard",
     exact: true,
-    AuthRoute: false,
+    AuthRoute: true,
     component: Dashboard,
   },
   {
     path: "/support",
     exact: true,
-    AuthRoute: false,
+    AuthRoute: true,
     component: Support,
   },
   {
     path: "/contact-us",
     exact: true,
-    AuthRoute: false,
+    AuthRoute: true,
     component: ContactUs,
   },
   {
     path: "/leads",
     exact: true,
-    AuthRoute: false,
+    AuthRoute: true,
     component: Leads,
   },
   {
     path: "/products",
     exact: true,
-    AuthRoute: false,
+    AuthRoute: true,
     component: Products,
   },
   {
     path: "/sales",
     exact: true,
-    AuthRoute: false,
+    AuthRoute: true,
     component: Sales,
-  }, 
+  },
   {
-    path: "/add-new-sales",
+    path: "/sales/new",
     exact: true,
-    AuthRoute: false,
+    AuthRoute: true,
     component: SalesAddEdit,
-  }, 
+  },
   {
-    path: "/productDetail/:name",
+    path: "/users",
+    exact: true,
+    AuthRoute: true,
+    component: UserList,
+  },
+  {
+    path: "/user/new",
+    exact: true,
+    AuthRoute: true,
+    component: NewUser,
+  },
+  {
+    path: "/edit-user/:id",
+    exact: true,
+    AuthRoute: true,
+    component: NewUser,
+  },
+  {
+    path: "/productDetail/:name/:id",
     exact: true,
     AuthRoute: true,
     component: ProductDetail,
@@ -139,6 +160,12 @@ const routes = [
     component: Wallet,
   },
   {
+    path: "/wallet/:id",
+    exact: true,
+    AuthRoute: true,
+    component: Wallet,
+  },
+  {
     path: "/knowledge-base",
     exact: true,
     AuthRoute: true,
@@ -151,43 +178,61 @@ const routes = [
     component: Partners,
   },
   {
+    path: "/partner/new",
+    exact: true,
+    AuthRoute: true,
+    component: PartnerAddEdite,
+  },
+  {
+    path: "/partner/edit/:id",
+    exact: true,
+    AuthRoute: true,
+    component: PartnerAddEdite,
+  },
+  {
     path: "/users",
     exact: true,
     AuthRoute: true,
     component: UserList,
   },
   {
-    path: "/add-new-user",  
+    path: "/user/new",
     exact: true,
     AuthRoute: true,
     component: NewUser,
   },
   {
-    path: "/add-new-partner",
-    exact: true,
-    AuthRoute: true,
-    component: PartnerAddEdite,
-  },
-  {
-    path: "/add-new-product",  
+    path: "/product/new",
     exact: true,
     AuthRoute: true,
     component: AdminProduct,
   },
   {
-    path: "/admin-product",
+    path: "/product/edit/:id",
+    exact: true,
+    AuthRoute: true,
+    component: AdminProduct,
+  },
+  {
+    path: "/product",
     exact: true,
     AuthRoute: true,
     component: Products,
   },
   {
-    path: "/package-list/:name",
+    path: "/package-list/:name/:id",
     exact: true,
     AuthRoute: true,
     component: PackageList,
   },
   {
-    path: "/add-new-package",
+    path: "/package/:name/new/:id",
+    exact: true,
+    AuthRoute: true,
+    component: PackageAddEdit,
+  },
+  {
+    path: "/package/:name/edit/:id/:editid",
     exact: true,
     AuthRoute: true,
     component: PackageAddEdit,
@@ -200,9 +245,11 @@ const routes = [
   },
 ];
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  // if (getAuthUserID()) {
-  return <Route {...rest} render={(props) => <Component {...props} />} />;
-  // } else {return <Redirect to="/login" />;}
+  if (getAuthUserID()) {
+    return <Route {...rest} render={(props) => <Component {...props} />} />;
+  } else {
+    return <Redirect to="/login" />;
+  }
 };
 const RestrictedRoute = ({ component: Component, publicAccess, ...rest }) => {
   if (getAuthUserID()) {

@@ -5,7 +5,7 @@ const initialState = {
   message: false,
   isAdded: false,
   isDeleted: false,
-  product: {},
+  products: [],
 };
 
 export default (state = initialState, action) => {
@@ -45,7 +45,7 @@ export default (state = initialState, action) => {
         ...state,
         error: false,
         loading: false,
-        product: action.payload.data,
+        products: action.payload.data,
       };
     case actions.GET_PRODUCT_ERROR:
       return {

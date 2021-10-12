@@ -2,24 +2,23 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Spin, Image } from "antd";
 import { Formik, Form } from "formik";
-import * as Yup from "yup";
 import Particles from "react-particles-js";
+import * as Yup from "yup";
 
-import { Label, Input, Button } from "components/Form";
+import { logo } from "components/Images";
+import { StyleContainer } from "./style.js";
 import { login } from "redux/login/actions";
 import { FormValidation } from "App/AppConstant";
-import { StyleContainer } from "./style.js";
 import { RegistrationConstant } from "./constant";
-import { logo } from "components/Images";
-
+import { Label, Input, Button } from "components/Form";
 
 const loginValidationSchema = Yup.object().shape({
   name: Yup.string().trim().required(" "),
   email: Yup.string().trim().email(" ").required(" "),
   mobile: Yup.string()
     .trim()
-    .min(6, FormValidation.mobileMin)
-    .max(25, FormValidation.mobileMax)
+    .min(6, FormValidation.mobileInvalid)
+    .max(25, FormValidation.mobileInvalid)
     .required(" "),
 });
 
@@ -41,7 +40,7 @@ class Login extends Component {
       await this.props.login(data);
       setSubmitting(false);
     } catch (error) {
-      console.log(error, "handle error");
+      console.log(error);
     }
   };
   render() {
@@ -50,7 +49,7 @@ class Login extends Component {
     return (
       <Spin spinning={loading} size="large">
         <StyleContainer>
-        <div className="canvasDiv">
+          <div className="canvasDiv">
             <Particles
               height="100vh"
               width="100vw"
@@ -66,9 +65,9 @@ class Login extends Component {
             />
           </div>
           <div className="form-div fadeInDown">
-          <div className="logoDiv">
+            <div className="logoDiv">
               <Image src={logo} alt="User Icon" preview={false} width={120} />
-            </div>            
+            </div>
             <div className="loginDiv">
               <Formik
                 initialValues={{ email: "", mobile: "", name: "", ref: "" }}
@@ -84,12 +83,8 @@ class Login extends Component {
                   handleBlur,
                   handleSubmit,
                 }) => (
-                  <Form
-                    onSubmit={handleSubmit}
-                    noValidate
-                    className="grid grid-cols-12 gap-4 gap-y-5 mt-5"
-                  >
-                    <div className="anime col-span-12 sm:col-span-12">
+                  <Form onSubmit={handleSubmit} noValidate>
+                    <div className="anime">
                       <Label
                         title={RegistrationConstant.name}
                         className={errors.name && touched.name ? "empty" : ""}
@@ -103,7 +98,7 @@ class Login extends Component {
                       />
                       {/* {errors.email && touched.email ? (<div className="form-error">{errors.email}</div>) : null} */}
                     </div>
-                    <div className="anime col-span-12 sm:col-span-12">
+                    <div className="anime">
                       <Label
                         title={RegistrationConstant.email}
                         className={errors.email && touched.email ? "empty" : ""}
@@ -117,7 +112,7 @@ class Login extends Component {
                       />
                       {/* {errors.email && touched.email ? (<div className="form-error">{errors.email}</div>) : null} */}
                     </div>
-                    <div className="anime col-span-12 sm:col-span-12">
+                    <div className="anime">
                       <Label
                         title={RegistrationConstant.mobile}
                         className={
@@ -138,7 +133,7 @@ class Login extends Component {
                         <div className="form-error">{errors.mobile}</div>
                       ) : null}
                     </div>
-                    <div className="anime col-span-12 sm:col-span-12">
+                    <div className="anime">
                       <Label
                         title={RegistrationConstant.RefC}
                         className={errors.ref && touched.ref ? "empty" : ""}
@@ -150,13 +145,8 @@ class Login extends Component {
                         handleChange={handleChange}
                         className={errors.ref && touched.ref ? "empty" : ""}
                       />
-                      {/* {errors.ref && touched.ref ? (<div className="form-error">{errors.ref}</div>) : null} */}
                     </div>
-
-                    {/* <NavLink to="/forget-mobile" className="forgetlbl">
-                        {RegistrationConstant.forgerPwd}
-                      </NavLink> */}
-                    <div className="anime col-span-12 flex items-center sm:justify-end mt-5 btnDiv">
+                    <div className="anime btnDiv">
                       <Button type="submit" disabled={btnDisable}>
                         {RegistrationConstant.submit}
                       </Button>

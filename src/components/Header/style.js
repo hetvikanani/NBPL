@@ -9,7 +9,6 @@ const StyleComponent = styled.div`
   position: relative;
   .maindiv {
     height: 4em;
-    background: ${Theme.mainColor};
     .head-container {
       display: flex;
       color: #fff;
@@ -24,9 +23,14 @@ const StyleComponent = styled.div`
           margin-right: 1rem;
           font-size: 1.25rem;
           line-height: inherit;
+          padding-bottom: 0;
           :before {
             cursor: pointer;
           }
+        }
+        &.dropDiv .title {
+          line-height: 1.3em;
+          margin-left: 10px;
         }
       }
       div:last-child {

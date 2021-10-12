@@ -4,11 +4,15 @@ import { Theme } from "App/theme";
 
 const PartnersStyle = styled.div`
   display: flex;
+
+  
   .allDiv {
     padding: 1em;
+    
     .headDiv {
       display: flex;
-      margin-bottom: 2em;       
+      margin-bottom: 2em;    
+
       h2 {
         margin-bottom: 0;
       }
@@ -27,7 +31,7 @@ const PartnersStyle = styled.div`
         stroke: white;
         stroke-width: 3em;
       }
-      
+    
     }
     .exportDiv{
       display: flex;
@@ -54,11 +58,18 @@ const PartnersStyle = styled.div`
         max-width: 20em;    
       }
     }
-    .ant-empty{
-      border: 1px solid;
-      height: 10em;
+    .pagiDiv{
+      margin-top: 1em;
+      display: flex;
+      justify-content: end;
     }
     
   }
+  .tableData{
+    padding: 0 6px 0 6px;
+  }
+ 
+
+ 
 `;
 export { PartnersStyle };

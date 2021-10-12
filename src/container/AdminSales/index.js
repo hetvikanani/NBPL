@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Row, Col, Card, Image } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Row, Col } from "antd";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
 import { AdmSelesStyle } from "./style";
+import { ButtonConst } from "App/AppConstant";
+import { tableData, SalesConst } from "./constant";
 import {
   Menu,
   Header,
@@ -14,8 +15,7 @@ import {
   Table,
   Button,
 } from "components/Form";
-import {tableData , SalesConst} from "./constant";
-import {ButtonConst} from "App/AppConstant";
+
 const SalesValidation = Yup.object().shape({
   product: Yup.string().trim().required(" "),
 });
@@ -28,8 +28,8 @@ class AdminSales extends Component {
       btnDisable: false,
       initialState: {
         product: "",
-        formDate:"",
-        toDate:"",
+        formDate: "",
+        toDate: "",
       },
     };
   }
@@ -68,7 +68,7 @@ class AdminSales extends Component {
         <Menu />
         <div className="container">
           <Header />
-          <div className="allDiv">
+          <div className="allDiv anime">
             <h2>{SalesConst.sales}</h2>
             <div className="inputDiv">
               <Formik
@@ -91,10 +91,11 @@ class AdminSales extends Component {
                     <Row gutter={25}>
                       <Col xs={24} sm={12} md={12} lg={6} xl={6}>
                         <div className="field">
-                          <Label title={SalesConst.product}
-                           className={
-                            errors.product && touched.product ? "empty" : ""
-                          }
+                          <Label
+                            title={SalesConst.product}
+                            className={
+                              errors.product && touched.product ? "empty" : ""
+                            }
                           />
                           {values.product === "" &&
                             this.selectUI(
@@ -113,26 +114,30 @@ class AdminSales extends Component {
                       <Col xs={24} sm={12} md={12} lg={6} xl={6}>
                         <div className="field">
                           <Label title={SalesConst.fromDate} />
-                          <DatePicker 
-                           name="formDate"
-                           disableDate={true}
-                           value={values.formDate}        
-                           onBlur={handleBlur}
-                           handleChange={(data) => setFieldValue("formDate", data)}
-                        //    className={errors.date && touched.date ? "empty" : ""}
+                          <DatePicker
+                            name="formDate"
+                            disableDate={true}
+                            value={values.formDate}
+                            onBlur={handleBlur}
+                            handleChange={(data) =>
+                              setFieldValue("formDate", data)
+                            }
+                            //    className={errors.date && touched.date ? "empty" : ""}
                           />
                         </div>
                       </Col>
                       <Col xs={24} sm={12} md={12} lg={6} xl={6}>
                         <div className="field">
                           <Label title={SalesConst.toDate} />
-                          <DatePicker 
-                          name="toDate"
-                          disableDate={true}
-                          value={values.toDate}        
-                          onBlur={handleBlur}
-                          handleChange={(data) => setFieldValue("toDate", data)}
-                        //   className={errors.date && touched.date ? "empty" : ""}
+                          <DatePicker
+                            name="toDate"
+                            disableDate={true}
+                            value={values.toDate}
+                            onBlur={handleBlur}
+                            handleChange={(data) =>
+                              setFieldValue("toDate", data)
+                            }
+                            //   className={errors.date && touched.date ? "empty" : ""}
                           />
                         </div>
                       </Col>
@@ -153,10 +158,10 @@ class AdminSales extends Component {
             </div>
             <div className="salesDiv">
               <div className="headerDiv">
-              <h2>{SalesConst.visman}</h2>
+                <h2>{SalesConst.visman}</h2>
               </div>
               <div className="tableDiv">
-                <Table type="admin_sales" data={tableData} size={10}/>
+                <Table type="admin_sales" data={tableData} size={10} />
               </div>
             </div>
           </div>

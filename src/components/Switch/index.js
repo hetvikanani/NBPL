@@ -4,7 +4,7 @@ import { FormWrapper } from "./style";
 
 class Swticher extends Component {
   render() {
-    const { left, right, handleChange, checked, className } = this.props;
+    const { left, right, handleChange, checked } = this.props;
     return (
       <FormWrapper>
         <Switch

@@ -25,7 +25,7 @@ const PackAddEditStyle = styled.div`
         }
         .rdw-editor-wrapper {
           border: 2px solid #dadada;
-          .rdw-editor-main{
+          .rdw-editor-main {
             height: 10em;
           }
         }
@@ -35,7 +35,7 @@ const PackAddEditStyle = styled.div`
         display: flex;
         justify-content: end;
         align-items: center;
-        button:first-child{
+        button:first-child {
           margin-right: 2em;
         }
         Button {

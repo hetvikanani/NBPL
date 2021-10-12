@@ -5,7 +5,7 @@ const ProductStyle = styled.div`
   display: flex;
   .allDiv {
     padding: 3em 1em 1em;
-    .headDiv{
+    .headDiv {
       display: flex;
       .addButton {
         margin-right: 2rem;
@@ -71,11 +71,11 @@ const ProductStyle = styled.div`
               line-height: 22px;
               color: #676767;
               font-weight: 400;
+              min-height: 6.5em;
             }
             .actionDiv {
               display: flex;
               justify-content: center;
-
               .acLogDiv {
                 height: 2em;
                 width: 2em;
@@ -83,28 +83,10 @@ const ProductStyle = styled.div`
                 justify-content: center;
                 align-items: center;
                 margin: 0 0.3em;
-                :hover{
+                :hover {
                   background-color: #e4e4e4;
                 }
               }
-            }
-            .vizLogo {
-              background-color: #ff944c;
-            }
-            .ipingLogo {
-              background-color: #0062a2;
-            }
-            .actLogo {
-              background-color: #9c33b1;
-            }
-            .eauctionLogo {
-              background-color: #7177e9;
-            }
-            .evotLogo {
-              background-color: #09447d;
-            }
-            .ezeoLogo {
-              background-color: #6c5ce7;
             }
             a {
               color: ${Theme.mainColor};

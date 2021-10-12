@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { Row, Col } from "antd";
-import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
-import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import { Formik, Form } from "formik";
+import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 
 import { LeadsStyle } from "./style";
+import { FormValidation } from "App/AppConstant";
 import { formTitle, tableTitle, tableData, leadsConst } from "./constant";
 import {
   Menu,
@@ -17,7 +18,7 @@ import {
   Switch,
   Table,
 } from "components/Form";
-import {  ButtonConst, FormValidation } from "App/AppConstant";
+
 const select = ["kartik", "Amar"];
 const ProspectSchema = Yup.object().shape({
   custName: Yup.string().trim().min(3, FormValidation.nameMin).required(" "),
@@ -29,11 +30,11 @@ const ProspectSchema = Yup.object().shape({
   email: Yup.string().trim().email(FormValidation.emailInvalid).required(" "),
 });
 const LeadsSchema = Yup.object().shape({
-  custSelect: Yup.string().trim().required(" "),
+  custSel: Yup.string().trim().required(" "),
   product: Yup.string().trim().required(" "),
 });
 const DemoSchema = Yup.object().shape({
-  cusNameDemo: Yup.string().trim().required(" "),
+  custnmDemo: Yup.string().trim().required(" "),
 });
 
 class Leads extends Component {
@@ -50,13 +51,13 @@ class Leads extends Component {
         address: "",
       },
       initLeads: {
-        custSelect: "",
+        custSel: "",
         leadType: "",
         product: "",
         remarks: "",
       },
       initDemo: {
-        cusNameDemo: "",
+        custnmDemo: "",
       },
     };
   }
@@ -67,6 +68,7 @@ class Leads extends Component {
           data={select}
           value={val}
           defaultValue={val}
+          id={name}
           selectClass={error ? "empty" : ""}
           onChange={(value) => {
             setFieldValue(name, value);
@@ -98,7 +100,7 @@ class Leads extends Component {
     try {
       const { initProspect, initLeads, initDemo, demo, sale } = this.state;
       return formTitle.map((a, i) => (
-        <Col xs={24} sm={24} md={24} lg={8} xl={8} key={i}>
+        <Col xs={24} sm={24} md={24} lg={8} xl={8} key={i} className="anime">
           <Card
             title={a}
             extra={
@@ -128,9 +130,9 @@ class Leads extends Component {
                     }) => (
                       <Form onSubmit={handleSubmit}>
                         <div className="inputDiv">
-                          <div className="field">
+                          <div className="field anime">
                             <Label
-                              title={leadsConst.cusName}
+                              title={leadsConst.custnm}
                               className={
                                 errors.custName && touched.custName
                                   ? "empty"
@@ -156,7 +158,7 @@ class Leads extends Component {
                               </div>
                             )}
                           </div>
-                          <div className="field">
+                          <div className="field anime">
                             <Label
                               title={leadsConst.mobile}
                               className={
@@ -179,7 +181,7 @@ class Leads extends Component {
                               <div className="form-error">{errors.mobile}</div>
                             )}
                           </div>
-                          <div className="field">
+                          <div className="field anime">
                             <Label
                               title={leadsConst.emid}
                               className={
@@ -201,7 +203,7 @@ class Leads extends Component {
                               <div className="form-error">{errors.email}</div>
                             )}
                           </div>
-                          <div className="field">
+                          <div className="field anime">
                             <Label title={leadsConst.address} />
                             <Input
                               placeholder={leadsConst.address}
@@ -239,42 +241,40 @@ class Leads extends Component {
                     }) => (
                       <Form onSubmit={handleSubmit}>
                         <div className="inputDiv">
-                          <div className="field">
+                          <div className="field anime highZ">
                             <Label
-                              title={leadsConst.cusSelect}
+                              title={leadsConst.custSel}
                               className={
-                                errors.custSelect && touched.custSelect
-                                  ? "empty"
-                                  : ""
+                                errors.custSel && touched.custSel ? "empty" : ""
                               }
                             />
-                            { values.custSelect==="" && this.selectUI(
-                              "",
-                              "custSelect",
-                              setFieldValue,
-                              errors.custSelect && touched.custSelect
-                            )}
-                            { values.custSelect!==""&& this.selectUI(
-                              values.custSelect,
-                              "custSelect",
-                              setFieldValue,
-                              errors.custSelect && touched.custSelect
-                            )}
+                            {values.custSel === "" &&
+                              this.selectUI(
+                                "",
+                                "custSel",
+                                setFieldValue,
+                                errors.custSel && touched.custSel
+                              )}
+                            {values.custSel !== "" &&
+                              this.selectUI(
+                                values.custSel,
+                                "custSel",
+                                setFieldValue,
+                                errors.custSel && touched.custSel
+                              )}
                           </div>
-                          <div className="field">
+                          <div className="field anime highZ2">
                             <Label title={leadsConst.leadType} />
-                            {values.leadType ==="" && this.selectUI(
-                              "",
-                              "leadType",
-                              setFieldValue
-                            )}
-                            {values.leadType !=="" &&this.selectUI(
-                              values.leadType,
-                              "leadType",
-                              setFieldValue
-                            )}
+                            {values.leadType === "" &&
+                              this.selectUI("", "leadType", setFieldValue)}
+                            {values.leadType !== "" &&
+                              this.selectUI(
+                                values.leadType,
+                                "leadType",
+                                setFieldValue
+                              )}
                           </div>
-                          <div className="field">
+                          <div className="field anime">
                             <Label
                               title={leadsConst.product}
                               className={
@@ -291,13 +291,13 @@ class Leads extends Component {
                               handleChange={handleChange}
                             />
                           </div>
-                          <div className="field">
-                            <Label title={leadsConst.remarks} />
+                          <div className="field anime">
+                            <Label title={leadsConst.rem} />
                             <Input
-                              placeholder={leadsConst.remarks}
+                              placeholder={leadsConst.rem}
                               row={1}
-                              name="address"
-                              value={values.address}
+                              name="remarks"
+                              value={values.remarks}
                               handleChange={handleChange}
                             />
                           </div>
@@ -320,51 +320,49 @@ class Leads extends Component {
                       values,
                       errors,
                       touched,
-                      onBlur,
-                      handleChange,
-                      handleBlur,
                       setFieldValue,
                       handleSubmit,
                     }) => (
                       <Form onSubmit={handleSubmit}>
                         <div className="inputDiv">
-                          <div className="field">
+                          <div className="field anime highZ">
                             <Label
-                              title={leadsConst.cusName}
+                              title={leadsConst.custnm}
                               className={
-                                errors.cusNameDemo && touched.cusNameDemo
+                                errors.custnmDemo && touched.custnmDemo
                                   ? "empty"
                                   : ""
                               }
                             />
-                            {values.cusNameDemo ==="" &&this.selectUI(
-                              "",
-                              "cusNameDemo",
-                              setFieldValue,
-                              errors.cusNameDemo && touched.cusNameDemo
-                            )}
-                            {values.cusNameDemo !=="" &&this.selectUI(
-                              values.cusNameDemo,
-                              "cusNameDemo",
-                              setFieldValue,
-                              errors.cusNameDemo && touched.cusNameDemo
-                            )}
+                            {values.custnmDemo === "" &&
+                              this.selectUI(
+                                "",
+                                "custnmDemo",
+                                setFieldValue,
+                                errors.custnmDemo && touched.custnmDemo
+                              )}
+                            {values.custnmDemo !== "" &&
+                              this.selectUI(
+                                values.custnmDemo,
+                                "custnmDemo",
+                                setFieldValue,
+                                errors.custnmDemo && touched.custnmDemo
+                              )}
                           </div>
-                          <div className="field">
+                          <div className="field anime">
                             <Label title={leadsConst.demo} />
                             <Switch
                               checked={demo}
                               handleChange={() => this.switchChange("demo")}
                             />
                           </div>
-                          <div className="field">
+                          <div className="field anime">
                             <Label title={leadsConst.sale} />
                             <Switch
                               checked={sale}
                               handleChange={() => this.switchChange("sale")}
                             />
                           </div>
-
                           <div className="demoBtndiv">
                             <Button type="submit">{leadsConst.save}</Button>
                           </div>
@@ -385,7 +383,7 @@ class Leads extends Component {
   tableCardUI = () => {
     try {
       return tableTitle.map((a, i) => (
-        <Col xs={24} sm={24} md={24} lg={8} xl={8} key={i}>
+        <Col xs={24} sm={24} md={24} lg={8} xl={8} key={i} className="anime">
           <Card
             title={a}
             content={

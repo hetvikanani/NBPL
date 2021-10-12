@@ -10,14 +10,10 @@ import { login } from "redux/login/actions";
 import { FormValidation } from "App/AppConstant";
 import { StyleContainer } from "./style.js";
 import { logo } from "components/Images";
-import {ForgetPasswordconst} from "./constant";
-
+import { ForgetPasswordconst } from "./constant";
 
 const loginValidationSchema = Yup.object().shape({
-  email: Yup.string()
-    .trim()
-    .email(FormValidation.emailInvalid)
-    .required(" "),
+  email: Yup.string().trim().email(FormValidation.emailInvalid).required(" "),
 });
 
 class Login extends Component {
@@ -35,7 +31,7 @@ class Login extends Component {
       await this.props.login(data);
       setSubmitting(false);
     } catch (error) {
-      console.log(error, "handle error");
+      console.log(error);
     }
   };
   render() {
@@ -122,7 +118,4 @@ const mapDispatchToProps = (dispatch) => ({
   login: (payload) => dispatch(login(payload)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

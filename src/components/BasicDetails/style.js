@@ -6,7 +6,6 @@ const BasicDetailsStyle = styled.div`
   padding: 1em;
   background-color: #ffff;
   box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
-
   h2 {
     color: ${Theme.mainColor};
   }
@@ -38,10 +37,10 @@ const BasicDetailsStyle = styled.div`
         button {
           height: 35px;
           line-height: 35px;
+          margin-right: 1em;
         }
       }
     }
-    
   }
 `;
 export { BasicDetailsStyle };

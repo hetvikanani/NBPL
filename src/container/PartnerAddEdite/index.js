@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import { AdmProductStyle } from "./style";
+import { PartnerAddEditConst } from "./constant";
 import {
   Menu,
   Header,
@@ -8,21 +9,29 @@ import {
   BasicDetails,
   FinancialDetails,
 } from "components/Form";
-import { PartnerAddEditConst } from "./constant";
 import { connect } from "react-redux";
-import { savePartner } from "redux/partner/action";
+import { savePartner, getPartnerById } from "redux/partner/action";
 import { withRouter } from "react-router-dom";
-import { contactDetailConst } from "components/ContactDetails/constant";
+import { changePartnerData } from "redux/partner/action";
 
 class AdminPartner extends Component {
   constructor(props) {
     super(props);
     this.state = {
       count: 0,
-      basicDetailsData: {},
-      financialDetailsData: {}, 
-      contractDetailsData: {},
+      partnerData: [],
     };
+  }
+  async componentDidMount() {
+    try {
+      const { match } = this.props;
+      if (match !== "/partner/new") {
+        if (match?.params?.id) await this.props.getPartnerById(match.params.id);
+        else this.props.changePartnerData(null, null);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
   countInc = () => {
     try {
@@ -40,42 +49,31 @@ class AdminPartner extends Component {
     this.setState({ count: count - 1 });
   };
   apiCall = (contacts) => {
-    const { basicDetailsData, financialDetailsData } = this.state;
+    const { partner } = this.props;
+    let id = 0;
+    if (this?.props?.match?.params?.id)
+      id = parseInt(this?.props?.match?.params?.id);
     let data = {
-      
-      partnerId: 0,
-      companyName: basicDetailsData.companyName,
-      emailId: basicDetailsData.email,
-      mobile: basicDetailsData.mobile?.toString(),
-      // gstType: basicDetailsData.gstType,
-      gstType:basicDetailsData.gstType ? 1 : 0,
-      gstNumber: basicDetailsData.gst,
-      pan: basicDetailsData.pan,
-      aadharNumber: basicDetailsData.aadhar?.toString(),
-      companyLogo: basicDetailsData.img,
-      bankName: financialDetailsData.bankName,
-      branchName: financialDetailsData.branchName,
-      accountNumber: financialDetailsData.accountNo?.toString(),
-      ifsc: financialDetailsData.ifscCode,
-      address: financialDetailsData.address,
-      pincode: financialDetailsData.pincode?.toString(),
-      city: financialDetailsData.city,
-      state: financialDetailsData.state,
-      ContactDetails: contacts,
-      // contactDetails: [
-      //   {
-      //     ...contacts,
-      //     contactId: 34,
-      //     partnerId: 1111113,
-      //     contactName: contractDetailsData.contactName,
-      //     emailId: contractDetailsData.email,
-      //     mobile: contractDetailsData.mobile?.toString(),
-      //     designation: contractDetailsData.designation,
-      //   },
-      // ],
+      partnerId: id,
+      companyName: partner.companyName,
+      emailId: partner.email,
+      mobile: partner.mobile?.toString(),
+      gstType: partner.gstType ? 1 : 0,
+      gstNumber: partner.gst,
+      pan: partner.pan,
+      aadharNumber: partner.aadhar?.toString(),
+      companyLogo: partner.companyLogo,
+      bankName: partner.bankName,
+      branchName: partner.branchName,
+      accountNumber: partner.accountNumber?.toString(),
+      ifsc: partner.ifscCode,
+      address: partner.address?.toString(),
+      pincode: partner.pincode?.toString(),
+      city: partner.city,
+      state: partner.state,
+      contactDetails: partner?.contactDetails,
     };
-    // this.props.savePartner(data);
-    console.log("datass", data);
+    this.props.savePartner(data);
   };
   pageUI = () => {
     try {
@@ -89,7 +87,11 @@ class AdminPartner extends Component {
           previous={this.previous}
         />
       ) : count === 2 ? (
-        <ContactDetails changeData={this.changeData} apiCall={this.apiCall} />
+        <ContactDetails
+          changeData={this.changeData}
+          apiCall={this.apiCall}
+          previous={this.previous}
+        />
       ) : (
         ""
       );
@@ -98,14 +100,13 @@ class AdminPartner extends Component {
     }
   };
   render() {
-    console.log("dataaaa", this.state);
     return (
       <AdmProductStyle>
         <Menu />
         <div className="container">
           <Header />
-          <div className="allDiv">
-            <h2>{PartnerAddEditConst.addNewPart}</h2>
+          <div className="allDiv anime">
+            <h2>{PartnerAddEditConst.addPart}</h2>
             {this.pageUI()}
           </div>
         </div>
@@ -118,41 +119,14 @@ const mapStateToProps = (state) => ({
   loading: state.partner.loading,
   error: state.partner.error,
   message: state.partner.message,
+  partner: state.partner.partner,
 });
 const mapDispatchToProps = (dispatch) => ({
   savePartner: (payload) => dispatch(savePartner(payload)),
+  getPartnerById: (id) => dispatch(getPartnerById(id)),
+  changePartnerData: (key, value) =>
+    dispatch(changePartnerData(key, value, true)),
 });
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(AdminPartner)
 );
-
-// {
-//   "partnerId":0,
-// "aadharNumber": "1212121212",
-// "accountNumber": "121212121212",
-// "address": "Near Sasuji Dining Hall, C G Road",
-// "bankName": "dsdsd",
-// "branchName": "sdsddddsd",
-// "city": "ahmedabad",
-// "companyLogo": "a",
-// "companyName": "cdsdcd",
-// "emailId": "hetvipatel321010@gmail.com",
-// "gstNumber": "DSDSDSDs",
-// "gstType": 0,
-// "ifsc": "121212121212",
-// "mobile": "8511829060",
-// "pan": "ABCDA1234A",
-// "pincode": "360005",
-// "state": "Gujarat",
-
-// "contactDetails": [
-//   {
-//     "contactId": 3,
-//     "partnerId": 1111112,
-//     "contactName": "hetvi@napbooks.com",
-//     "emailId": "hetvi@napbooks.com",
-//     "mobile": "123456789",
-//     "designation": "string"
-//   }
-// ]
-// }

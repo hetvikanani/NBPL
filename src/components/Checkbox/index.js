@@ -4,10 +4,12 @@ import { StyleContainer } from "./style";
 
 export default class Check extends Component {
   render() {
-    const { text, onChange,checked } = this.props;
+    const { text, onChange, checked } = this.props;
     return (
       <StyleContainer>
-        <Checkbox onChange={onChange} checked={checked}>{text}</Checkbox>
+        <Checkbox onChange={onChange} checked={checked}>
+          {text}
+        </Checkbox>
       </StyleContainer>
     );
   }

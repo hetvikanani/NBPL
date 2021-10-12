@@ -4,9 +4,14 @@ import { StyleComponent } from "./style";
 
 class RenderDrop extends Component {
   menu = () => {
+    const { data, children } = this.props;
     return (
       <Menu>
-        <Menu.Item key="0">{this.props.children}</Menu.Item>
+        {!data ? (
+          <Menu.Item key="1">{children}</Menu.Item>
+        ) : (
+          data.map((a, i) => a && <Menu.Item key={i + 1}>{a}</Menu.Item>)
+        )}
       </Menu>
     );
   };
@@ -17,6 +22,7 @@ class RenderDrop extends Component {
       <StyleComponent>
         <div id={cls}>
           <Dropdown
+            destroyPopupOnHide
             placement="bottomRight"
             overlay={this.menu()}
             trigger={["click"]}

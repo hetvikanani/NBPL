@@ -10,7 +10,7 @@ import GlobalStyle, { AppContainer } from "./app.style";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, active: "", iactive: " is-active" };
+    this.state = { hasError: false, active: "" };
   }
   async componentDidMount() {
     const auth = localStorage.auth;
@@ -18,12 +18,6 @@ class App extends Component {
       const session_id = JSON.parse(auth).sessionId;
       await this.props.setAuth(session_id);
     }
-    // const a=setTimeout(() => {
-    //   this.setState({iactive:"",active:" is-active"})
-    // }, 500);
-    // const b=setTimeout(() => {
-    //   this.setState({active:""})
-    // }, 2000);
   }
   componentDidUpdate(prevProps) {
     try {
@@ -51,12 +45,9 @@ class App extends Component {
   }
   render() {
     const { isAuthenticated, loading } = this.props;
-    // const {active,iactive}=this.state;
     return (
       <Spin spinning={loading} size="large">
-        {/* <div className={"pageloader"+active}></div>
-        <div className={"infraloader"+iactive}></div> */}
-        <AppContainer>
+        <AppContainer id="App">
           <GlobalStyle />
           <Routes isAuthenticated={isAuthenticated} />
         </AppContainer>

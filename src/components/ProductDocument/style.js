@@ -48,24 +48,27 @@ const ProDocStyle = styled.div`
     margin-right: 2em;
     margin-top: 2em;
     // text-align: center;
-    .anticon-file-pdf {
-      svg {
-        width: 2em;
-        height: 2em;
+    a{
+      color:${Theme.mainColor};
+      .anticon-file-pdf {
+        svg {
+          width: 2em;
+          height: 2em;
+        }
       }
     }
     .anticon-delete {
       margin-left: 10px;
     }
   }
-  .linkDiv{
+  .linkDiv {
     display: inline-block;
     margin-right: 2em;
     margin-top: 1em;
-    padding: 1em 0;    
-    .videoBox{      
+    padding: 1em 0;
+    .videoBox {
       display: flex;
-      .anticon-close{
+      .anticon-close {
         margin-left: 10px;
       }
     }

@@ -1,21 +1,30 @@
 import React, { Component } from "react";
 import { Row, Col } from "antd";
-import { CloseOutlined, UploadOutlined } from "@ant-design/icons";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { financialDetailConst } from "./constant";
-
+import { finConst } from "./constant";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 import { FinDetailsStyle } from "./style";
 import { Input, Label, Button } from "components/Form";
+import { changePartnerData } from "redux/partner/action";
+import { FormValidation } from "App/AppConstant";
+
 const UserValidation = Yup.object().shape({
-  bankName: Yup.string().trim().required(" "),
-  branchName: Yup.string().trim().required(" "),
+  bankName: Yup.string()
+    .trim()
+    .required(" ")
+    .matches(/^[aA-zZ\s]+$/, FormValidation.alphaValid),
+  branchName: Yup.string()
+    .trim()
+    .required(" ")
+    .matches(/^[aA-zZ\s]+$/, FormValidation.alphaValid),
   address: Yup.string().trim().required(" "),
-  accountNo: Yup.string().trim().min(11).max(11).required(" "),
+  accountNumber: Yup.string().trim().min(11).max(11).required(" "),
   ifscCode: Yup.string()
     .trim()
     .required(" ")
-    .matches(/^[A-Z]{4}0[A-Z0-9]{6}$/, "only"),
+    .matches(/^[A-Z]{4}0[A-Z0-9]{6}$/, "only ifsc code allow"),
   pincode: Yup.string().trim().min(6).max(6).required(" "),
   city: Yup.string().trim().required(" "),
   state: Yup.string().trim().required(" "),
@@ -25,18 +34,9 @@ class FinancialDetails extends Component {
     super(props);
     this.state = {
       disable: false,
-      initialState: {
-        bankName: "",
-        branchName: "",
-        address: "",
-        accountNo: "",
-        ifscCode: "",
-        pincode: "",
-        city: "",
-        state: "",
-      },
     };
   }
+
   handleSubmit = async (values, { setSubmitting }) => {
     try {
       this.setState({ btnDisable: true });
@@ -44,21 +44,24 @@ class FinancialDetails extends Component {
         this.setState({ btnDisable: false });
       }, 4500);
       this.props.countInc();
-      this.props.changeData("financialDetailsData", values);
-
       setSubmitting(false);
     } catch (error) {
-      console.log(error, "handle error");
+      console.log(error);
     }
   };
+  changeDataForm = (fieldName, value) =>
+    this.props.changePartnerData(fieldName, value);
+
   render() {
-    const { initialState, disable } = this.state;
+    const { disable } = this.state;
+    const { partner } = this.props;
+
     return (
       <FinDetailsStyle>
-        <h2>{financialDetailConst.finDetail}</h2>
+        <h2 className="anime">{finConst.finDetail}</h2>
         <div className="formDiv">
           <Formik
-            initialValues={initialState}
+            initialValues={partner}
             validationSchema={UserValidation}
             onSubmit={this.handleSubmit}
             enableReinitialize
@@ -70,14 +73,20 @@ class FinancialDetails extends Component {
               handleChange,
               handleBlur,
               handleSubmit,
-              validateForm,
             }) => (
               <Form onSubmit={handleSubmit}>
                 <Row gutter={24}>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
-                        title={financialDetailConst.bankName}
+                        title={finConst.bankName}
                         className={
                           errors.bankName && touched.bankName ? "empty" : ""
                         }
@@ -86,7 +95,10 @@ class FinancialDetails extends Component {
                         onBlur={handleBlur}
                         name="bankName"
                         value={values.bankName}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("bankName", e.target.value);
+                        }}
                         tabIndex="1"
                         className={
                           errors.bankName && touched.bankName ? "empty" : ""
@@ -94,10 +106,17 @@ class FinancialDetails extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
-                        title={financialDetailConst.branchName}
+                        title={finConst.branchName}
                         className={
                           errors.branchName && touched.branchName ? "empty" : ""
                         }
@@ -106,7 +125,10 @@ class FinancialDetails extends Component {
                         onBlur={handleBlur}
                         name="branchName"
                         value={values.branchName}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("branchName", e.target.value);
+                        }}
                         tabIndex="2"
                         className={
                           errors.branchName && touched.branchName ? "empty" : ""
@@ -114,10 +136,17 @@ class FinancialDetails extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
-                        title={financialDetailConst.address}
+                        title={finConst.address}
                         className={
                           errors.address && touched.address ? "empty" : ""
                         }
@@ -127,7 +156,10 @@ class FinancialDetails extends Component {
                         onBlur={handleBlur}
                         name="address"
                         value={values.address}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("address", e.target.value);
+                        }}
                         tabIndex="3"
                         className={
                           errors.address && touched.address ? "empty" : ""
@@ -135,29 +167,43 @@ class FinancialDetails extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
-                        title={financialDetailConst.accNo}
+                        title={finConst.accNo}
                         className={
-                          errors.accountNo && touched.accountNo ? "empty" : ""
+                          errors.accountNumber && touched.accountNumber
+                            ? "empty"
+                            : ""
                         }
                       />
                       <Input
                         type="number"
                         onBlur={handleBlur}
-                        name="accountNo"
-                        value={values.accountNo}
-                        handleChange={handleChange}
+                        name="accountNumber"
+                        value={values.accountNumber}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("accountNumber", e.target.value);
+                        }}
                         tabIndex="4"
                         className={
-                          errors.accountNo && touched.accountNo ? "empty" : ""
+                          errors.accountNumber && touched.accountNumber
+                            ? "empty"
+                            : ""
                         }
                       />
                     </div>
                     <div className="field">
                       <Label
-                        title={financialDetailConst.ifsc}
+                        title={finConst.ifsc}
                         className={
                           errors.ifscCode && touched.ifscCode ? "empty" : ""
                         }
@@ -166,7 +212,10 @@ class FinancialDetails extends Component {
                         onBlur={handleBlur}
                         name="ifscCode"
                         value={values.ifscCode}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("ifscCode", e.target.value);
+                        }}
                         tabIndex="5"
                         className={
                           errors.ifscCode && touched.ifscCode ? "empty" : ""
@@ -174,10 +223,17 @@ class FinancialDetails extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
-                        title={financialDetailConst.pincode}
+                        title={finConst.pincode}
                         className={
                           errors.pincode && touched.pincode ? "empty" : ""
                         }
@@ -187,7 +243,10 @@ class FinancialDetails extends Component {
                         onBlur={handleBlur}
                         name="pincode"
                         value={values.pincode}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("pincode", e.target.value);
+                        }}
                         tabIndex="6"
                         className={
                           errors.pincode && touched.pincode ? "empty" : ""
@@ -195,47 +254,67 @@ class FinancialDetails extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
                     <div className="field">
                       <Label
-                        title={financialDetailConst.city}
-                        className={errors.city && touched.city ? "empty" : ""}
-                      />
-                      <Input
-                        onBlur={handleBlur}
-                        name="city"
-                        value={values.city}
-                        handleChange={handleChange}
-                        tabIndex="7"
-                        className={errors.city && touched.city ? "empty" : ""}
-                      />
-                    </div>
-                  </Col>
-                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                    <div className="field">
-                      <Label
-                        title={financialDetailConst.state}
+                        title={finConst.state}
                         className={errors.state && touched.state ? "empty" : ""}
                       />
                       <Input
                         onBlur={handleBlur}
                         name="state"
                         value={values.state}
-                        handleChange={handleChange}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("state", e.target.value);
+                        }}
                         tabIndex="8"
                         className={errors.state && touched.state ? "empty" : ""}
+                      />
+                    </div>
+                  </Col>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={24}
+                    lg={12}
+                    xl={12}
+                    className="anime"
+                  >
+                    <div className="field">
+                      <Label
+                        title={finConst.city}
+                        className={errors.city && touched.city ? "empty" : ""}
+                      />
+                      <Input
+                        onBlur={handleBlur}
+                        name="city"
+                        value={values.city}
+                        handleChange={(e) => {
+                          handleChange(e);
+                          this.changeDataForm("city", e.target.value);
+                        }}
+                        tabIndex="7"
+                        className={errors.city && touched.city ? "empty" : ""}
                       />
                     </div>
                   </Col>
                 </Row>
 
                 <div className="bottomDiv">
-                  <div className="btn">
+                  <div className="btn anime">
                     <Button type="button" onClick={this.props.previous}>
-                      {financialDetailConst.previous}
+                      {finConst.previous}
                     </Button>
                     <Button type="submit" disabled={disable}>
-                      {financialDetailConst.next}
+                      {finConst.next}
                     </Button>
                   </div>
                 </div>
@@ -247,4 +326,16 @@ class FinancialDetails extends Component {
     );
   }
 }
-export default FinancialDetails;
+const mapStateToProps = (state) => ({
+  loading: state.partner.loading,
+  error: state.partner.error,
+  message: state.partner.message,
+  partners: state.partner.partners,
+  partner: state.partner.partner,
+});
+const mapDispatchToProps = (dispatch) => ({
+  changePartnerData: (key, value) => dispatch(changePartnerData(key, value)),
+});
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(FinancialDetails)
+);

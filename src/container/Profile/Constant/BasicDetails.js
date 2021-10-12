@@ -1,50 +1,61 @@
 import React, { Component } from "react";
 import { Input, Label, Button, Select, FileUpload } from "components/Form";
 import { Row, Col, Image } from "antd";
-import { ProfileStyle } from "../style";
 import { CloseOutlined, VerticalAlignTopOutlined } from "@ant-design/icons";
 import { BasicConst } from "../constant";
 
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import {
+  FormValidation,
+  panConst,
+  gstConst,
+  ButtonConst,
+} from "App/AppConstant";
 
 const ValidationSchema = Yup.object().shape({
-  company_name: Yup.string()
+  companyName: Yup.string()
     .trim()
     .required(" ")
-    .matches(/^[aA-zZ0-9\s]+$/, "Only alphabets are allowed for this field "),
+    .matches(/^[aA-zZ0-9\s]+$/, FormValidation.aadharInvalid),
   partner_code: Yup.string().trim().required(" "),
-  email_id: Yup.string()
-    .trim()
-    .email()
-    .required("Please enter valid Email Address"),
+  email: Yup.string().trim().email().required(FormValidation.emailInvalid),
   mobile_no: Yup.string()
     .trim()
     .min(10)
     .max(10)
-    .required("Please enter valid Mobile No"),
+    .required(FormValidation.mobileInvalid),
   gst_type: Yup.string().trim().required(" "),
   gst_number: Yup.string()
     .trim()
     .required(" ")
-    .matches(/\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}/, "only"),
-  pan_number: Yup.string()
-    .trim()
-    .matches(/[A-Z]{5}\d{4}[A-Z]{1}/, "enter valid PAN"),
+    .matches(gstConst, FormValidation.gstvalid),
+  pan_number: Yup.string().trim().matches(panConst, FormValidation.panValid),
   aadhar_number: Yup.string().trim().min(12).max(12),
 });
 
 export default class BasicDetails extends Component {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     disable: false,
+  //     gstType: false,
+  //     gstNoError: false,
+  //     imgnm: "",
+  //     imgByte: "",
+  //     imgBase64: "",
+  //     isDataSet: false,
+  //   };
+  // }
   constructor() {
     super();
     this.state = {
       imgByte: "",
       imgnm: "",
-
       initState: {
-        company_name: "",
+        companyName: "",
         partner_code: "",
-        email_id: "",
+        email: "",
         mobile_no: "",
         gst_type: "",
         gst_number: "",
@@ -53,6 +64,15 @@ export default class BasicDetails extends Component {
       },
     };
   }
+
+  // changeDataForm = (fieldName, value) =>
+  //   this.props.changePartnerData(fieldName, value);
+
+  // switchChange = (setFieldValue) => {
+  //   this.changeDataForm("gstType", !this.state.gstType);
+  //   setFieldValue("gstType", !this.state.gstType);
+  //   this.setState({ gstType: !this.state.gstType });
+  // };
 
   fileUpload = () => {
     try {
@@ -73,14 +93,13 @@ export default class BasicDetails extends Component {
       }
       return (
         <FileUpload
-         
           accept=".jpg, .jpeg, .png"
           image={true}
           sendByte={this.setByte}
           elements={
             <Button color="secondary" className="uploadbtn">
               <VerticalAlignTopOutlined />
-              No File Choosen
+              {ButtonConst.upload}
             </Button>
           }
         />
@@ -90,31 +109,47 @@ export default class BasicDetails extends Component {
     }
   };
   removefile = () => this.setState({ imgByte: "", imgnm: "" });
-
   setByte = (byteCode, name) =>
     this.setState({ imgByte: byteCode, imgnm: name });
-
   handleSubmit = async (values, { setSubmitting }) => {
     try {
       this.setState({ btnDisable: true });
       setTimeout(() => {
         this.setState({ btnDisable: false });
       }, 4500);
-
       setSubmitting(false);
     } catch (error) {
-      console.log(error, "handle error");
+      console.log(error);
     }
   };
 
+  // handleSubmit = async (values, { setSubmitting }) => {
+  //   try {
+  //     const { gstType } = this.state;
+  //     this.setState({ btnDisable: true });
+  //     setTimeout(() => {
+  //       this.setState({ btnDisable: false });
+  //     }, 4500);
+  //     this.props.changePartnerData("img", this.state.imgBase64);
+  //     this.props.countInc();
+  //     setSubmitting(false);
+  //   } catch (error) {
+  //     console.log(error, "handle error");
+  //   }
+  // };
+
   render() {
-    let gst = ["Yes", "No"];
-
     const { initState } = this.state;
-
+    let gst = ["Yes", "No"];
+    // const { disable, gstNoError } = this.state;
+    // const { partner } = this.props;
     return (
       <div>
         <Formik
+          // initialValues={partner}
+          // validationSchema={UserValidation}
+          // onSubmit={this.handleSubmit}
+          // enableReinitialize
           initialValues={initState}
           validationSchema={ValidationSchema}
           onSubmit={this.handleSubmit}
@@ -131,35 +166,38 @@ export default class BasicDetails extends Component {
           }) => (
             <Form onSubmit={handleSubmit}>
               <Row gutter={24}>
-                <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
                   <Label
                     title={BasicConst.company_name}
                     className={
-                      errors.company_name && touched.company_name ? "empty" : ""
+                      errors.companyName && touched.companyName ? "empty" : ""
                     }
-                  ></Label>
-
+                  />
                   <Input
-                    placeholder={BasicConst.company_nameplace}
+                    // placeholder={BasicConst.company_nameplace}
                     className={
-                      errors.company_name && touched.company_name ? "empty" : ""
+                      errors.companyName && touched.companyName ? "empty" : ""
                     }
                     onBlur={handleBlur}
-                    name="company_name"
-                    value={values.company_name}
+                    name="companyName"
+                    value={values.companyName}
                     handleChange={handleChange}
+                    // handleChange={(e) => {
+                    //   this.changeDataForm("companyName", e.target.value);
+                    //   setFieldValue("companyName", e.target.value);
+                    // }}
                     tabIndex="1"
-                  ></Input>
+                  />
                 </Col>
-                <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
                   <Label
                     title={BasicConst.partner_code}
                     className={
                       errors.partner_code && touched.partner_code ? "empty" : ""
                     }
-                  ></Label>
+                  />
                   <Input
-                    placeholder={BasicConst.partner_codeplace}
+                    // placeholder={BasicConst.partner_codeplace}
                     type="number"
                     className={
                       errors.partner_code && touched.partner_code ? "empty" : ""
@@ -169,40 +207,35 @@ export default class BasicDetails extends Component {
                     value={values.partner_code}
                     handleChange={handleChange}
                     tabIndex="2"
-                  ></Input>
+                  />
                 </Col>
-                <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
                   <Label
                     title={BasicConst.email_id}
-                    className={
-                      errors.email_id && touched.email_id ? "empty" : ""
-                    }
-                  ></Label>
+                    className={errors.email && touched.email ? "empty" : ""}
+                  />
                   <Input
-                    placeholder={BasicConst.email_idplace}
-                    className={
-                      errors.email_id && touched.email_id ? "empty" : ""
-                    }
+                    // placeholder={BasicConst.email_idplace}
+                    className={errors.email && touched.email ? "empty" : ""}
                     onBlur={handleBlur}
-                    name="email_id"
-                    value={values.email_id}
+                    name="email"
+                    value={values.email}
                     handleChange={handleChange}
                     tabIndex="3"
-                  ></Input>
-                  {errors.email_id && touched.email_id && (
-                    <div className="form-error">{errors.email_id}</div>
+                  />
+                  {errors.email && touched.email && (
+                    <div className="form-error">{errors.email}</div>
                   )}
                 </Col>
-
-                <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
                   <Label
                     title={BasicConst.mobile_no}
                     className={
                       errors.mobile_no && touched.mobile_no ? "empty" : ""
                     }
-                  ></Label>
+                  />
                   <Input
-                    placeholder={BasicConst.mobile_noplace}
+                    // placeholder={BasicConst.mobile_noplace}
                     type="number"
                     className={
                       errors.mobile_no && touched.mobile_no ? "empty" : ""
@@ -212,20 +245,20 @@ export default class BasicDetails extends Component {
                     value={values.mobile_no}
                     handleChange={handleChange}
                     tabIndex="4"
-                  ></Input>
+                  />
                   {errors.mobile_no && touched.mobile_no && (
                     <div className="form-error">{errors.mobile_no}</div>
                   )}
                 </Col>
-                <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
                   <Label
                     title={BasicConst.gst_type}
                     className={
                       errors.gst_type && touched.gst_type ? "empty" : ""
                     }
-                  ></Label>
+                  />
                   <Select
-                    placeholder={BasicConst.gst_typeplace}
+                    // placeholder={BasicConst.gst_typeplace}
                     data={gst}
                     selectClass={
                       errors.gst_type && touched.gst_type ? "empty" : ""
@@ -236,18 +269,17 @@ export default class BasicDetails extends Component {
                     onChange={(value) => {
                       setFieldValue("gst_type", value);
                     }}
-                  ></Select>
+                  />
                 </Col>
-
-                <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
                   <Label
                     title={BasicConst.gst_number}
                     className={
                       errors.gst_number && touched.gst_number ? "empty" : ""
                     }
-                  ></Label>
+                  />
                   <Input
-                    placeholder={BasicConst.gst_numberplace}
+                    // placeholder={BasicConst.gst_numberplace}
                     className={
                       errors.gst_number && touched.gst_number ? "empty" : ""
                     }
@@ -256,18 +288,17 @@ export default class BasicDetails extends Component {
                     value={values.gst_number}
                     handleChange={handleChange}
                     tabIndex="6"
-                  ></Input>
+                  />
                 </Col>
-
-                <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
                   <Label
                     title={BasicConst.pan}
                     className={
                       errors.pan_number && touched.pan_number ? "empty" : ""
                     }
-                  ></Label>
+                  />
                   <Input
-                    placeholder={BasicConst.panplace}
+                    // placeholder={BasicConst.panplace}
                     className={
                       errors.pan_number && touched.pan_number ? "empty" : ""
                     }
@@ -276,12 +307,12 @@ export default class BasicDetails extends Component {
                     value={values.pan_number}
                     handleChange={handleChange}
                     tabIndex="7"
-                  ></Input>
+                  />
                   {errors.pan_number && touched.pan_number && (
                     <div className="form-error">{errors.pan_number}</div>
                   )}
                 </Col>
-                <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
                   <Label
                     title={BasicConst.aadhar}
                     className={
@@ -289,9 +320,9 @@ export default class BasicDetails extends Component {
                         ? "empty"
                         : ""
                     }
-                  ></Label>
+                  />
                   <Input
-                    placeholder={BasicConst.aadharplace}
+                    // placeholder={BasicConst.aadharplace}
                     className={
                       errors.aadhar_number && touched.aadhar_number
                         ? "empty"
@@ -303,18 +334,18 @@ export default class BasicDetails extends Component {
                     value={values.aadhar_number}
                     handleChange={handleChange}
                     tabIndex="7"
-                  ></Input>
+                  />
                   {errors.aadhar_number && touched.aadhar_number && (
                     <div className="form-error">{errors.aadhar_number}</div>
                   )}
                 </Col>
-                <Col xs={24} sm={24} md={12} lg={8} xl={8}>
-                  <Label title={BasicConst.companylogo}></Label>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
+                  <Label title={BasicConst.companylogo} />
                   <>{this.fileUpload()}</>
                 </Col>
               </Row>
-              <div className="btnDiv">
-                <Button type="submit">Update</Button>
+              <div className="btnDiv anime">
+                <Button type="submit">{ButtonConst.update}</Button>
               </div>
             </Form>
           )}

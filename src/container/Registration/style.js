@@ -12,10 +12,9 @@ const StyleContainer = styled.div`
   .canvasDiv {
     position: absolute;
   }
-  .logoDiv {   
+  .logoDiv {
     text-align: center;
   }
-
   .form-div {
     border-radius: 10px;
     width: 30%;
@@ -82,6 +81,5 @@ const StyleContainer = styled.div`
       }
     }
   }
-  
 `;
 export { StyleContainer };

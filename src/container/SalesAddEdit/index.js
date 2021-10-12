@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import { Row, Col, Image, message } from "antd";
 import { Formik, Form } from "formik";
@@ -17,19 +16,14 @@ import {
   PackageCard,
 } from "components/Form";
 import { copy } from "components/Images";
-// import { PageConst, ButtonConst } from "App/AppConstant";
 import { salesAddConstant } from "./constant";
 
 import { MonthlyData, AnnualData, CardData } from "./constant";
+import { FormValidation, gstConst } from "App/AppConstant";
 const select = ["kartik", "Amar"];
 const ValidationSchema = Yup.object().shape({
   lead: Yup.string().trim().required(" "),
-  gstNo: Yup.string()
-    .trim()
-    .matches(
-      /\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}/,
-      "Enter Valid GST No."
-    ),
+  gstNo: Yup.string().trim().matches(gstConst, FormValidation.gstvalid),
   product: Yup.string().trim().required(" "),
   timePeriod: Yup.string().trim().required(" "),
 });
@@ -41,7 +35,7 @@ class SelseAddEdit extends Component {
       subType: false,
       gstError: false,
       btnDisable: false,
-      genLicence: false,     
+      genLicence: false,
       licenseId: "45ABc551",
       initValues: {
         lead: "",
@@ -64,7 +58,6 @@ class SelseAddEdit extends Component {
               : select
           }
           value={val}
-          // withID={true}
           defaultValue={val}
           selectClass={error ? "empty" : ""}
           onChange={(value) => {
@@ -122,8 +115,8 @@ class SelseAddEdit extends Component {
   };
   copyCode = () => {
     try {
-      const { licenseId, btnDisable } = this.state;      
-      if(btnDisable === false){
+      const { licenseId, btnDisable } = this.state;
+      if (btnDisable === false) {
         navigator.clipboard.writeText(licenseId);
         message.success("Code Copied");
         this.setState({ btnDisable: true });
@@ -143,7 +136,7 @@ class SelseAddEdit extends Component {
         <Menu />
         <div className="container">
           <Header />
-          <div className="allDiv">
+          <div className="allDiv anime">
             <Card
               title={"Add New Sales"}
               content={
@@ -167,7 +160,7 @@ class SelseAddEdit extends Component {
                       <Form onSubmit={handleSubmit}>
                         <Row gutter={20}>
                           <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-                            <div className="field">
+                            <div className="field anime">
                               <Label title={salesAddConstant.lead} />
                               {values.lead === "" &&
                                 this.selectUI(
@@ -185,8 +178,14 @@ class SelseAddEdit extends Component {
                                 )}
                             </div>
                           </Col>
-                          <Col xs={24} sm={24} md={24} lg={12} xl={ gstType?8:16}>
-                            <div className="field">
+                          <Col
+                            xs={24}
+                            sm={24}
+                            md={24}
+                            lg={12}
+                            xl={gstType ? 8 : 16}
+                          >
+                            <div className="field anime">
                               <Label title={salesAddConstant.gstType} />
                               <div className="switchDiv">
                                 <RoundSwitch
@@ -201,15 +200,16 @@ class SelseAddEdit extends Component {
                             </div>
                           </Col>
                           {gstType && (
-                          <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-                              <div className="field">
-                                <Label title={salesAddConstant.gstno} 
-                                className={
-                                  (errors.gstNo && touched.gstNo) ||
-                                  (gstError && values.gstNo === "")
-                                    ? "empty"
-                                    : ""
-                                }
+                            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
+                              <div className="field anime">
+                                <Label
+                                  title={salesAddConstant.gstno}
+                                  className={
+                                    (errors.gstNo && touched.gstNo) ||
+                                    (gstError && values.gstNo === "")
+                                      ? "empty"
+                                      : ""
+                                  }
                                 />
                                 <Input
                                   className={
@@ -229,10 +229,10 @@ class SelseAddEdit extends Component {
                                   </div>
                                 )}
                               </div>
-                          </Col>
-                            )}
+                            </Col>
+                          )}
                           <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-                            <div className="field">
+                            <div className="field anime">
                               <Label title={salesAddConstant.product} />
                               {values.product === "" &&
                                 this.selectUI(
@@ -250,45 +250,45 @@ class SelseAddEdit extends Component {
                                 )}
                             </div>
                           </Col>
-                         {values.product !== "" && (
-                         <>
-                         <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-                            <div className="field">
-                              <Label title={salesAddConstant.subType} />
-                              <div className="switchDiv">
-                                <RoundSwitch
-                                  left="MONTHLY"
-                                  right="ANNUAL"
-                                  checked={subType}
-                                  handleChange={() => {
-                                    this.switchChange("subType");
-                                    setFieldValue("timePeriod", "");
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </Col>
-                          <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-                            <div className="field">
-                              <Label title={salesAddConstant.timePeriod} />
-                              {values.timePeriod === "" &&
-                                this.selectUI(
-                                  "",
-                                  "timePeriod",
-                                  setFieldValue,
-                                  errors.timePeriod && touched.timePeriod
-                                )}
-                              {values.timePeriod !== "" &&
-                                this.selectUI(
-                                  values.timePeriod,
-                                  "timePeriod",
-                                  setFieldValue,
-                                  errors.timePeriod && touched.timePeriod
-                                )}
-                            </div>
-                          </Col>
-                          {this.packageUI()}
-                          </>
+                          {values.product !== "" && (
+                            <>
+                              <Col xs={24} sm={24} md={24} lg={12} xl={8}>
+                                <div className="field anime">
+                                  <Label title={salesAddConstant.subType} />
+                                  <div className="switchDiv">
+                                    <RoundSwitch
+                                      left="MONTHLY"
+                                      right="ANNUAL"
+                                      checked={subType}
+                                      handleChange={() => {
+                                        this.switchChange("subType");
+                                        setFieldValue("timePeriod", "");
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              </Col>
+                              <Col xs={24} sm={24} md={24} lg={12} xl={8}>
+                                <div className="field anime">
+                                  <Label title={salesAddConstant.timePeriod} />
+                                  {values.timePeriod === "" &&
+                                    this.selectUI(
+                                      "",
+                                      "timePeriod",
+                                      setFieldValue,
+                                      errors.timePeriod && touched.timePeriod
+                                    )}
+                                  {values.timePeriod !== "" &&
+                                    this.selectUI(
+                                      values.timePeriod,
+                                      "timePeriod",
+                                      setFieldValue,
+                                      errors.timePeriod && touched.timePeriod
+                                    )}
+                                </div>
+                              </Col>
+                              {this.packageUI()}
+                            </>
                           )}
                         </Row>
                         {genLicence && (
@@ -306,18 +306,16 @@ class SelseAddEdit extends Component {
                           </div>
                         )}
 
-                        <div className="btnDiv">                         
-                          {!genLicence ?
-                            <Button
-                              onClick={this.generateLicence}
-                            >
+                        <div className="btnDiv">
+                          {!genLicence ? (
+                            <Button onClick={this.generateLicence}>
                               {salesAddConstant.genLicence}
                             </Button>
-                            :
+                          ) : (
                             <Button type="submit">
                               {salesAddConstant.payment}
                             </Button>
-                          }
+                          )}
                         </div>
                       </Form>
                     )}
