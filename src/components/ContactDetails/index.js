@@ -82,7 +82,6 @@ class ContactDetails extends Component {
   };
   handleSubmit = async (values, { setSubmitting }) => {
     try {
-      // const { partner } = this.props;
       const { prev } = this.state;
       this.setState({ btnDisable: true, check: true });
       setTimeout(() => {
@@ -153,7 +152,7 @@ class ContactDetails extends Component {
     let finalContactDetials = partner?.contactDetails?.filter(
       (data) => data.isDelete !== 1
     );
-
+    console.log(this.props, "aaa");
     return (
       <ContDetailsStyle>
         <h3 className="anime">{contactConst.cd}</h3>

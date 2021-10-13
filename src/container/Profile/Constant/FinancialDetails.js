@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Input, Label, Button, Select } from "components/Form";
+import { Input, Label, Button } from "components/Form";
 import { Row, Col } from "antd";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -8,13 +8,17 @@ import { ButtonConst } from "App/AppConstant";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { changePartnerData } from "redux/partner/action";
+import { FormValidation } from "App/AppConstant";
 
 const UserValidation = Yup.object().shape({
-  bankName: Yup.string().trim().required(" "),
+  bankName: Yup.string()
+    .trim()
+    .required(" ")
+    .matches(/^[aA-zZ\s]+$/, FormValidation.alphaValid),
   branchName: Yup.string()
     .trim()
     .required(" ")
-    .matches(/^[aA-zZ\s]+$/, ""),
+    .matches(/^[aA-zZ\s]+$/, FormValidation.alphaValid),
   accountNumber: Yup.string().trim().min(11).max(11).required(" "),
   ifscCode: Yup.string()
     .trim()
@@ -27,8 +31,8 @@ const UserValidation = Yup.object().shape({
 });
 
 class FinancialDetails extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       disable: false,
     };
@@ -37,9 +41,10 @@ class FinancialDetails extends Component {
   handleSubmit = async (values, { setSubmitting }) => {
     try {
       this.setState({ btnDisable: true });
-      setTimeout(() => {
-        this.setState({ btnDisable: false });
-      }, 4500);
+      // setTimeout(() => {
+      //   this.setState({ btnDisable: false });
+      // }, 4500);
+      this.props.apiCall();
       setSubmitting(false);
     } catch (error) {
       console.log(error);
@@ -52,17 +57,6 @@ class FinancialDetails extends Component {
   render() {
     const { disable } = this.state;
     const { partner } = this.props;
-
-    let bank = [
-      "Canara Bank",
-      "Bank of India",
-      "Bank of Baroda",
-      "Punjab Bank",
-    ];
-    let city = ["Rajkot", "Ahmedabad", "Surat", "Baroda"];
-    let state = ["Gujarat", "Utter Pradesh", "Goa", "Maharastra"];
-
-    // const { initState } = this.state;
 
     return (
       <div>
@@ -80,7 +74,6 @@ class FinancialDetails extends Component {
             handleChange,
             handleBlur,
             handleSubmit,
-            setFieldValue,
           }) => (
             <Form onSubmit={handleSubmit}>
               <Row gutter={24}>

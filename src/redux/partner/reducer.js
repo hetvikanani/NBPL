@@ -124,6 +124,7 @@ export default (state = initialState, action) => {
         pincode: data.pincode,
         city: data.city,
         state: data.state,
+        partnerCode: data.partnerId,
       };
       let contactDetails = [];
       data?.contactDetails.forEach((a, i) => {

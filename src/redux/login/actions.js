@@ -8,6 +8,7 @@ import * as actions from "./constant";
 
 export const login = (payload) => async (dispatch) => {
   try {
+    // debugger;
     dispatch({ type: actions.LOGIN_INITIATED });
     let url =
       payload.role === "admin"

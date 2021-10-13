@@ -6,7 +6,6 @@ import { BasicConst } from "../constant";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { changePartnerData } from "redux/partner/action";
-
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import {
@@ -21,7 +20,7 @@ const UserValidation = Yup.object().shape({
     .trim()
     .required(" ")
     .matches(/^[aA-zZ0-9\s]+$/, FormValidation.aadharInvalid),
-  partner_code: Yup.string().trim().required(" "),
+  partnerCode: Yup.string().trim().required(" "),
   email: Yup.string().trim().email().required(FormValidation.emailInvalid),
   mobile: Yup.string()
     .trim()
@@ -49,23 +48,6 @@ class BasicDetails extends Component {
       isDataSet: false,
     };
   }
-  // constructor() {
-  //   super();
-  //   this.state = {
-  //     imgByte: "",
-  //     imgnm: "",
-  //     initState: {
-  //       companyName: "",
-  //       partner_code: "",
-  //       email: "",
-  //       mobile_no: "",
-  //       gst_type: "",
-  //       gst_number: "",
-  //       pan_number: "",
-  //       aadhar_number: "",
-  //     },
-  //   };
-  // }
 
   changeDataForm = (fieldName, value) =>
     this.props.changePartnerData(fieldName, value);
@@ -76,28 +58,29 @@ class BasicDetails extends Component {
     this.setState({ gstType: !this.state.gstType });
   };
 
-  fileUpload = () => {
+  fileUpload = (setFieldValue) => {
     try {
-      const { imgnm, imgByte } = this.state;
-      let name = imgnm;
-      if (imgnm && imgByte) {
-        let a = name.split(".");
-        name = a[0].substr(0, 5) + "." + a[1];
+      const { partner } = this.props;
+      let name = partner?.imgnm;
+
+      if (partner?.imgnm || partner?.companyLogo) {
+        let a = name?.split(".");
+        name = a?.[0]?.substr(0, 5) + "." + a?.[1];
         return (
           <>
             <span className="optionui">
-              <span className="txtWrap">{"name"}</span>
-              <CloseOutlined onClick={() => this.removefile()} />
+              <span className="txtWrap">{"Image" || name}</span>
+              <CloseOutlined onClick={() => this.removefile(setFieldValue)} />
             </span>
-            <Image src={imgByte} width={50} height={30} />
+            <Image src={partner?.companyLogo} width={50} height={30} />
           </>
         );
       }
       return (
         <FileUpload
-          accept=".jpg, .jpeg, .png"
+          accept=".jpg, .jpeg, .png, .svg"
           image={true}
-          sendByte={this.setByte}
+          sendByte={(a, b, c) => this.setByte(a, b, c, setFieldValue)}
           elements={
             <Button color="secondary" className="uploadbtn">
               <VerticalAlignTopOutlined />
@@ -110,30 +93,35 @@ class BasicDetails extends Component {
       console.log(error);
     }
   };
-  removefile = () => this.setState({ imgByte: "", imgnm: "" });
-  setByte = (byteCode, name) =>
-    this.setState({ imgByte: byteCode, imgnm: name });
-  handleSubmit = async (values, { setSubmitting }) => {
-    try {
-      this.setState({ btnDisable: true });
-      setTimeout(() => {
-        this.setState({ btnDisable: false });
-      }, 4500);
-      setSubmitting(false);
-    } catch (error) {
-      console.log(error);
-    }
+  removefile = (setFieldValue) => {
+    this.changeDataForm("companyLogo", "");
+    setFieldValue("companyLogo", "");
+    this.changeDataForm("imgnm", "");
+    setFieldValue("imgnm", "");
+    this.changeDataForm("imgBase64", "");
+    setFieldValue("imgBase64", "");
+    this.setState({ companyLogo: "", imgnm: "", imgBase64: "" });
+  };
+  setByte = (byteCode, name, base64, setFieldValue) => {
+    this.changeDataForm("companyLogo", byteCode);
+    setFieldValue("companyLogo", byteCode);
+    this.changeDataForm("imgnm", name);
+    setFieldValue("imgnm", name);
+    this.changeDataForm("imgBase64", base64);
+    setFieldValue("imgBase64", base64);
+    this.setState({ companyLogo: byteCode, imgnm: name, imgBase64: base64 });
   };
 
   handleSubmit = async (values, { setSubmitting }) => {
     try {
       const { gstType } = this.state;
       this.setState({ btnDisable: true });
-      setTimeout(() => {
-        this.setState({ btnDisable: false });
-      }, 4500);
+      // setTimeout(() => {
+      //   this.setState({ btnDisable: false });
+      // }, 4500);
       this.props.changePartnerData("img", this.state.imgBase64);
-      this.props.countInc();
+      this.props.apiCall(false);
+
       setSubmitting(false);
     } catch (error) {
       console.log(error, "handle error");
@@ -141,8 +129,10 @@ class BasicDetails extends Component {
   };
 
   render() {
-    // const { initState } = this.state;
-    let gst = ["Yes", "No"];
+    let gst = [
+      { id: 1, value: "Registred" },
+      { id: 0, value: "Unregistred" },
+    ];
     const { disable, gstNoError } = this.state;
     const { partner } = this.props;
     return (
@@ -152,9 +142,6 @@ class BasicDetails extends Component {
           validationSchema={UserValidation}
           onSubmit={this.handleSubmit}
           enableReinitialize
-          // initialValues={initState}
-          // validationSchema={ValidationSchema}
-          // onSubmit={this.handleSubmit}
         >
           {({
             values,
@@ -176,14 +163,13 @@ class BasicDetails extends Component {
                     }
                   />
                   <Input
-                    // placeholder={BasicConst.company_nameplace}
                     className={
                       errors.companyName && touched.companyName ? "empty" : ""
                     }
+                    disabled={true}
                     onBlur={handleBlur}
                     name="companyName"
                     value={values.companyName}
-                    handleChange={handleChange}
                     handleChange={(e) => {
                       this.changeDataForm("companyName", e.target.value);
                       setFieldValue("companyName", e.target.value);
@@ -198,18 +184,18 @@ class BasicDetails extends Component {
                   <Label
                     title={BasicConst.partner_code}
                     className={
-                      errors.partner_code && touched.partner_code ? "empty" : ""
+                      errors.partnerCode && touched.partnerCode ? "empty" : ""
                     }
                   />
                   <Input
-                    // placeholder={BasicConst.partner_codeplace}
                     type="number"
                     className={
-                      errors.partner_code && touched.partner_code ? "empty" : ""
+                      errors.partnerCode && touched.partnerCode ? "empty" : ""
                     }
+                    disabled={true}
                     onBlur={handleBlur}
-                    name="partner_code"
-                    value={values.partner_code}
+                    name="partnerCode"
+                    value={values.partnerCode}
                     handleChange={handleChange}
                     tabIndex="2"
                   />
@@ -220,12 +206,11 @@ class BasicDetails extends Component {
                     className={errors.email && touched.email ? "empty" : ""}
                   />
                   <Input
-                    // placeholder={BasicConst.email_idplace}
                     className={errors.email && touched.email ? "empty" : ""}
                     onBlur={handleBlur}
                     name="email"
                     value={values.email}
-                    // handleChange={handleChange}
+                    disabled={true}
                     handleChange={(e) => {
                       this.changeDataForm("email", e.target.value);
                       setFieldValue("email", e.target.value);
@@ -242,13 +227,12 @@ class BasicDetails extends Component {
                     className={errors.mobile && touched.mobile ? "empty" : ""}
                   />
                   <Input
-                    // placeholder={BasicConst.mobile_noplace}
                     type="number"
                     className={errors.mobile && touched.mobile ? "empty" : ""}
+                    disabled={true}
                     onBlur={handleBlur}
                     name="mobile"
                     value={values.mobile}
-                    // handleChange={handleChange}
                     handleChange={(e) => {
                       this.changeDataForm("mobile", e.target.value);
                       setFieldValue("mobile", e.target.value);
@@ -262,41 +246,45 @@ class BasicDetails extends Component {
                 <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
                   <Label
                     title={BasicConst.gst_type}
-                    className={
-                      errors.gst_type && touched.gst_type ? "empty" : ""
-                    }
+                    className={errors.gstType && touched.gstType ? "empty" : ""}
                   />
+
                   <Select
-                    // placeholder={BasicConst.gst_typeplace}
+                    withID
                     data={gst}
                     selectClass={
-                      errors.gst_type && touched.gst_type ? "empty" : ""
+                      errors.gstType && touched.gstType ? "empty" : ""
                     }
-                    name="gst_type"
-                    tabIndex="5"
-                    value={values.gst_type}
+                    name="gstType"
+                    value={values.gstType}
                     onChange={(value) => {
-                      setFieldValue("gst_type", value);
+                      setFieldValue("gstType", value);
+                      this.changeDataForm("gstType", value);
                     }}
+                    defaultValue={values.gstType}
                   />
                 </Col>
                 <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
                   <Label
                     title={BasicConst.gst_number}
-                    className={
-                      errors.gst_number && touched.gst_number ? "empty" : ""
-                    }
+                    className={errors.gst && touched.gst ? "empty" : ""}
                   />
                   <Input
-                    // placeholder={BasicConst.gst_numberplace}
-                    className={
-                      errors.gst_number && touched.gst_number ? "empty" : ""
-                    }
+                    className={errors.gst && touched.gst ? "empty" : ""}
                     onBlur={handleBlur}
-                    name="gst_number"
-                    value={values.gst_number}
-                    handleChange={handleChange}
+                    name="gst"
+                    value={values?.gst?.toUpperCase()}
                     tabIndex="6"
+                    handleChange={(e) => {
+                      this.changeDataForm("gst", e.target.value);
+                      setFieldValue("gst", e.target.value);
+                    }}
+                    className={
+                      (errors.gst && touched.gst) ||
+                      (gstNoError && values.gst === "")
+                        ? "empty"
+                        : ""
+                    }
                   />
                 </Col>
                 <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
@@ -305,12 +293,10 @@ class BasicDetails extends Component {
                     className={errors.pan && touched.pan ? "empty" : ""}
                   />
                   <Input
-                    // placeholder={BasicConst.panplace}
                     className={errors.pan && touched.pan ? "empty" : ""}
                     onBlur={handleBlur}
                     name="pan"
                     value={values.pan}
-                    // handleChange={handleChange}
                     handleChange={(e) => {
                       this.changeDataForm("pan", e.target.value);
                     }}
@@ -326,13 +312,14 @@ class BasicDetails extends Component {
                     className={errors.aadharr && touched.aadhar ? "empty" : ""}
                   />
                   <Input
-                    // placeholder={BasicConst.aadharplace}
                     className={errors.aadhar && touched.aadhar ? "empty" : ""}
                     type="number"
                     onBlur={handleBlur}
                     name="aadhar"
                     value={values.aadhar}
-                    handleChange={handleChange}
+                    handleChange={(e, z) => {
+                      this.changeDataForm("aadhar", e.target.value);
+                    }}
                     tabIndex="7"
                   />
                   {errors.aadhar && touched.aadhar && (
@@ -341,7 +328,7 @@ class BasicDetails extends Component {
                 </Col>
                 <Col xs={24} sm={24} md={12} lg={8} xl={8} className="anime">
                   <Label title={BasicConst.companylogo} />
-                  <>{this.fileUpload()}</>
+                  <>{this.fileUpload(setFieldValue)}</>
                 </Col>
               </Row>
               <div className="btnDiv anime">

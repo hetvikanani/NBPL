@@ -3,14 +3,19 @@ import { Row, Col, Card } from "antd";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { SearchOutlined } from "@ant-design/icons";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import { saveContactus } from "redux/partnerUser/action";
 
 import { ContactStyle } from "./style";
 import { Menu, Header, Input, Button } from "components/Form";
 import { FormValidation } from "App/AppConstant";
 import { ContactPageconst } from "./constant";
+import { getAuthUserID } from "modules/helper";
+var userId = getAuthUserID();
 
 const ValidationSchema = Yup.object().shape({
-  name: Yup.string().trim().required(" "),
+  fullName: Yup.string().trim().required(" "),
   email: Yup.string().trim().email(FormValidation.emailInvalid).required(" "),
   message: Yup.string().trim().required(" "),
 });
@@ -20,12 +25,14 @@ class Contact extends Component {
     super();
     this.state = {
       initState: {
-        name: "",
+        fullName: "",
         email: "",
         message: "",
+        contactId: 0,
       },
     };
   }
+
   addressRow = (a) => {
     try {
       let a = ["Surat", "Vadodara", "Mumbai", "U.S.A"];
@@ -51,7 +58,26 @@ class Contact extends Component {
       console.log(error);
     }
   };
+  handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      this.setState({ btnDisable: true });
+      setTimeout(() => {
+        this.setState({ btnDisable: false });
+      }, 4500);
+      let data = {
+        contactId: values.contactId,
+        fullName: values.fullName,
+        email: values.email,
+        message: values.message,
+        userId: userId,
+      };
 
+      await this.props.saveContactus({ data: data });
+      setSubmitting(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   render() {
     const { initState } = this.state;
     return (
@@ -82,14 +108,16 @@ class Contact extends Component {
                         <Row gutter={20} className="anime">
                           <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                             <Input
-                              name="name"
-                              value={values.name}
+                              name="fullName"
+                              value={values.fullName}
                               onBlur={handleBlur}
                               handleChange={handleChange}
                               placeholder={ContactPageconst.fullName}
                               tabIndex="1"
                               className={
-                                errors.name && touched.name ? "empty" : ""
+                                errors.fullName && touched.fullName
+                                  ? "empty"
+                                  : ""
                               }
                             />
                           </Col>
@@ -185,4 +213,17 @@ class Contact extends Component {
     );
   }
 }
-export default Contact;
+
+const mapStateToProps = (state) => {
+  return {
+    loading: state.partner.loading,
+    error: state.partner.error,
+    message: state.partner.message,
+  };
+};
+const mapDispatchToProps = (dispatch) => ({
+  saveContactus: (payload) => dispatch(saveContactus(payload)),
+});
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Contact)
+);

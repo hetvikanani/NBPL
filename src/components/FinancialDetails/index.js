@@ -19,12 +19,13 @@ const UserValidation = Yup.object().shape({
     .trim()
     .required(" ")
     .matches(/^[aA-zZ\s]+$/, FormValidation.alphaValid),
-  address: Yup.string().trim().required(" "),
   accountNumber: Yup.string().trim().min(11).max(11).required(" "),
   ifscCode: Yup.string()
     .trim()
     .required(" ")
     .matches(/^[A-Z]{4}0[A-Z0-9]{6}$/, "only ifsc code allow"),
+  address: Yup.string().trim().required(" "),
+
   pincode: Yup.string().trim().min(6).max(6).required(" "),
   city: Yup.string().trim().required(" "),
   state: Yup.string().trim().required(" "),

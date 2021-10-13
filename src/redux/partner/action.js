@@ -7,12 +7,13 @@ import { axiosAuthPost, axiosAuthGet } from "modules/Axios";
 
 export const savePartner = (payload) => async (dispatch) => {
   try {
+    console.log("xxx", payload);
     dispatch({ type: actions.SAVE_PARTNER_INITIATED });
     let response = await axiosAuthPost(partnerConst.SAVE_PARTNER, payload);
     if (response.responseStatus === "1") {
       message.success(response.message);
       await dispatch({ type: actions.SAVE_PARTNER_SUCCESS, payload: response });
-      dispatch(push("/partners"));
+      if (payload.isRedirectNeeded) dispatch(push("/partners"));
     } else dispatch({ type: actions.SAVE_PARTNER_ERROR, error: response });
   } catch (error) {
     console.log(error, "action catch");

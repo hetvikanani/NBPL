@@ -7,12 +7,17 @@ import { Menu, Header } from "components/Form";
 import { Button, Input, Label } from "components/Form";
 import { FormValidation } from "App/AppConstant";
 import { supportConstant } from "./constant";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import { saveSupport } from "redux/partnerUser/action";
+import { getAuthUserID } from "modules/helper";
+var userId = getAuthUserID();
 
 const ValidationSchema = Yup.object().shape({
   name: Yup.string().trim().required(" "),
   email: Yup.string().trim().required(" ").email(FormValidation.emailInvalid),
   message: Yup.string().trim().required(" "),
-  number: Yup.string()
+  mobile: Yup.string()
     .trim()
     .min(10, FormValidation.mobileInvalid)
     .max(10, FormValidation.mobileInvalid),
@@ -23,19 +28,31 @@ class Support extends Component {
     this.state = {
       disable: false,
       initValues: {
+        supportId: 0,
         name: "",
         email: "",
         message: "",
-        number: "",
+        mobile: "",
       },
     };
   }
-  handleSubmit = () => {
+
+  handleSubmit = async (values, { setSubmitting }) => {
     try {
       this.setState({ disable: true });
       setTimeout(() => {
         this.setState({ disable: false });
-      }, 5000);
+      }, 4500);
+      let data = {
+        supportId: values.contactId,
+        name: values.name,
+        email: values.email,
+        message: values.message,
+        mobile: values.mobile,
+        userId: userId,
+      };
+      await this.props.saveSupport({ data: data });
+      setSubmitting(false);
     } catch (error) {
       console.log(error);
     }
@@ -121,15 +138,15 @@ class Support extends Component {
                       <Input
                         placeholder={supportConstant.placePhone}
                         className={
-                          errors.number && touched.number ? "empty" : ""
+                          errors.mobile && touched.mobile ? "empty" : ""
                         }
                         onBlur={handleBlur}
-                        name="number"
-                        value={values.number}
+                        name="mobile"
+                        value={values.mobile}
                         handleChange={handleChange}
                       />
-                      {errors.number && touched.number && (
-                        <div className="form-error">{errors.number}</div>
+                      {errors.mobile && touched.mobile && (
+                        <div className="form-error">{errors.mobile}</div>
                       )}
                     </div>
                     <div className="btnDiv">
@@ -147,4 +164,17 @@ class Support extends Component {
     );
   }
 }
-export default Support;
+
+const mapStateToProps = (state) => {
+  return {
+    loading: state.partner.loading,
+    error: state.partner.error,
+    message: state.partner.message,
+  };
+};
+const mapDispatchToProps = (dispatch) => ({
+  saveSupport: (payload) => dispatch(saveSupport(payload)),
+});
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Support)
+);

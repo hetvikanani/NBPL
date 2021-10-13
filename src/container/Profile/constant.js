@@ -46,6 +46,7 @@ const ContactConst = {
   emailplace: "john@gmail.com",
   designation: "Designation",
   designationplace: "Web designer",
+  remove: "Remove",
 };
 
 export { BasicConst, FinancialConst, ContactConst };

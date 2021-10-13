@@ -72,6 +72,7 @@ class AdminPartner extends Component {
       city: partner.city,
       state: partner.state,
       contactDetails: partner?.contactDetails,
+      isRedirectNeeded: true,
     };
     this.props.savePartner(data);
   };
