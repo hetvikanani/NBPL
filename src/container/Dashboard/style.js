@@ -10,6 +10,11 @@ const DashbordStyle = styled.div`
       font-weight: 600;
       margin: 0 0 0 10px;
     }
+    .date-div {
+      font-size: 16px;
+      display: flex;
+      justify-content: flex-end;
+    }
     .top-row {
       margin-top: 1em;
       .box {
@@ -53,41 +58,18 @@ const DashbordStyle = styled.div`
     .middle-row {
       margin-top: 2em;
       .box {
-        box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
+        box-shadow: 0 0 10px rgb(0, 0, 0, 0.2);
         height: 20em;
         @media ${size["laptop-max"]} {
           margin-bottom: 2em;
         }
       }
-      .slider_div {
-        background-color: #ffff;
-        box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
-        .ant-image {
-          width: 100%;
-          .ant-image-img {
-            height: 180px;
-            object-fit: cover;
-          }
-        }
-        .accountDiv {
-          text-align: center;
-          h2 {
-            margin-top: 1em;
-          }
-          .detailDiv {
-            margin-top: 1em;
-            div {
-              margin: 0.5em;
-            }
-          }
-        }
-      }
       .referral_div {
-        margin-top: 1.5em;
-        box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
+        box-shadow: 0 0 10px rgb(0, 0, 0, 0.2);
         text-align: center;
+        margin-bottom: 1em;
         h2 {
-          font-size: 18px;
+          font-size: 24px;
         }
         .ref_Code {
           display: flex;
@@ -121,11 +103,35 @@ const DashbordStyle = styled.div`
           }
         }
       }
+
+      .slider_div {
+        background-color: #ffff;
+        box-shadow: 0 0 10px rgb(0, 0, 0, 0.2);
+        .ant-image {
+          width: 100%;
+          .ant-image-img {
+            height: 180px;
+            object-fit: cover;
+          }
+        }
+        .accountDiv {
+          text-align: center;
+          h2 {
+            margin-top: 1em;
+          }
+          .detailDiv {
+            margin-top: 1em;
+            div {
+              margin: 0.5em;
+            }
+          }
+        }
+      }
     }
     .bottom_div {
       margin-top: 3em;
       padding: 1em 0.5em;
-      box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
+      box-shadow: 0 0 10px rgb(0, 0, 0, 0.2);
       .ant-col {
         display: flex;
         margin-top: 2em;
@@ -156,6 +162,20 @@ const DashbordStyle = styled.div`
         }
         .iPShadow:hover {
           box-shadow: 2px 3px 7px rgb(0 96 167);
+        }
+      }
+    }
+    .test_div {
+      margin-top: 3em;
+      padding: 1em 0.5em;
+      box-shadow: 0 0 10px rgb(0, 0, 0, 0.2);
+      .accountDiv {
+        text-align: center;
+        .test_para {
+          padding: 20px 1.5em 10px 20px;
+          .test {
+            font-weight: 500;
+          }
         }
       }
     }

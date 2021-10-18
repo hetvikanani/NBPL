@@ -33,7 +33,7 @@ class DashBoard extends Component {
   topRowUi = () => {
     try {
       return TopRowData.map((a, i) => (
-        <Col xs={24} sm={12} md={12} lg={12} xl={5} key={i} className="anime">
+        <Col xs={24} sm={12} md={12} lg={12} xl={6} key={i} className="anime">
           <Card className="box">
             <div className="content">
               <h3 className="name">{a.name}</h3>
@@ -55,15 +55,31 @@ class DashBoard extends Component {
   };
   currDateUI = () => {
     try {
+      var daysArray = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
       let today = new Date();
       let currDate = today.getDate();
       let monthName = " " + Months[today.getMonth()];
+      let dayName = today.getDay();
+      let weekday = daysArray[dayName];
       return (
         <Col xs={24} sm={12} md={12} lg={12} xl={4} className="dateUI anime">
-          <h2 className="mainTxt">
-            {currDate + this.suffix_of(currDate)}
-            {monthName + "," + today.getFullYear()}
-          </h2>
+          <div className="mainTxt">
+            {currDate +
+              this.suffix_of(currDate) +
+              monthName +
+              "," +
+              today.getFullYear() +
+              "-" +
+              weekday}
+          </div>
         </Col>
       );
     } catch (error) {
@@ -103,38 +119,13 @@ class DashBoard extends Component {
         <div className="container">
           <Header />
           <div className="allDiv">
-            <Row className="top-row">
-              {this.topRowUi()}
-              {this.currDateUI()}
-            </Row>
+            <div className="date-div">{this.currDateUI()}</div>
+            <Row className="top-row">{this.topRowUi()}</Row>
             <Row className="middle-row" gutter={25}>
               <Col xs={24} sm={24} md={24} lg={24} xl={17} className="anime">
                 <Card className="box"></Card>
               </Col>
               <Col xs={24} sm={24} md={24} lg={24} xl={7} className="anime">
-                <div className="slider_div">
-                  <Carousel autoplay>
-                    <div className="accountDiv">
-                      <h2 className="mainTxt">
-                        {DashConst.accManDetail + DashConst.colon}
-                      </h2>
-                      <div className="detailDiv">
-                        <span>
-                          {DashConst.name} {DashConst.colon} {"Kartik Patel"}
-                        </span>
-                        <div>
-                          {DashConst.contNum} {DashConst.colon} {"9876543210"}
-                        </div>
-                        <span>
-                          {DashConst.emid} {DashConst.colon}
-                          {"kartik@naapbooks.com"}
-                        </span>
-                      </div>
-                    </div>
-                    <Image src={banner1} preview={false} alt="banner" />
-                    <Image src={banner2} preview={false} alt="banner" />
-                  </Carousel>
-                </div>
                 <div className="referral_div">
                   <h2>{DashConst.refCode}</h2>
                   <div className="ref_Code">
@@ -160,11 +151,64 @@ class DashBoard extends Component {
                     </div>
                   </div>
                 </div>
+
+                <div className="slider_div">
+                  <Carousel autoplay>
+                    <div className="accountDiv">
+                      <h2 className="mainTxt">
+                        {DashConst.accManDetail + DashConst.colon}
+                      </h2>
+                      <div className="detailDiv">
+                        <span>
+                          {DashConst.name} {DashConst.colon} {"Kartik Patel"}
+                        </span>
+                        <div>
+                          {DashConst.contNum} {DashConst.colon} {"9876543210"}
+                        </div>
+                        <span>
+                          {DashConst.emid} {DashConst.colon}
+                          {"kartik@naapbooks.com"}
+                        </span>
+                      </div>
+                    </div>
+                    <Image src={banner1} preview={false} alt="banner" />
+                    <Image src={banner2} preview={false} alt="banner" />
+                  </Carousel>
+                </div>
               </Col>
             </Row>
             <div className="bottom_div">
               <h2 className="mainTxt anime">{DashConst.hotSellPro}</h2>
               <Row gutter={10}>{this.hotSellProd()}</Row>
+            </div>
+            <div className="test_div">
+              <h2 className="mainTxt anime">Testimonial</h2>
+
+              <Carousel>
+                <div className="accountDiv">
+                  <div className="test_para">
+                    <p className="test">
+                      Lorem Ipsum is simply dummy text of the printing and
+                      typesetting industry. Lorem Ipsum , when an unknown
+                      printer took a galley of type and scrambled. Lorem Ipsum
+                      is simply dummy text of the printing and typesetting
+                      industry. Lorem Ipsum , when an unknown printer took a
+                      galley of type and scrambled.
+                    </p>
+                  </div>
+
+                  <div>
+                    <span>-Allen Canvoian</span>
+                  </div>
+                </div>
+
+                <div className="accountDiv">
+                  <p>hetvi hetiv</p>
+                </div>
+                <div className="accountDiv">
+                  <p>hetvi hetiv</p>
+                </div>
+              </Carousel>
             </div>
           </div>
         </div>
